@@ -342,7 +342,7 @@ printf("SET STIMULATION END[%d]\n",pc.id)
 pc.barrier()
 {load_file("recorder.hoc")}
 proc setRecorder(){
-    //setVoltageRecord()
+    setVoltageRecord(0)
     //setGABArecord()
     //setDummyRecord()
     //setPreGABArecord()
@@ -365,7 +365,7 @@ stdinit()
 if(pc.id==0)print "FINISHED "
 if(pc.id == 0){printf("PRINTING[%d]\n",pc.id)}
 proc setPrinter(){
-    //fprintVoltageRecord()
+    fprintVoltageRecord(0)
     //fprintGABArecord()
     //fprintDummyRecord()
     //fprintSynapseList()

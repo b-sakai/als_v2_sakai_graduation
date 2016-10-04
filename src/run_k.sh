@@ -1,5 +1,23 @@
+#!/bin/bash -x
 
-#! /bin/bash
+#PJM --rsc-list "node=12"
+#PJM --rsc-list "rscgrp=small"
+#PJM --mpi "proc=96"
+
+#PJM --rsc-list "elapse=1:00:00"
+#PJM -s
+
+#PJM --stg-transfiles all
+#PJM --mpi "use-rankdir"
+
+#PJM --stgin-basedir /home/hp120263/k00633/arase/als_v2
+
+# STAGE IN ANTENNAL LOBE SIMULATION PROGRAM
+#PJM --stgin "rank=* ./input/* %r:../input/"
+
+
+
+
 
 # Make directory to save data file
 Time=`date '+%m%d%H%M%S'`
@@ -21,7 +39,7 @@ HOC_NAME="./main.hoc"
 #HOC_NAME="./loadbalance_test.hoc"
 
 NRNOPT=\
-" -c STOPTIME=70"\
+" -c STOPTIME=40"\
 " -c IS_SUPERCOMPUTER=0"\
 " -c START_TIME=${Time}"\
 " -c WEIGHT_200=0.05"\
@@ -31,11 +49,11 @@ NRNOPT=\
 " -c GABAB_GMAX_LTOL=5.0"\
 " -c GABAA_GMAX_LTOP=0.2"\
 " -c GABAB_GMAX_LTOP=0.0065"\       
-" -c GABAB_ON=0"\
-" -c GABAA_ON=0"
+" -c GABAB_ON=1"\
+" -c GABAA_ON=1"
 
-#MPIEXEC="mpiexec  -n 2"
-MPIEXEC="mpiexec -n 4"
+MPIEXEC="mpiexec  -n 2"
+#MPIEXEC="mpiexec -n 4"
 #MPIEXEC="mpiexec -n 5"
 #MPIEXEC="mpiexec -n 1"
 #MPIEXEC=""
