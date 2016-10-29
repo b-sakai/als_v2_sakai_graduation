@@ -35,7 +35,7 @@ public setPath, setNid, setGid, setSpikegenlist
 public setIntermitStim_gaus,setIClamp, mkIclamp, setIClamp_with_Latency
 public insertHH, insertHH_RN, insertLNlla, insertFukuda_tunned, insertHH_K
 public getAxon
-public setSpikeRecord,fprintSpikeRecord
+public setSpikeRecord, setMultiSpikeRecord, fprintSpikeRecord, fprintMultiSpikeRecord
 public setNSEG
 
 //-------------------------------------------------------
@@ -929,22 +929,40 @@ proc setIClamp_with_Latency(){local stoptime, timestep, i, j, num_spike, flg, st
     //stim_vec.printf()
 }
 
-
-
-
 objref ncSR// netcon for Spike Record
-objref tvecSR, idvecSR //tvecSR time vector for Spike Record
+objref tvecSR, tvecSR_var, idvecSR //tvecSR time vector for Spike Record
+
 proc setSpikeRecord(){local cmpt localobj nil
     cmpt = $1
     tvecSR = new Vector()
     idvecSR = new Vector()
     ncSR = connect2target(cmpt,nil)
     //ncSR.record(tvecSR,idvecSR.srcgid)
-    ncSR.record(tvecSR)
+
+    ncSR.record(tvecSR)    
 }
+
+proc setMultiSpikeRecord(){local cmpt localobj compartments, nil
+    compartments = new Vector(4)
+    compartments.x(0) = 382 - 2
+    compartments.x(1) = 1168 - 2
+    compartments.x(2) = 5000
+    compartments.x(3) = 11197
+
+    tvecSR = new List()
+
+    for(j = 0; j<compartments.size();j+=1){
+        tvecSR_var = new Vector()
+        ncSR = connect2target(compartments.x(j),nil)//compartments.x(0), nil)
+        ncSR.record(tvecSR_var)
+        tvecSR.append(tvecSR_var)
+    }
+}
+
 public setSpikeRecord_debug, fprintSpikeRecord_debug, setSpikeRecordList_debug
 
 objref tvecL, cmptL, ncL
+
 proc setSpikeRecordList_debug(){
     tvecL = new List()
     cmptL = new Vector()
@@ -1003,6 +1021,42 @@ proc fprintSpikeRecord(){local i, interval, tstop, delay
     fileSR.printf("$ Number of data : %d\n",tvecSR.size())
     fileSR.printf("$ TSTOP : %d\n",tstop)
     tvecSR.printf(fileSR,"%5.5f\n")
+    fileSR.close()
+}
+
+func getNumLines(){local max 
+    max = 0
+    for(j = 0; j<tvecSR.count();j+=1){
+        if(tvecSR.o(j).size() > max){
+            max = tvecSR.o(j).size()
+        }
+    }
+    return max
+}
+
+proc fprintMultiSpikeRecord(){local i, interval, tstop, delay localobj mt
+    strdef filename, fprint_dir
+    fprint_dir = $s1
+    interval = $2
+    tstop = $3
+    delay = 0.0
+    mt = new Matrix()
+    fileSR = new File()
+    num_lines = getNumLines()
+
+    mt.resize(num_lines, 4)
+    for(j = 0; j<tvecSR.count();j+=1){
+        mt.setcol(j, tvecSR.o(j))
+    }
+
+    sprint(filename,"%s%dSpike.dat",fprint_dir,gid)
+    fileSR.wopen(filename)
+    fileSR.printf("$ Stimulation Interval(ms): %d\n",interval)
+    fileSR.printf("$ Delay(ms): %f\n",delay)    
+    print "tvecSR  ",num_lines
+    fileSR.printf("$ Number of data : %d\n",num_lines)
+    fileSR.printf("$ TSTOP : %d\n",tstop)
+    mt.fprint(fileSR,"%5.5f\t")
     fileSR.close()
 }
 
