@@ -20,8 +20,8 @@
 strdef FPRINT_DIR
 strdef SPIKEOUT_DIR
 if(IS_SUPERCOMPUTER == 1){
-    FPRINT_DIR = "./result/record"
-    SPIKEOUT_DIR = "./result/spike"
+    FPRINT_DIR = "./result/record/"
+    SPIKEOUT_DIR = "./result/spike/"
 }else if(START_TIME == 0){
     FPRINT_DIR = "../result/record/"
     SPIKEOUT_DIR = "../result/spike/"
@@ -157,7 +157,7 @@ proc multiSpikeOut(){
         pns.o(0).fprintSpikeRecord(SPIKEOUT_DIR,INTERVAL,STOPTIME)
     }
     if(lns.count()!=0){
-        printf("spike out(%d) for LN\n",pc.id)
+        printf("multi spike out(%d) for LN\n",pc.id)
         lns.o(0).fprintMultiSpikeRecord(SPIKEOUT_DIR,INTERVAL,STOPTIME)
     }
     if(rns.count()!=0){
