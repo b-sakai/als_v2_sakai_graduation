@@ -39,9 +39,9 @@ def readSpikeRecordFile(filename):
     delay = float(data[1].split(":")[1])
     size = int(data[2].split(":")[1])
     tstop = int(data[3].split(":")[1])
-    istim1 = int(data[4].split(":")[1])
+    # istim1 = int(data[4].split(":")[1])
     #istim2 = int(data[5].split(":")[1])
-    istim2 = float(data[5].split(":")[1])
+    # istim2 = float(data[5].split(":")[1])
     #interval = 300
     print "Interval : %d, Delay : %f, number of data : %d, tstop : %d"%(interval, delay, size, tstop)
     spt = [] #spike timing
@@ -54,7 +54,7 @@ def readSpikeRecordFile(filename):
                 spt.append(float(time))
             except ValueError:
                 pass
-    #print spt
+    print spt
     return spt
 
 def reconstruct_data(spt):
@@ -90,7 +90,7 @@ def reconstruct_data(spt):
     if(size != cnt2):
         print "Reconstruct_data ERROR"
         return 
-
+    print pulses
     return pulses
    
 def drawSpikeCounts(pulses,filename,show):
