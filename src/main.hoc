@@ -161,9 +161,9 @@ proc mkCells(){localobj pn,ln,rn, nc, nil
             pn.axonlist = areaList(99,100,0)
 	    pn.setSpikegenlist(SPIKEGEN_POS, SPIKEGEN_SIZE)
 	    //pn.spikegenlist.printnames()
-	    initModel_PN(pn)
 
-	    //pn.insertFukuda_tunned()
+	    //initModel_PN(pn)
+	    pn.insertFukuda_tunned()
 
 	    pns.append(pn)
 	    //print "pn ", i, j
@@ -239,55 +239,6 @@ proc mkCells(){localobj pn,ln,rn, nc, nil
     pc.barrier()
 }
 
-proc initModel_PN() { local i, j, axonnum, ncells, v_init localobj tmplist, pn
-    pn = $o1
-
-    pn forall {
-	uninsert pas
-	uninsert GPeA
-    }
-
-    forsec pn.noaxonlist {
-	insert pas
-	e_pas = EL
-	g_pas = GL
-	cm = CM
-    }
-    forsec pn.axonlist {
-	insert GPeA
-	gnabar_GPeA_k = GNABAR*0.1
-	gkdrbar_GPeA_k = GKDRBAR*0.1
-	gcatbar_GPeA_k = GCATBAR*0.1
-	gkcabar_GPeA_k = GKCABAR*0.1
-	kca_GPeA_k = KCA
-	kna_GPeA_k = KNA
-	kk_GPeA_k = KNA
-	caGain_GPeA_k = CAGAIN
-	vol_GPeA_k = PI*diam*diam*L/4 * 1e-15
-	gl_GPeA_k = GL
-	el_GPeA_k = EL
-	cm = CM
-    }
-
-    pn.spikegenlist = new SectionList()
-    axonnum = countSL(pn.axonlist)
-    tmplist = sl2list(pn.axonlist)
-    SPIKEGEN_POS = int(SPIKEGEN_POS)
-    SPIKEGEN_SIZE = int(SPIKEGEN_SIZE)
-    j = SPIKEGEN_POS
-    while(j < axonnum && j < SPIKEGEN_POS+SPIKEGEN_SIZE) {
- 	tmplist.o(j).sec pn.spikegenlist.append()
- 	j+=1
-    }
-    forsec pn.spikegenlist {
-	gnabar_GPeA_k = GNABAR*20
-	gkdrbar_GPeA_k = GKDRBAR*20
-	//gcatbar_GPeA_k = GCATBAR*0.1
-	//gkcabar_GPeA_k = GKCABAR*0.1
-    }
-    //stdinit() Why do i need to use this?
-}
-
 {load_file("connect.hoc")}
 proc mkConnections(){
     connectRNtoOthers()
@@ -328,8 +279,11 @@ proc setRecorder(){
     //setGABArecord()
     //setDummyRecord()
     //setPreGABArecord()
-    //spikerecord()
-    multiSpikeRecord()
+    if(name_declared("COMP_0")!=5){
+        spikerecord()
+    } else {
+        multiSpikeRecord(COMP_0, COMP_1, COMP_2, COMP_3)
+    }
 }
 if(pc.id==0)print "SET RECORDER"
 printf("SET RECORDER[%d]\n",pc.id)
@@ -353,8 +307,11 @@ proc setPrinter(){
     //fprintDummyRecord()
     //fprintSynapseList()
     //fprintPreGABArecord()
-    //spikeout()
-    multiSpikeOut()
+    if(name_declared("COMP_0")!=5){
+        spikeout()
+    } else {
+        multiSpikeOut()
+    }
 }
 
 setPrinter()

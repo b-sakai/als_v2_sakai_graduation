@@ -946,10 +946,10 @@ proc setSpikeRecord(){local cmpt localobj nil
 
 proc setMultiSpikeRecord(){local cmpt localobj nil
     compartments = new Vector(4)
-    compartments.x(0) = 382 - 2
-    compartments.x(1) = 1168 - 2
-    compartments.x(2) = 5000
-    compartments.x(3) = 11197
+    compartments.x(0) = $1
+    compartments.x(1) = $2
+    compartments.x(2) = $3
+    compartments.x(3) = $4
 
     tvecSR = new List()
 

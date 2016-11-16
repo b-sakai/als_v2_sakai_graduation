@@ -53,7 +53,11 @@ NRNOPT=\
 " -c STOPTIME=100"\
 " -c IS_SUPERCOMPUTER=1"\
 " -c INTERVAL=300"
-
+#\
+#" -c COMP_0=500"\
+#" -c COMP_1=1000"\
+#" -c COMP_2=1500"\
+#" -c COMP_3=2000"
 
 
 #LPG="lpgparm -t 4MB -s 4MB -d 4MB -h 4MB -p 4MB"

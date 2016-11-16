@@ -30,9 +30,14 @@ NRNOPT=\
 " -c GABAA_GMAX_LTOL=5.0"\
 " -c GABAB_GMAX_LTOL=5.0"\
 " -c GABAA_GMAX_LTOP=0.2"\
-" -c GABAB_GMAX_LTOP=0.0065"\       
+" -c GABAB_GMAX_LTOP=0.0065"\
 " -c GABAB_ON=0"\
 " -c GABAA_ON=0"
+#\
+#" -c COMP_0=500"\
+#" -c COMP_1=1000"\
+#" -c COMP_2=1500"\
+#" -c COMP_3=2000"
 
 #MPIEXEC="mpiexec  -n 2"
 MPIEXEC="mpiexec -n 4"

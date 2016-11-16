@@ -63,7 +63,7 @@ proc multiSpikeRecord(){local i localobj nc, nil
         pns.o(0).setSpikeRecord(475)
     }else if(lns.count()!=0){
         printf("multiSpikerecord(%d) for LN\n",pc.id)
-        lns.o(0).setMultiSpikeRecord()
+        lns.o(0).setMultiSpikeRecord($1, $2, $3, $4)
 //        lns.o(0).setMultiSpikeRecord(1168-2, 2)
   //      lns.o(0).setMultiSpikeRecord(5000, 3)
     //    lns.o(0).setMultiSpikeRecord(11197, 4)
