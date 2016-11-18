@@ -50,11 +50,16 @@ NRNIV="./special -mpi"
 HOC_NAME="./main.hoc"
 #NRNOPT=""
 NRNOPT=\
-" -c STOPTIME=100"\
+" -c STOPTIME=700"\
 " -c IS_SUPERCOMPUTER=1"\
 " -c INTERVAL=300"\
+" -c COMP_0=5025"\
+" -c COMP_1="\
+" -c COMP_2="\
+" -c COMP_3="\
 " -c GABAA_ON=0"\
 " -c GABAB_ON=0"
+
 
 
 #LPG="lpgparm -t 4MB -s 4MB -d 4MB -h 4MB -p 4MB"
