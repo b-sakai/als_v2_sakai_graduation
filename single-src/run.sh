@@ -13,7 +13,7 @@ mkdir -p ${RECORD_DIR}
 mkdir -p ${SPIKE_DIR}
 
 #NRNIV="../specials/x86_64/special -mpi"
-NRNIV="/home/kosuke/lab/neuron_kplus/specials/x86_64/special -mpi"
+NRNIV="~/lab/neuron_kplus/specials/x86_64/special -mpi"
 #HOC_NAME="./main-local.hoc"
 HOC_NAME="./main.hoc"
 

@@ -11,3 +11,7 @@ echo $target
 echo $HOME
 mkdir $HOME/$target
 scpfromk result/spike/$1/* $HOME/$target
+python spike_analyze.py $HOME/$target
+#for file in `\find $HOME/$target -maxdepth 1 -type f`; do
+#    python 
+#done

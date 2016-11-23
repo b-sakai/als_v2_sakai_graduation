@@ -32,9 +32,8 @@ def readSpikeRecordFile(filename):
         delay = float(data.popleft().split(":")[1])
         size = int(data.popleft().split(":")[1])
         tstop = int(data.popleft().split(":")[1])
-        if data[0].split()[0] == "$":
+        if len(data[0].split()) > 0 and data[0].split()[0] == "$":
             cmpt = map(int, data.popleft().split(":")[1].split())
-            print cmpt
         else:
             cmpt = [""]
         row = size
@@ -76,6 +75,7 @@ def drawSpikeCounts(pulses, filename, show):
 
     for c in xrange(column):
         plt.plot(stims,counts[c], label=str(cmpt[c]))
+
 
     plt.xlabel("stimulus pulse number", fontsize=15)
     plt.ylabel("Spike Counts[spikes]", fontsize=15)
