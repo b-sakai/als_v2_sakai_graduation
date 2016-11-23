@@ -49,3 +49,4 @@ job/.*
 #*.xlsx
 tail
 al_env
+.DS_Store

@@ -78,7 +78,8 @@ if(IS_SUPERCOMPUTER == 0){
     //info_filename_rn = "../input/network_info/network_info_1rns.dat"
 }else if(IS_SUPERCOMPUTER == 1){
     //info_filename = "../input/network_info/network_info_3cells.dat"
-    info_filename = "../input/network_info/network_info_40cells.dat"
+    //info_filename = "../input/network_info/network_info_40cells.dat"
+    info_filename = "../input/network_info/network_info_40cells_arase.dat"
     //info_filename = "../input/network_info/network_info_400cells.dat"
     //info_filename = "../input/network_info/network_info_39cells.dat"
     //info_filename = "../input/network_info/network_info_1LN.dat"
