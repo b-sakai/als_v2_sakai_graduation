@@ -30,6 +30,9 @@
 #*
 *#
 
+# variable input files
+input/synapse_list/*_arase/*.txt
+
 # recorded files
 record/
 record/**/*.txt
