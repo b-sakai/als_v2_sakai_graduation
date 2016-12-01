@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # usage
+
 # sh download_spike.sh [jobID] [local path after $HOME]
 # ex. sh download_spike.sh 5475341 lab/result/compare_compartments/
 
@@ -11,7 +12,6 @@ echo $target
 echo $HOME
 mkdir $HOME/$target
 scpfromk result/spike/$1/* $HOME/$target
-python spike_analyze.py $HOME/$target
-#for file in `\find $HOME/$target -maxdepth 1 -type f`; do
-#    python 
-#done
+
+#python spike_analyze.py $HOME/$target
+

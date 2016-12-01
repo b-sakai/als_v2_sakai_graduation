@@ -1,6 +1,6 @@
 #!/bin/bash -x
 #PJM --rsc-list "node=6"
-#PJM --rsc-list "elapse=10:00:00"
+#PJM --rsc-list "elapse=02:00:00"
 #PJM --rsc-list "rscgrp=small"
 #PJM --mpi "proc=48"
 #PJM -s
@@ -25,10 +25,10 @@
 #PJM --stgin "rank=* ./input/swc/* %r:../input/swc/"
 #PJM --stgin "rank=* ./input/swc/rn0514/* %r:../input/swc/rn0514/"
 #PJM --stgin "rank=* ./input/synapse_info/* %r:../input/synapse_info/"
-#PJM --stgin "rank=* ./input/synapse_info/40cells/* %r:../input/synapse_info/40cells/"
+#PJM --stgin "rank=* ./input/synapse_info/40cells_arase/* %r:../input/synapse_info/40cells_arase/"
 #PJM --stgin "rank=* ./input/synapse_info/syn/* %r:../input/synapse_info/syn/"
 #PJM --stgin "rank=* ./input/synapse_list/* %r:../input/synapse_list/"
-#PJM --stgin "rank=* ./input/synapse_list/40cells/* %r:../input/synapse_list/40cells/"
+#PJM --stgin "rank=* ./input/synapse_list/40cells_arase/* %r:../input/synapse_list/40cells_arase/"
 #PJM --stgin "rank=* ./input/synapse_list/fromRN/* %r:../input/synapse_list/fromRN/"
 
 #PJM --stgin "rank=* ./src/* %r:./"
@@ -50,14 +50,14 @@ NRNIV="./special -mpi"
 HOC_NAME="./main.hoc"
 #NRNOPT=""
 NRNOPT=\
-" -c STOPTIME=700"\
+" -c STOPTIME=1850"\
 " -c IS_SUPERCOMPUTER=1"\
 " -c INTERVAL=300"\
-" -c COMP_0=5025"\
-" -c COMP_1="\
-" -c COMP_2="\
-" -c COMP_3="\
-" -c GABAA_ON=0"\
+" -c COMP_0=65"\
+" -c COMP_1=4525"\
+" -c COMP_2=5025"\
+" -c COMP_3=6525"\
+" -c GABAA_ON=1"\
 " -c GABAB_ON=0"
 
 

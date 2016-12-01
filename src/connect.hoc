@@ -20,7 +20,6 @@
 
 {load_file("loadinfo.hoc")}
 
-NUMAXONS_PER_RN = 5
 NUMSYNAPSE_PER_CELL = 400
 objref rnclist
 rnclist = new List()
@@ -48,38 +47,33 @@ func mkPreSynapseOnRN(){local i, gid_base, gid_cnt, save_syn_gid localobj syn, n
     printf("Max synapse gid %d [%d]\n",syn_gid,pc.id)
     return save_syn_gid
 }
-/*
-proc mkGABArecepterOnRN(){local i, gid_base localobj 
-    gid_base = $1
 
-}*/
-func calcSyngid(){local base, cnt,gid,cellcnt,wholecnt,cnt2
+func calcSyngid(){local base, axon_id, cell_id, cell_cnt, gid //Calculate Synapse GID: calculate gid of presynapse
     base = $1
-    cnt  = $2//dendrite number conuter
-    cnt2 = $3//cell number counter
-    wholecnt = 0
-    cellcnt  = 0
+    axon_id  = $2 //dendrite number
+    cell_id = $3 //cell number
+    cell_cnt  = 0
     for i=0, pc.id-1{
-	cellcnt += CELLM.x[i][2]
+	cell_cnt += CELLM.x[i][2]
     }
-    gid = base + cnt*NRN + cellcnt + cnt2
+    gid = base + axon_id * NRN + cell_cnt + cell_id
     return gid
 }
 
-func calcSrcgid(){local base,syn_cnt, gid
-    base =    $1
-    syn_cnt = $2
-    cnt  = $3
-    //gid = base + syn_cnt + cnt*NRN //this equation should be changed when i make this network more bigger
-    //just for the test
-    
-    gid = base + NUMSYNAPSE_PER_CELL*cnt + syn_cnt 
+func calcSrcgid(){local base, syn_id, target_id, modular, gid //Calculate Source GID: calculate which presynapse to connect
+    base = $1
+    syn_id = $2
+    target_id = $3
+    modular = $4 - base
+    gid = base + ((NUMSYNAPSE_PER_CELL * target_id + syn_id) % modular)
     return gid
 }
+
 objref nclist_RN
 nclist_RN = new List()
 proc mkPostSynapseOfRN(){local i,j,gid_base,src_gid localobj target, syn, nc
     gid_base = $1
+    syn_gid_max = $2
     //print gid_base
     for i=0, NPN+NLN-1{
     //for i=NPN, NPN+NLN-1{
@@ -91,7 +85,7 @@ proc mkPostSynapseOfRN(){local i,j,gid_base,src_gid localobj target, syn, nc
 	    printf("target.synlist.count() : %d [%d]\n",target.synlist.count(),pc.id)
 	    for j=0, target.synlist.count()-1{
 		syn = target.synlist.o(j)
-		src_gid = calcSrcgid(gid_base, j, i)
+		src_gid = calcSrcgid(gid_base, j, i, syn_gid_max)
 		//print "src_gid ", src_gid
 		nc  = pc.gid_connect(src_gid, syn)
 		nc.delay  = 1.0
@@ -128,7 +122,7 @@ proc connectRNtoOthers(){\
     syn_gid_max = pc.allreduce(syn_gid,2)
     //printf("After allreduce  gid_max:%d pc.id:%d\n",syn_gid_max,pc.id)
     pc.barrier()
-    mkPostSynapseOfRN(gid_base)
+    mkPostSynapseOfRN(gid_base, syn_gid_max)
     pc.barrier()
 }
 
@@ -506,22 +500,13 @@ proc makeNET_GABAsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weig
     weight=$4
     gmax_a=$5
     gmax_b=$6
-    
-    /*
-    pre_cell  = 301000
-    post_cell = 200000
-    *//*
-    delay=1
-    weight=1
-    gmax=0.3
-    */
-    //printf("pre_cell\t%d, post_cell\t%d\n",pre_cell,post_cell)
+
     if(pc.gid_exists(pre_cell)){
 	pre = pc.gid2obj(pre_cell)
 	for i=0, pre_comps.size()-1{
 	    if(!pc.gid_exists(gidVec.x[i])){
 		point = (pc.id)/(NLN+NPN)
-		printf("PRE : %d, GID : %d, i : %d, point : %f [%d]\n",pre_cell,gidVec.x[i],i,point,pc.id)
+		//printf("PRE : %d, GID : %d, i : %d, point : %f [%d]\n",pre_cell,gidVec.x[i],i,point,pc.id)
 		pre.Dend[pre_comps.x[i]] nc = new NetCon(&v(point),nil)
 		//nc = pre.connect2target(pre_comps.x[i],nil)
 		nc.threshold = 1
@@ -540,7 +525,7 @@ proc makeNET_GABAsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weig
     if(pc.gid_exists(post_cell)){
         post = pc.gid2obj(post_cell)
         for i=0, post_comps.size()-1{
-	    printf("POST: %d, GID : %d, i : %d, [%d]\n",post_cell,gidVec.x[i],i,pc.id)
+	    //printf("POST: %d, GID : %d, i : %d, [%d]\n",post_cell,gidVec.x[i],i,pc.id)
             if(GABAA_ON == 1){
                 gaba = post.mkNET_GABAa(post_comps.x[i],gmax_a)
 		gabalist.append(gaba)
