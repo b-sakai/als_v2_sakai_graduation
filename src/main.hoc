@@ -62,6 +62,8 @@ if(name_declared("GABAB_ON")!=5){ execute("GABAB_ON=0")}
 if(name_declared("GABAA_ON")!=5){ execute("GABAA_ON=0")}
 if(name_declared("DOSE")!=5){ execute("DOSE=1000")}
 if(name_declared("NSTIM")!=5){ execute("NSTIM=30")}
+if(name_declared("MECHANO_ON")!=5){ execute("MECHANO_ON=0")}
+
 
 strdef info_filename
 strdef info_filename_rn
@@ -94,12 +96,23 @@ if(IS_SUPERCOMPUTER == 0){
 }
 
 
-strdef spt_file_dir
+strdef olfactory_spt_file_dir
+strdef mechano_spt_file_dir
 
 if(NSTIM == 1){
-    sprint(spt_file_dir, "../input/spiketiming/%ddose_1stims_filtering/", DOSE)
+    if(MECHANO_ON == 0) {
+        sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_1stims_filtering/", DOSE)
+    } else {
+        sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/%ddose_1stims/ORN/", DOSE)
+        sprint(mechano_spt_file_dir, "../input/spiketiming_arase/%ddose_1stims/MRN/", DOSE)
+    }
 }else{
-    sprint(spt_file_dir, "../input/spiketiming/%ddose_30stims_filtering/", DOSE)
+    if(MECHANO_ON == 0) {
+        sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_30stims_filtering/", DOSE)
+    } else {
+        sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/%ddose_30stims/ORN/", DOSE)
+        sprint(mechano_spt_file_dir, "../input/spiketiming_arase/%ddose_30stims/MRN/", DOSE)
+    }
 }
 
 objref pc
@@ -115,7 +128,12 @@ proc ShowInitialStatus(){
     printf("WEIGHT_200\t%f\tWEIGHT_300\t%f\tWEIGHT_301\t%f\n",WEIGHT_200,WEIGHT_300,WEIGHT_301)
     printf("GABAA_GMAX_LTOL\t%f\tGABAB_GMAX_LTOL\t%f\tGABAA_GMAX_LTOP\t%f\tGABAB_GMAX_LTOP\t%f\n",GABAA_GMAX_LTOL,GABAB_GMAX_LTOL,GABAA_GMAX_LTOP,GABAB_GMAX_LTOP)
     printf("GABAA_ON\t%f\tGABAB_ON\t%f\n",GABAA_ON, GABAB_ON)
-    printf("SPIKE TIMING: %s\n",spt_file_dir)
+    if(MECHANO_ON == 1){
+        print mechano_spt_file_dir
+    }else{
+        print olfactory_spt_file_dir
+    }
+//    printf("SPIKE TIMING: %s\n",spt_file_dir)
     printf("DOSE: %f, NSTIM: %d\n",DOSE, NSTIM)
     printf("==================================================================================\n")
     }
@@ -150,90 +168,90 @@ proc mkCells(){localobj pn,ln,rn, nc, nil
 
     for i=0, NCELLS-1{
         if((i%pc.nhost==pc.id)&&(i<NPN)){
-        j = i
-        pn = new CellSwc(pn_path[j].swcpath,pn_matrix.x[j][0],pn_matrix.x[j][1],pn_matrix.x[j][2],pn_matrix.x[j][3])
-        pn.setPath(pn_path[j].ppath, pn_path[j].synpath)
-        pn.setNid()
+            j = i
+            pn = new CellSwc(pn_path[j].swcpath,pn_matrix.x[j][0],pn_matrix.x[j][1],pn_matrix.x[j][2],pn_matrix.x[j][3])
+            pn.setPath(pn_path[j].ppath, pn_path[j].synpath)
+            pn.setNid()
 
-        pn.cellbodylist = areaList(39,38,0)
-        //pn.cellbodylist.printnames()
-        pn.dendlist = areaList(97,98,0)
-            pn.axonlist = areaList(99,100,0)
-        pn.setSpikegenlist(SPIKEGEN_POS, SPIKEGEN_SIZE)
-        //pn.spikegenlist.printnames()
+            pn.cellbodylist = areaList(39,38,0)
+            //pn.cellbodylist.printnames()
+            pn.dendlist = areaList(97,98,0)
+                pn.axonlist = areaList(99,100,0)
+            pn.setSpikegenlist(SPIKEGEN_POS, SPIKEGEN_SIZE)
+            //pn.spikegenlist.printnames()
 
-        //initModel_PN(pn)
-        pn.insertFukuda_tunned()
+            //initModel_PN(pn)
+            pn.insertFukuda_tunned()
 
-        pns.append(pn)
-        //print "pn ", i, j
-        nc = pn.connect2target(0,nil)
-        //pns.o(0).mkSynapses("./synlist/fromRN/050622_4_sn_SynapseList.dat")
+            pns.append(pn)
+            //print "pn ", i, j
+            nc = pn.connect2target(0,nil)
+            //pns.o(0).mkSynapses("./synlist/fromRN/050622_4_sn_SynapseList.dat")
 
-        pc.set_gid2node(pn.gid,pc.id)
-        pc.cell(pn.gid,nc)
-        //psection()
-        print "SectionNum",pn.SectionNum
-    }else if((i%pc.nhost==pc.id)&&(i>=NPN && i<NPN+NLN)){
-        j = i-NPN
-        ln = new CellSwc(ln_path[j].swcpath,ln_matrix.x[j][0],ln_matrix.x[j][1],ln_matrix.x[j][2],ln_matrix.x[j][3])
-        ln.setPath(ln_path[j].ppath, ln_path[j].synpath)
-        ln.setNid()
-        ln.insertLNlla()
-        lns.append(ln)
-        //if(j==0) ln.mkSynapses("./synlist/fromRN/040823_5_sn_SynapseList.dat")
-        //if(j==1) ln.mkSynapses("./synlist/fromRN/050205_7_sn_SynapseList.dat")
-        //print "ln ", i, j
-        nc = ln.connect2target(0,nil)
-
-        pc.set_gid2node(ln.gid,pc.id)
-        pc.cell(ln.gid,nc)
-        //psection()
-        print "SectionNum",ln.SectionNum
-    }else if(i>=NPN+NLN){
-        if(pc.nhost>NPN+NLN){
-        if((i-NLN-NPN)%(pc.nhost-NPN-NLN)==(pc.id-NPN-NLN)){
-            j = i-NPN-NLN
-            //print "j & i",j, i
-            rn = new CellSwc(rn_path[j].swcpath,-1,rn_matrix.x[j][0],rn_matrix.x[j][1],rn_matrix.x[j][2])
-            rn.getAxon()
-            rn.setPath(rn_path[j].ppath, rn_path[j].synpath)
-            rn.setGid()
-            rn.setNid()
-            rn.insertHH_RN()
-            //print "SectionNumber " ,rn.SectionNum
-
-            rns.append(rn)
-            //print "rn ", i, j, pc.id
-            nc = rn.connect2target(0,nil)
-
-            pc.set_gid2node(rn.gid,pc.id)
-            pc.cell(rn.gid,nc)
+            pc.set_gid2node(pn.gid,pc.id)
+            pc.cell(pn.gid,nc)
             //psection()
-        }
-        }else if(pc.nhost<=NPN+NLN){
-        if(i%pc.nhost==pc.id){
-            //print "j & i",j, i
-            j = i-NPN-NLN
-            rn = new CellSwc(rn_path[j].swcpath,-1,rn_matrix.x[j][0],rn_matrix.x[j][1],rn_matrix.x[j][2])
-            rn.getAxon()
-            rn.setPath(rn_path[j].ppath, rn_path[j].synpath)
-            rn.setGid()
-            rn.setNid()
-            rn.insertHH_RN()
-            //print "SectionNumber " ,rn.SectionNum
-            rns.append(rn)
-            //print "rn ", i, j, pc.id
-            nc = rn.connect2target(0,nil)
+            print "SectionNum",pn.SectionNum
+        }else if((i%pc.nhost==pc.id)&&(i>=NPN && i<NPN+NLN)){
+            j = i-NPN
+            ln = new CellSwc(ln_path[j].swcpath,ln_matrix.x[j][0],ln_matrix.x[j][1],ln_matrix.x[j][2],ln_matrix.x[j][3])
+            ln.setPath(ln_path[j].ppath, ln_path[j].synpath)
+            ln.setNid()
+            ln.insertLNlla()
+            lns.append(ln)
+            //if(j==0) ln.mkSynapses("./synlist/fromRN/040823_5_sn_SynapseList.dat")
+            //if(j==1) ln.mkSynapses("./synlist/fromRN/050205_7_sn_SynapseList.dat")
+            //print "ln ", i, j
+            nc = ln.connect2target(0,nil)
 
-            pc.set_gid2node(rn.gid,pc.id)
-            pc.cell(rn.gid,nc)
+            pc.set_gid2node(ln.gid,pc.id)
+            pc.cell(ln.gid,nc)
+            //psection()
+            print "SectionNum",ln.SectionNum
+        }else if(i>=NPN+NLN){
+            if(pc.nhost>NPN+NLN){
+                if((i-NLN-NPN)%(pc.nhost-NPN-NLN)==(pc.id-NPN-NLN)){
+                    j = i-NPN-NLN
+                    //print "j & i",j, i
+                    rn = new CellSwc(rn_path[j].swcpath,-1,rn_matrix.x[j][0],rn_matrix.x[j][1],rn_matrix.x[j][2])
+                    rn.getAxon()
+                    rn.setPath(rn_path[j].ppath, rn_path[j].synpath)
+                    rn.setGid()
+                    rn.setNid()
+                    rn.insertHH_RN()
+                    //print "SectionNumber " ,rn.SectionNum
 
+                    rns.append(rn)
+                    //print "rn ", i, j, pc.id
+                    nc = rn.connect2target(0,nil)
+
+                    pc.set_gid2node(rn.gid,pc.id)
+                    pc.cell(rn.gid,nc)
+                    //psection()
+                }
+            }else if(pc.nhost<=NPN+NLN){
+                if(i%pc.nhost==pc.id){
+                    //print "j & i",j, i
+                    j = i-NPN-NLN
+                    rn = new CellSwc(rn_path[j].swcpath,-1,rn_matrix.x[j][0],rn_matrix.x[j][1],rn_matrix.x[j][2])
+                    rn.getAxon()
+                    rn.setPath(rn_path[j].ppath, rn_path[j].synpath)
+                    rn.setGid()
+                    rn.setNid()
+                    rn.insertHH_RN()
+                    //print "SectionNumber " ,rn.SectionNum
+                    rns.append(rn)
+                    //print "rn ", i, j, pc.id
+                    nc = rn.connect2target(0,nil)
+
+                    pc.set_gid2node(rn.gid,pc.id)
+                    pc.cell(rn.gid,nc)
+
+                }
+            }else{
+                print "SOMETHING WRONG IN MAKE RECEPTOR"
+            }
         }
-        }else{
-        print "SOMETHING WRONG IN MAKE RECEPTOR"
-        }
-    }
     }
     pc.multisplit()
     pc.barrier()
@@ -242,6 +260,9 @@ proc mkCells(){localobj pn,ln,rn, nc, nil
 {load_file("connect.hoc")}
 proc mkConnections(){
     connectRNtoOthers()
+    if(MECHANO_ON == 1) {
+        connectVecStimFromMRN(mechano_spt_file_dir, DOSE, NSTIM)
+    }
     //connectNtoN()
     //connectNtoN_NET_GABA()
     connectNtoN_NET_GABA2()
@@ -249,6 +270,7 @@ proc mkConnections(){
     //makeNET_GABAsynapse2(301000,200001,100,0,1)
     //makeNET_GABAsynapse2(301000,200001,0,0,0)
 }
+
 if(pc.id==0)print "MAKE NETWORK"
 mkNetwork()
 pc.barrier()
@@ -257,7 +279,7 @@ pc.barrier()
 proc mkStimulations(){
     //mkIntermitStim()
     //mkIclamp()
-    mkSerialStim(spt_file_dir)
+    mkSerialStim(olfactory_spt_file_dir)
     //mkIclamp_ln2()
 }
 if(pc.id==0)print "SET STIMULATION"

@@ -43,11 +43,12 @@ public setNSEG
 public ID, Type, pID //pID -> parent ID
 public gid, nid, cellid, swcid, cloneid, ppath, synpath
 public synlist_
-public synlist,synapse
+public synlist, synlist_fromMRN, synapse
 public SynNumberList, numSynapse
 public SynPathList //Synapse information file path list
-public fromRNsyn
+public fromRNsyn, fromMRNsyn
 public axonlist, cellbodylist, dendlist, noaxonlist, spikegenlist
+public Delay
 
 // will be re-created in shape()
 create Dend[1]
@@ -92,6 +93,7 @@ objref SynList
 objref SynNo
 
 objref synlist
+objref synlist_fromMRN
 
 objref synlist_
 //------------------------------------------------------------------------------
@@ -119,13 +121,17 @@ proc init() {
     strdef swc_filename
     swc_filename = $s1
     strdef fromRNsyn
+    strdef fromMRNsyn
     gid     = $2
     cellid  = $3
     swcid   = $4
     cloneid = $5
 
+    Delay = 0
+
     SynList = new List()
     synlist = new List()
+    synlist_fromMRN = new List()
     SynNo = new Vector()
 
     SynNumberList = new Vector()
@@ -531,6 +537,7 @@ strdef str1
 proc mkSynapses(){local i
     //$s1 = Synapse list data file name
     str1 = $s1
+    type = $2 // type = 0: synapse from ORN, type = 1: synapse from MRN
     ReadSynlist(str1)
     //for test
     /*
@@ -546,7 +553,12 @@ proc mkSynapses(){local i
     Dend[SynNumberList.x[i]] print secname()
     print "post"
     */
-    synapses(SynNumberList.x[i])
+    if(type == 0){
+        synapses(SynNumberList.x[i])
+    } else if(type == 1){
+        synapses_fromMRN(SynNumberList.x[i])
+    }
+
     }
 }
 
@@ -573,6 +585,48 @@ proc synapses(){local targetno, tau1, tau2, rev_e
     syn__.tau1 = tau1
     syn__.tau2 = tau2
     syn__.e = rev_e
+}
+
+proc synapses_fromMRN(){local targetno, tau1, tau2, rev_e
+    targetno = $1
+    //print targetno
+    tau1  = 1
+    tau2  = 0.5
+    rev_e = 0
+    this.Dend[targetno] syn__ = new Exp2Syn(0.2) synlist_fromMRN.append(syn__)
+    syn__.tau1 = tau1
+    syn__.tau2 = tau2
+    syn__.e = rev_e
+    this.Dend[targetno] syn__ = new Exp2Syn(0.4) synlist_fromMRN.append(syn__)
+    syn__.tau1 = tau1
+    syn__.tau2 = tau2
+    syn__.e = rev_e
+    this.Dend[targetno] syn__ = new Exp2Syn(0.6) synlist_fromMRN.append(syn__)
+    syn__.tau1 = tau1
+    syn__.tau2 = tau2
+    syn__.e = rev_e
+    this.Dend[targetno] syn__ = new Exp2Syn(0.8) synlist_fromMRN.append(syn__)
+    syn__.tau1 = tau1
+    syn__.tau2 = tau2
+    syn__.e = rev_e
+}
+
+public connectVecStim
+obfunc connectVecStim(){local latency, id, i, seed, N, c localobj synapse, vecstim, nc
+    vecstim = $o1
+    synapse = $o2
+    
+    nc = new NetCon(vecstim, synapse)
+    nc.threshold = 0
+    nc.weight    = 1
+    if(numarg()==3){
+    latency = $3
+    }else{
+    latency = 0
+    }
+    nc.delay = Delay + latency
+//    vs_ncs.append(nc)
+    return nc
 }
 
 /*
@@ -754,8 +808,8 @@ proc setIClamp(){local stoptime, timestep, i, j, num_spike, flg, start_time, len
 
     while(!datafile.eof()){
         var = datafile.scanvar()
-        spiketiming.append(var-6.0)
-//        spiketiming.append(var)
+//        spiketiming.append(var-6.0)
+        spiketiming.append(var)
     }
     spiketiming.remove(spiketiming.size()-1)
     num_spike = spiketiming.size()

@@ -21,7 +21,7 @@ HOC_NAME="./main.hoc"
 #HOC_NAME="./loadbalance_test.hoc"
 
 NRNOPT=\
-" -c STOPTIME=20"\
+" -c STOPTIME=50"\
 " -c IS_SUPERCOMPUTER=0"\
 " -c START_TIME=${Time}"\
 " -c WEIGHT_200=0.05"\
@@ -32,7 +32,8 @@ NRNOPT=\
 " -c GABAA_GMAX_LTOP=0.2"\
 " -c GABAB_GMAX_LTOP=0.0065"\
 " -c GABAB_ON=0"\
-" -c GABAA_ON=0"
+" -c GABAA_ON=0"\
+" -c MECHANO_ON=1"
 
 
 #MPIEXEC="mpiexec  -n 2"

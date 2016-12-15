@@ -19,6 +19,7 @@
 //************************************************
 
 {load_file("loadinfo.hoc")}
+{load_file("stim.hoc")}
 
 NUMSYNAPSE_PER_CELL = 400
 objref rnclist
@@ -80,7 +81,7 @@ proc mkPostSynapseOfRN(){local i,j,gid_base,src_gid localobj target, syn, nc
     if(pc.gid_exists(GID_VEC.x[i])){
         target = pc.gid2obj(GID_VEC.x[i])
         loadSynapseInfo(target, target.synpath, 1)
-        target.mkSynapses(target.fromRNsyn)
+        target.mkSynapses(target.fromRNsyn, 0)
         //printf("loadsynapseinfo()(pc.id : %d)\n",pc.id)
         printf("target.synlist.count() : %d [%d]\n",target.synlist.count(),pc.id)
         for j=0, target.synlist.count()-1{
@@ -126,18 +127,64 @@ proc connectRNtoOthers(){\
     pc.barrier()
 }
 
-/*
-proc setSynapseInfo(){\
-    local i\
-    localobj cell
-    for i=0, NPN+NLN-1{
-    if(pc.gid_exists(i)){
-        cell = pc.gid2obj(i)
-        loadSynapseInfo(cell)
+obfunc setVecStim(){localobj vs, spvec
+    spvec = $o1
+    vs = new VecStim(0.025)
+    vs.play(spvec)
+    return vs
+}
+
+objref spvecs, vses, ncs, synlyst
+
+
+proc connectVecStimFromMRN(){ local i, j, dose, nstim localobj rnd, target, post_syn, spvec, vs, nc
+    if(pc.id == 0){
+        printf("connectVecStimFromMRN()\n")
     }
+
+    strdef _SPT_DIR_
+    strdef _SPT_NAME_
+
+    spvecs = new List()
+    vses = new List()
+    ncs = new List()
+    synlyst = new List()
+
+    _SPT_DIR_ = $s1
+    print _SPT_DIR_
+    dose = $2
+    nstim= $3
+
+    RND_SEED = START_TIME
+    rnd = new Random(RND_SEED+pc.id)
+    rnd.uniform(0,1000)
+
+    for i=0, NPN+NLN-1{
+        if(pc.gid_exists(GID_VEC.x[i])){
+            target = pc.gid2obj(GID_VEC.x[i])
+            loadSynapseInfo(target, target.synpath, 1)
+            target.mkSynapses(target.fromMRNsyn, 1)
+            printf("target.synlist_fromMRN.count() : %d [%d]\n",target.synlist_fromMRN.count(),pc.id)
+  
+            for j=0, target.synlist_fromMRN.count()-1{
+                post_syn = target.synlist_fromMRN.o(j)
+                sprint(_SPT_NAME_, "%sspt%03d.dat", _SPT_DIR_, int(rnd.repick()))
+                spvec = readSpikeTiming(_SPT_NAME_)
+
+                vs    = setVecStim(spvec)
+                nc = target.connectVecStim(vs, post_syn)
+
+                spvecs.append(spvec)
+                vses.append(vs)
+                ncs.append(nc)
+                synlyst.append(post_syn)
+            }
+//            printf("src_gid : %d i: %d j: %d [%d]\n",src_gid,i,j,pc.id)
+        }
     }
 }
-*/
+
+
 objref NC_CMPT_VECS, NC_GID_VECS
 NC_CMPT_VECS = new List()
 NC_GID_VECS  = new List()

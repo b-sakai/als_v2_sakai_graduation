@@ -135,12 +135,19 @@ func loadSynapseInfo(){local i,pregid,postgid,pre_nid,post_nid,ndata,mode localo
         syn_fp.gets(buf)
         sscanf(buf, "%s\n", class)
         if((strcmp("fromRN",class)==0)&&(mode==1)){
-        syn_fp.gets(buf)
-        sscanf(buf, "%s\n", path)
-        //print path
-        //print cell.SectionNum
-        //cell.mkSynapses(path)
-        cell.fromRNsyn = path
+            syn_fp.gets(buf)
+            sscanf(buf, "%s\n", path)
+            //print path
+            //print cell.SectionNum
+            //cell.mkSynapses(path)
+            cell.fromRNsyn = path
+        }else if ((strcmp("fromMRN",class)==0)&&(mode==1)){
+            syn_fp.gets(buf)
+            sscanf(buf, "%s\n", path)
+            //print path
+            //print cell.SectionNum
+            //cell.mkSynapses(path)
+            cell.fromMRNsyn = path
         }else if((strcmp("CtoC",class)==0)&&(mode==2)){
         syn_fp.gets(buf)
         sscanf(buf, "%d\n",&ndata)
