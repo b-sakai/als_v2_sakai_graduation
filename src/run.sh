@@ -33,6 +33,7 @@ NRNOPT=\
 " -c GABAB_GMAX_LTOP=0.0065"\
 " -c GABAB_ON=0"\
 " -c GABAA_ON=0"\
+" -c DOSE=5000"\
 " -c MECHANO_ON=1"
 
 

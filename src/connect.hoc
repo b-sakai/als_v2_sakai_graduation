@@ -151,7 +151,6 @@ proc connectVecStimFromMRN(){ local i, j, dose, nstim localobj rnd, target, post
     synlyst = new List()
 
     _SPT_DIR_ = $s1
-    print _SPT_DIR_
     dose = $2
     nstim= $3
 
