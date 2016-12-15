@@ -61,6 +61,7 @@ if(name_declared("GABAB_GMAX_LTOP")!=5){ execute("GABAB_GMAX_LTOP=0.6")}
 if(name_declared("GABAB_ON")!=5){ execute("GABAB_ON=0")}
 if(name_declared("GABAA_ON")!=5){ execute("GABAA_ON=0")}
 if(name_declared("DOSE")!=5){ execute("DOSE=1000")}
+if(name_declared("MECHANO_SPONTANEOUS")!=5){ execute("MECHANO_SPONTANEOUS=60")}
 if(name_declared("NSTIM")!=5){ execute("NSTIM=30")}
 if(name_declared("MECHANO_ON")!=5){ execute("MECHANO_ON=0")}
 
@@ -104,14 +105,14 @@ if(NSTIM == 1){
         sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_1stims_filtering/", DOSE)
     } else {
         sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/%ddose_1stims/ORN/", DOSE)
-        sprint(mechano_spt_file_dir, "../input/spiketiming_arase/%ddose_1stims/MRN/", DOSE)
+        sprint(mechano_spt_file_dir, "../input/spiketiming_arase/%dHz_1stims/MRN/", MECHANO_SPONTANEOUS)
     }
 }else{
     if(MECHANO_ON == 0) {
         sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_30stims_filtering/", DOSE)
     } else {
         sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/%ddose_30stims/ORN/", DOSE)
-        sprint(mechano_spt_file_dir, "../input/spiketiming_arase/%ddose_30stims/MRN/", DOSE)
+        sprint(mechano_spt_file_dir, "../input/spiketiming_arase/%dHz_30stims/MRN/", MECHANO_SPONTANEOUS)
     }
 }
 
