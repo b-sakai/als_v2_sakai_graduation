@@ -89,5 +89,5 @@ if __name__ == "__main__":
     nconnections = 40
     n_comps = [22928-5, 12525-5] #[300, 301]
 
-    #make_synapse_Park()
-    make_synapse_Arase(nconnections)
+    make_synapse_Park()
+    #make_synapse_Arase(nconnections)

@@ -1,6 +1,8 @@
 # This file shows the file path of synapse
 $ fromRN
 ../input/synapse_list/fromRN/040823_5_sn_SynapseList.dat
+$ fromMRN
+../input/synapse_list/fromRN/040823_5_sn_SynapseList.dat
 $ CtoC
 22
 300016 200000 ../input/synapse_list/40cells_arase/300016_200000_manual.txt
