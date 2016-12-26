@@ -14,12 +14,12 @@ for file in files:
 
     if index == "5":
         num_synapses = 400
-        target_dir = "300/"
+        # target_dir = "300/"
         target_prefix = "3000"
         ncells = 17
     elif index == "7":
         num_synapses = 300
-        target_dir = "301/"
+        # target_dir = "301/"
         target_prefix = "3010"
         ncells = 16
     else:
@@ -32,12 +32,12 @@ for file in files:
         for i, line in enumerate(lines):
             synlist[i] = line.split("[")[2].split("]")[0]
 
-    for i in xrange(ncells):
+    for i in xrange(ncells+1):
         reduced_synlist = np.random.choice(synlist, num_synapses, replace=False)
         # print len(reduced_synlist)
         target_suffix = "%02d"%i
         print target_suffix
-        with open(target_dir + target_prefix + target_suffix + ".dat", "w") as f:
+        with open(target_prefix + target_suffix + ".dat", "w") as f:
             f.write(str(num_synapses)+"\n")
             for syn in reduced_synlist:
                 # index = random.randint(0,len(not_toroid)-1)
