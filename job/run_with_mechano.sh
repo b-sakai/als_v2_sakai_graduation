@@ -1,6 +1,6 @@
 #!/bin/bash -x
 #PJM --rsc-list "node=6"
-#PJM --rsc-list "elapse=02:00:00"
+#PJM --rsc-list "elapse=10:00:00"
 #PJM --rsc-list "rscgrp=small"
 #PJM --mpi "proc=48"
 #PJM -s
@@ -19,9 +19,9 @@
 #PJM --stgin "rank=* ./input/network_info/* %r:../input/network_info/"
 #PJM --stgin "rank=* ./input/spiketiming_arase/* %r:../input/spiketiming_arase/"
 #PJM --stgin "rank=* ./input/spiketiming_arase/ORN/* %r:../input/spiketiming_arase/ORN/"
-#PJM --stgin "rank=* ./input/spiketiming_arase/ORN/5000dose_30stims/* %r:../input/spiketiming_arase/ORN/5000dose_30stims/"
+#PJM --stgin "rank=* ./input/spiketiming_arase/ORN/3000dose_1stim/* %r:../input/spiketiming_arase/ORN/3000dose_1stim/"
 #PJM --stgin "rank=* ./input/spiketiming_arase/MRN/* %r:../input/spiketiming_arase/MRN/"
-#PJM --stgin "rank=* ./input/spiketiming_arase/MRN/60Hz_30stims/* %r:../input/spiketiming_arase/MRN/60Hz_30stims/"
+#PJM --stgin "rank=* ./input/spiketiming_arase/MRN/30Hz_1stim/* %r:../input/spiketiming_arase/MRN/30Hz_1stim/"
 
 
 #PJM --stgin "rank=* ./input/swc/* %r:../input/swc/"
@@ -52,17 +52,19 @@ NRNIV="./special -mpi"
 HOC_NAME="./main.hoc"
 #NRNOPT=""
 NRNOPT=\
-" -c STOPTIME=1850"\
+" -c STOPTIME=5000"\
 " -c IS_SUPERCOMPUTER=1"\
-" -c INTERVAL=300"\
+" -c INTERVAL=5000"\
 " -c COMP_0=65"\
 " -c COMP_1=4525"\
 " -c COMP_2=5025"\
-" -c COMP_3=6525"\
+" -c COMP_3=9743"\
 " -c GABAA_ON=1"\
 " -c GABAB_ON=0"\
-" -c DOSE=5000"\
-" -c MECHANO_ON=1"
+" -c DOSE=3000"\
+" -c NSTIM=1"\
+" -c MECHANO_SPONTANEOUS=30"\
+" -c MECHANO_ON=0"
 
 
 #LPG="lpgparm -t 4MB -s 4MB -d 4MB -h 4MB -p 4MB"

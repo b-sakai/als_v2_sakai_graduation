@@ -101,10 +101,10 @@ strdef olfactory_spt_file_dir
 strdef mechano_spt_file_dir
 
 if(NSTIM == 1){
-        //sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_1stims_filtering/", DOSE)
-        sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/ORN/%ddose_1stims/", DOSE)
+        //sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_1stim_filtering/", DOSE)
+        sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/ORN/%ddose_1stim/", DOSE)
     if(MECHANO_ON == 1) {
-        sprint(mechano_spt_file_dir, "../input/spiketiming_arase/MRN/%dHz_1stims/", MECHANO_SPONTANEOUS)
+        sprint(mechano_spt_file_dir, "../input/spiketiming_arase/MRN/%dHz_1stim/", MECHANO_SPONTANEOUS)
     }
 }else{
         //sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_30stims_filtering/", DOSE)
