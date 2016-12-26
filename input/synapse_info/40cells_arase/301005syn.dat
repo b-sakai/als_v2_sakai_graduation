@@ -2,7 +2,7 @@
 $ fromRN
 ../input/synapse_list/fromRN/050205_7_sn_SynapseList.dat
 $ fromMRN
-../input/synapse_list/fromRN/050205_7_sn_SynapseList.dat
+../input/synapse_list/fromMRN/301005.dat
 $ CtoC
 23
 301005 200000 ../input/synapse_list/40cells_arase/301005_200000_manual.txt

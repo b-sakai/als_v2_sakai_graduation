@@ -137,7 +137,6 @@ func loadSynapseInfo(){local i,pregid,postgid,pre_nid,post_nid,ndata,mode localo
         if((strcmp("fromRN",class)==0)&&(mode==1)){
             syn_fp.gets(buf)
             sscanf(buf, "%s\n", path)
-            //print path
             //print cell.SectionNum
             //cell.mkSynapses(path)
             cell.fromRNsyn = path
