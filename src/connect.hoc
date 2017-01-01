@@ -826,48 +826,47 @@ proc connectNtoN_NET_GABA2(){\
     printf("connectNtoN_NET_GABA[%d]\n",pc.id)
     printf("NPN : %d NLN : %d\n",NPN,NLN)
     for(i=0;i<NPN;i=i+1){
-    if(pc.id == 0){printf("loadSynapseInfo PN\n")}
-    //print "error pn"
-    loadSynapseInfo(nil,pn_path[i].synpath,2)
+        if(pc.id == 0){printf("loadSynapseInfo PN\n")}
+        //print "error pn"
+        loadSynapseInfo(nil,pn_path[i].synpath,2)
     }
     for(i=0;i<NLN;i=i+1){
-    if(pc.id == 0){printf("loadSynapseInfo LN\n")}
-    //print "error ln"
-    loadSynapseInfo(nil,ln_path[i].synpath,2)
+        if(pc.id == 0){printf("loadSynapseInfo LN\n")}
+        //print "error ln"
+        loadSynapseInfo(nil,ln_path[i].synpath,2)
     }
     printf("SynPathList.count() %d [%d]\n",SynPathList.count(),pc.id)
     for(j=0;j<SynPathList.count();j+=1){
     //print "SynPathList ",j,SynPathList.o(j).synpath, SynPathList.o(j).pregid, SynPathList.o(j).postgid
-    readSynapseList2(SynPathList.o(j))
-    if(int(SynPathList.o(j).postgid/100000)==2){//If post-synaptic neuron is PN
-        //printf("POST SYNAPSE IS PN(pc.id:%d)\n",pc.id)
-        //makePostSynapse_NET_GABA(SynPathList.o(j).postgid,1,10,GMAX_LTOP/NLN)
-        //makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,10.0,GMAX_LTOP/NLN)
-        //makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid)
-        //makePostSynapse_NET_GABA(SynPathList.o(j).postgid,1,10,5.0)
-        
+        readSynapseList2(SynPathList.o(j))
+        if(int(SynPathList.o(j).postgid/100000)==2){//If post-synaptic neuron is PN
+            //printf("POST SYNAPSE IS PN(pc.id:%d)\n",pc.id)
+            //makePostSynapse_NET_GABA(SynPathList.o(j).postgid,1,10,GMAX_LTOP/NLN)
+            //makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,10.0,GMAX_LTOP/NLN)
+            //makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid)
+            //makePostSynapse_NET_GABA(SynPathList.o(j).postgid,1,10,5.0)
             if(GABAA_ON == 1){
-        gmax_a = GABAA_GMAX_LTOP/NLN
+                gmax_a = GABAA_GMAX_LTOP/NLN
             }
-        if(GABAB_ON == 1){
-        gmax_b = GABAB_GMAX_LTOP/NLN
+            if(GABAB_ON == 1){
+                gmax_b = GABAB_GMAX_LTOP/NLN
             }
-    }else{
-        //printf("POST SYNAPSE IS LN(pc.id:%d)\n",pc.id)
-        //makePostSynapse_NET_GABA(SynPathList.o(j).postgid,1,10,GMAX_LTOL/NLN)
-        //makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,10.0,GMAX_LTOL/NLN)
-        //makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid)
+        }else{
+            //printf("POST SYNAPSE IS LN(pc.id:%d)\n",pc.id)
+            //makePostSynapse_NET_GABA(SynPathList.o(j).postgid,1,10,GMAX_LTOL/NLN)
+            //makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,10.0,GMAX_LTOL/NLN)
+            //makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid)
             if(GABAA_ON == 1){
-        gmax_a = GABAA_GMAX_LTOL/NLN
+                gmax_a = GABAA_GMAX_LTOL/NLN
             }else if(GABAB_ON == 1){
-        gmax_b = GABAB_GMAX_LTOL/NLN
+                gmax_b = GABAB_GMAX_LTOL/NLN
             }
-    }
-    makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,weight,gmax_a,gmax_b)
-    if(pre_comps.size() != post_comps.size()){
-        print "ERROR IN CONNECTNTON"
-        return (-1)
-    }
+        }
+        makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,weight,gmax_a,gmax_b)
+        if(pre_comps.size() != post_comps.size()){
+            print "ERROR IN CONNECTNTON"
+            return (-1)
+        }
     }
     printf("gabalist.count()=%d [%d]\n",gabalist.count(),pc.id)
 }

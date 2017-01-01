@@ -13,13 +13,13 @@ for file in files:
     # print src_prefix
 
     if index == "5":
+#        num_synapses = 800
         num_synapses = 400
-        # target_dir = "300/"
         target_prefix = "3000"
         ncells = 17
     elif index == "7":
+#        num_synapses = 600
         num_synapses = 300
-        # target_dir = "301/"
         target_prefix = "3010"
         ncells = 16
     else:
