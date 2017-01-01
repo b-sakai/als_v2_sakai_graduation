@@ -69,7 +69,10 @@ def make_synapse_Arase(n):
                 pre_index = int(pre_cell[2])
                 post_index = int(post_cell[2])
                 for i in xrange(n):
-                    f.write("%d %d %d\n" % (random.randint(1, n_comps[pre_index]), random.randint(1, n_comps[post_index]), gid_to_ln+i))
+                    if i < len(comps_to_ln[index][0]):
+                        f.write("%d %d %d\n" % (comps_to_ln[index][0][i], comps_to_ln[index][1][i], gid_to_ln+i))
+                    else:
+                        f.write("%d %d %d\n" % (random.randint(1, n_comps[pre_index]), random.randint(1, n_comps[post_index]), gid_to_ln+i))
                 gid_to_ln += n
         elif post_cell[0] == "2":
             with open(target + file, "w") as f:
