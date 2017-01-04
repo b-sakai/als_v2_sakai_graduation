@@ -72,7 +72,12 @@ def make_synapse_Arase(n):
                     if i < len(comps_to_ln[index][0]):
                         f.write("%d %d %d\n" % (comps_to_ln[index][0][i], comps_to_ln[index][1][i], gid_to_ln+i))
                     else:
-                        f.write("%d %d %d\n" % (random.randint(1, n_comps[pre_index]), random.randint(1, n_comps[post_index]), gid_to_ln+i))
+                        while True:
+                            pre_comp = random.randint(1, n_comps[pre_index])
+                            post_comp = random.randint(1, n_comps[post_index])
+                            if not (pre_comp in comps_to_ln[index][0] and post_comp in comps_to_ln[index][1]):
+                                break
+                        f.write("%d %d %d\n" % (pre_comp, post_comp, gid_to_ln+i))
                 gid_to_ln += n
         elif post_cell[0] == "2":
             with open(target + file, "w") as f:
@@ -89,8 +94,8 @@ if __name__ == "__main__":
     target = os.path.abspath(sys.argv[1]) + "/"
     files = os.listdir(target)
 
-    nconnections = 40
+    nconnections = 20
     n_comps = [22928-5, 12525-5] #[300, 301]
 
-    make_synapse_Park()
-    #make_synapse_Arase(nconnections)
+    # make_synapse_Park()
+    make_synapse_Arase(nconnections)
