@@ -1,8 +1,8 @@
 #!/bin/bash -x
-#PJM --rsc-list "node=6"
-#PJM --rsc-list "elapse=1:00:00"
+#PJM --rsc-list "node=60"
+#PJM --rsc-list "elapse=10:00:00"
 #PJM --rsc-list "rscgrp=small"
-#PJM --mpi "proc=48"
+#PJM --mpi "proc=480"
 #PJM -s
 
 # staging
@@ -27,10 +27,10 @@
 #PJM --stgin "rank=* ./input/swc/* %r:../input/swc/"
 #PJM --stgin "rank=* ./input/swc/rn0514/* %r:../input/swc/rn0514/"
 #PJM --stgin "rank=* ./input/synapse_info/* %r:../input/synapse_info/"
-#PJM --stgin "rank=* ./input/synapse_info/40cells_arase/* %r:../input/synapse_info/40cells_arase/"
+#PJM --stgin "rank=* ./input/synapse_info/400cells_arase/* %r:../input/synapse_info/400cells_arase/"
 #PJM --stgin "rank=* ./input/synapse_info/syn/* %r:../input/synapse_info/syn/"
 #PJM --stgin "rank=* ./input/synapse_list/* %r:../input/synapse_list/"
-#PJM --stgin "rank=* ./input/synapse_list/40cells_arase/* %r:../input/synapse_list/40cells_arase/"
+#PJM --stgin "rank=* ./input/synapse_list/400cells_arase/* %r:../input/synapse_list/400cells_arase/"
 #PJM --stgin "rank=* ./input/synapse_list/fromRN/* %r:../input/synapse_list/fromRN/"
 #PJM --stgin "rank=* ./input/synapse_list/fromMRN/* %r:../input/synapse_list/fromMRN/"
 
@@ -53,10 +53,10 @@ NRNIV="./special -mpi"
 HOC_NAME="./main.hoc"
 #NRNOPT=""
 NRNOPT=\
-" -c STOPTIME=500"\
+" -c STOPTIME=30"\
 " -c IS_SUPERCOMPUTER=1"\
 " -c INTERVAL=5000"\
-" -c NCELL=40"\
+" -c NCELL=400"\
 " -c WEIGHT_200=0.05"\
 " -c WEIGHT_300=0.05"\
 " -c WEIGHT_301=0.05"\
@@ -69,7 +69,7 @@ NRNOPT=\
 " -c DOSE=3000"\
 " -c NSTIM=1"\
 " -c MECHANO_SPONTANEOUS=30"\
-" -c MECHANO_ON=1"\
+" -c MECHANO_ON=0"\
 " -c GABAA_GMAX_LTOP=5.0"\
 " -c GABAA_GMAX_LTOL=5.0"\
 " -c GABAB_GMAX_LTOP=0.6"\

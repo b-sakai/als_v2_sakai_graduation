@@ -49,6 +49,7 @@ if(name_declared("CAGAIN")!=5){ execute("CAGAIN=0.16")}
 if(name_declared("STOPTIME")!=5){ execute("STOPTIME=50")}
 if(name_declared("IS_SUPERCOMPUTER")!=5){ execute("IS_SUPERCOMPUTER=0")}
 if(name_declared("INTERVAL")!=5){ execute("INTERVAL=1200")}
+if(name_declared("NCELL")!=5){ execute("NCELL=40")}
 if(name_declared("START_TIME")!=5){ execute("START_TIME=0")}
 if(name_declared("WEIGHT_200")!=5){ execute("WEIGHT_200=0.05")}
 if(name_declared("WEIGHT_300")!=5){ execute("WEIGHT_300=0.05")}
@@ -78,22 +79,11 @@ if(IS_SUPERCOMPUTER == 0){
     //info_filename = "../input/network_info/network_info_3reduced.dat"
     //info_filename = "../input/network_info/network_info_4cells.dat"
     info_filename_rn = "../input/network_info/network_info_500rns.dat"
-    //info_filename_rn = ""
     //info_filename_rn = "../input/network_info/network_info_1rns.dat"
 }else if(IS_SUPERCOMPUTER == 1){
-    //info_filename = "../input/network_info/network_info_3cells.dat"
-    //info_filename = "../input/network_info/network_info_40cells.dat"
-    info_filename = "../input/network_info/network_info_40cells_arase.dat"
-    //info_filename = "../input/network_info/network_info_400cells.dat"
-    //info_filename = "../input/network_info/network_info_39cells.dat"
-    //info_filename = "../input/network_info/network_info_1LN.dat"
-    //info_filename = "../input/network_info/network_info_1PN.dat"
-    //info_filename_rn = ""
-    info_filename_rn = "../input/network_info/network_info_2000rns.dat"
-    //info_filename_rn = "../input/network_info/network_info_500rns.dat"
-    //info_filename_rn = "../input/network_info/network_info_20000rns.dat"
-    //info_filename_rn = "../input/network_info/network_info_20000RN_7axon.dat"
-    //info_filename_rn = "../input/network_info/network_info_1rns.dat"
+    //sprint(info_filename, "../input/network_info/network_info_%dcells.dat", NCELL)
+    sprint(info_filename, "../input/network_info/network_info_%dcells_arase.dat", NCELL)
+    sprint(info_filename_rn, "../input/network_info/network_info_%drns.dat", NCELL*50)
 }else{
     printf("IS_SUPERCOMPUTER = %d is invalid.\n", IS_SUPERCOMPUTER)
 }
@@ -104,13 +94,13 @@ strdef mechano_spt_file_dir
 
 if(NSTIM == 1){
         //sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_1stim_filtering/", DOSE)
-        sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/ORN/%ddose_1stim/", DOSE)
+        sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/ORN/%dng_1stim/", DOSE)
     if(MECHANO_ON == 1) {
         sprint(mechano_spt_file_dir, "../input/spiketiming_arase/MRN/%dHz_1stim/", MECHANO_SPONTANEOUS)
     }
 }else{
         //sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_30stims_filtering/", DOSE)
-        sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/ORN/%ddose_30stims/", DOSE)
+        sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/ORN/%dng_30stims/", DOSE)
     if(MECHANO_ON == 1) {
         sprint(mechano_spt_file_dir, "../input/spiketiming_arase/MRN/%dHz_30stims/", MECHANO_SPONTANEOUS)
     }

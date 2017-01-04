@@ -846,7 +846,7 @@ proc connectNtoN_NET_GABA2(){\
             //makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid)
             //makePostSynapse_NET_GABA(SynPathList.o(j).postgid,1,10,5.0)
             if(GABAA_ON == 1){
-                gmax_a = GABAA_GMAX_LTOP/NLN
+                gmax_a = GABAA_GMAX_LTOP/NLN //The larger the network is, the more synapses are connected to one compartment.
             }
             if(GABAB_ON == 1){
                 gmax_b = GABAB_GMAX_LTOP/NLN
