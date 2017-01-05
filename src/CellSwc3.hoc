@@ -1,5 +1,6 @@
 //------------------------------------
 // MODIFIED HISTORY
+// 2017.01.05 by nebula
 // 2015.01.08
 // 2015.04.30
 // 2015.05.20
@@ -21,6 +22,7 @@ begintemplate CellSwc
 // Original Variables and Functions
 public init, shape, translation, subsets, geom, biophys, geom_nseg, biophys_inhomo, makeSyn, makeNetCon
 public Scalex, ScaleY, ScaleZ, Shrinkagex, Shrinkagey, Shrinkagez
+public saveData
 public all, secInput, secOutput
 public SynList
 public Dend, SectionNum
@@ -1122,5 +1124,21 @@ proc fprintMultiSpikeRecord(){local i, interval, tstop, delay localobj mt
     mt.fprint(fileSR,"%5.5f\t")
     fileSR.close()
 }
+
+proc saveData() { local i localobj outfile strdef filename
+     filename = $s1
+
+     printf("filename: %s\n", filename)
+
+     outfile = new File()
+     outfile.wopen(filename)
+     for(i=0; i<SectionNum; i=i+1){
+     	      access Dend[i]
+	      outfile.printf("%f\n", v)
+     }
+     outfile.printf("\n")
+     outfile.close()
+}
+
 
 endtemplate CellSwc
