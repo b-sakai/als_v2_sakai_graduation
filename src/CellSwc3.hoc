@@ -1128,7 +1128,7 @@ proc fprintMultiSpikeRecord(){local i, interval, tstop, delay localobj mt
 proc saveData() { local i localobj outfile strdef filename
      filename = $s1
 
-     printf("filename: %s\n", filename)
+//     printf("filename: %s\n", filename)
 
      outfile = new File()
      outfile.wopen(filename)
