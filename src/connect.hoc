@@ -443,22 +443,22 @@ proc makeNET_GABAsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weig
         //printf("POST: %d, GID : %d, i : %d, [%d]\n",post_cell,gidVec.x[i],i,pc.id)
             if(GABAA_ON == 1){
                 gaba = post.mkNET_GABAa(post_comps.x[i],gmax_a)
-        gabalist.append(gaba)
-        nc = pc.gid_connect(gidVec.x[i], gaba)
-        nc.delay = delay
-        nc.weight = weight
-        nclist_NtoN.append(nc)
+                gabalist.append(gaba)
+                nc = pc.gid_connect(gidVec.x[i], gaba)
+                nc.delay = delay
+                nc.weight = weight
+                nclist_NtoN.append(nc)
             }
         if(GABAB_ON == 1){
                 gaba = post.mkNET_GABAb(post_comps.x[i],gmax_b)
-        gabalist.append(gaba)
-        nc = pc.gid_connect(gidVec.x[i], gaba)
-        nc.delay = delay
-        nc.weight = weight
-        nclist_NtoN.append(nc)
+                gabalist.append(gaba)
+                nc = pc.gid_connect(gidVec.x[i], gaba)
+                nc.delay = delay
+                nc.weight = weight
+                nclist_NtoN.append(nc)
             }
         //setPostSynapseVoltageRecord(post, post_comps.x[i])
-    }
+        }
     }
 }
 
@@ -471,9 +471,10 @@ proc makeNET_GABAsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weig
 proc connectNtoN_NET_GABA2(){\
     local i, j,gid_base,gmax_a, gmax_b, weight\
     localobj str,nil,pre,post
-
     strdef _syn_path
     gid_base = 2000000
+    weight =1.0
+
     printf("connectNtoN_NET_GABA[%d]\n",pc.id)
     printf("NPN : %d NLN : %d\n",NPN,NLN)
     for(i=0;i<NPN;i=i+1){

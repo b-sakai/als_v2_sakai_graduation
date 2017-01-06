@@ -121,8 +121,8 @@ pc = new ParallelContext()
 proc ShowInitialStatus(){
     if(pc.id==0){
     printf("==================================================================================\n")
-    printf("PC.NHOST : %d\n",pc.nhost)
-    printf("STOPTIME : %d(ms) IS_SUPERCOMPUTER : %d INTERVAL : %d\n",STOPTIME, IS_SUPERCOMPUTER, INTERVAL)
+    printf("PC.NHOST: %d\n",pc.nhost)
+    printf("STOPTIME: %d(ms), IS_SUPERCOMPUTER: %d, INTERVAL: %d, SAVE_ALL: %d\n",STOPTIME, IS_SUPERCOMPUTER, INTERVAL, SAVE_ALL)
     printf("NETWORK INFORMATION :\n")
     printf("CELL LIST : %s(PNs and LNs), %s(RNs)\n",info_filename, info_filename_rn)
     printf("WEIGHT_200\t%f\tWEIGHT_300\t%f\tWEIGHT_301\t%f\n",WEIGHT_200,WEIGHT_300,WEIGHT_301)
