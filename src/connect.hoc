@@ -308,7 +308,7 @@ proc readSynapseList2(){\
 
     strdef buf, ctype
     strdef syn_filename
-    
+
     pre_comps = new Vector()
     post_comps = new Vector()
     syntypes = new Vector()
@@ -318,7 +318,7 @@ proc readSynapseList2(){\
     gid_cnt  = 0
     
     synf = new File()
-    
+
     if(synf.ropen(syn_filename) != 1){
     printf("ERROR : File was not found. (%s)\n",syn_filename)
     return(-1) 
@@ -471,7 +471,7 @@ proc makeNET_GABAsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weig
 proc connectNtoN_NET_GABA2(){\
     local i, j,gid_base,gmax_a, gmax_b, weight\
     localobj str,nil,pre,post
-    strdef _syn_path
+    strdef _syn_path, cmd
     gid_base = 2000000
     weight =1.0
 
@@ -488,6 +488,17 @@ proc connectNtoN_NET_GABA2(){\
         loadSynapseInfo(nil,ln_path[i].synpath,2)
     }
     printf("SynPathList.count() %d [%d]\n",SynPathList.count(),pc.id)
+
+//    cmd = "tar xvf ../input/synapse_list/30temp/synlist.tar -C ../input/synapse_list/30temp/"
+    if(pc.id==0) {
+        print "Begin decompressing synlist"
+        sprint(cmd, "tar xvf %ssynlist.tar -C %s", synlist_dir, synlist_dir)
+        print cmd
+        system(cmd)
+        print "Begin decompressing synlist"
+    }
+    pc.barrier()
+
     for(j=0;j<SynPathList.count();j+=1){
     //print "SynPathList ",j,SynPathList.o(j).synpath, SynPathList.o(j).pregid, SynPathList.o(j).postgid
         readSynapseList2(SynPathList.o(j))

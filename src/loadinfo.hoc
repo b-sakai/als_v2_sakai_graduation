@@ -155,6 +155,7 @@ func loadSynapseInfo(){local i,pregid,postgid,pre_nid,post_nid,ndata,mode localo
             syn_fp.gets(buf)
             sscanf(buf,"%d %d %s\n",&pregid, &postgid, synpath)
             //printf("%d %d %s\n",pregid,postgid, synpath)
+            
             synp = new SynPath(pregid, pre_nid,postgid, post_nid,synpath)
             //cell.SynPathList.append(synp)
             SynPathList.append(synp)

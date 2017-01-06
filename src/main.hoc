@@ -70,8 +70,7 @@ if(name_declared("NSTIM")!=5){ execute("NSTIM=30")}
 if(name_declared("MECHANO_ON")!=5){ execute("MECHANO_ON=0")}
 
 
-strdef info_filename
-strdef info_filename_rn
+strdef info_filename, info_filename_rn, synlist_dir
 
 if(IS_SUPERCOMPUTER == 0){
     //info_filename = "../input/network_info/network_info_3cells.dat"
@@ -81,10 +80,13 @@ if(IS_SUPERCOMPUTER == 0){
     //info_filename = "../input/network_info/network_info_4cells.dat"
     info_filename_rn = "../input/network_info/network_info_500rns.dat"
     //info_filename_rn = "../input/network_info/network_info_1rns.dat"
+    synlist_dir = "../input/synapse_list/3_1PN2LNs/"
 }else if(IS_SUPERCOMPUTER == 1){
     //sprint(info_filename, "../input/network_info/network_info_%dcells.dat", NCELL)
     sprint(info_filename, "../input/network_info/network_info_%dcells_arase.dat", NCELL)
     sprint(info_filename_rn, "../input/network_info/network_info_%drns.dat", NCELL*50)
+    sprint(synlist_dir, "../input/synapse_list/%dcells_arase/", NCELL)
+        
 }else{
     printf("IS_SUPERCOMPUTER = %d is invalid.\n", IS_SUPERCOMPUTER)
 }
