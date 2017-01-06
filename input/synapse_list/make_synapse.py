@@ -7,6 +7,7 @@ $ python make_synapse.py [target_directory]
 
 import os
 import sys
+import glob
 import random
 
 """
@@ -36,7 +37,7 @@ def make_synapse_Park():
     for file in files:
         pre_cell, post_cell, _ = file.split("_")
         if post_cell[0] == "3":
-            with open(target + file, "w") as f:
+            with open(file, "w") as f:
                 f.write("$ PRE_CELL %s\n" % pre_cell)
                 f.write("$ POST_CELL %s\n" % post_cell)
                 f.write("$ NCONNECTIONS %d\n" % n)
@@ -45,7 +46,7 @@ def make_synapse_Park():
                     f.write("%d %d %d\n" % (comps_to_ln[index][0][i], comps_to_ln[index][1][i], gid_to_ln+i))
                 gid_to_ln += n
         elif post_cell[0] == "2":
-            with open(target + file, "w") as f:
+            with open(file, "w") as f:
                 f.write("$ PRE_CELL %s\n" % pre_cell)
                 f.write("$ POST_CELL %s\n" % post_cell)
                 f.write("$ NCONNECTIONS %d\n" % n)
@@ -60,9 +61,10 @@ def make_synapse_Arase(n):
     gid_to_pn = 2000000
 
     for file in files:
-        pre_cell, post_cell, _ = file.split("_")
+        print file
+        pre_cell, post_cell, _ = file.split("/")[-1].split("_")
         if post_cell[0] == "3":
-            with open(target + file, "w") as f:
+            with open(file, "w") as f:
                 f.write("$ PRE_CELL %s\n" % pre_cell)
                 f.write("$ POST_CELL %s\n" % post_cell)
                 f.write("$ NCONNECTIONS %d\n" % nconnections)
@@ -80,7 +82,7 @@ def make_synapse_Arase(n):
                         f.write("%d %d %d\n" % (pre_comp, post_comp, gid_to_ln+i))
                 gid_to_ln += n
         elif post_cell[0] == "2":
-            with open(target + file, "w") as f:
+            with open(file, "w") as f:
                 f.write("$ PRE_CELL %s\n" % pre_cell)
                 f.write("$ POST_CELL %s\n" % post_cell)
                 f.write("$ NCONNECTIONS %d\n" % n)
@@ -92,7 +94,7 @@ def make_synapse_Arase(n):
 
 if __name__ == "__main__":
     target = os.path.abspath(sys.argv[1]) + "/"
-    files = os.listdir(target)
+    files = glob.glob("{0}*.txt".format(target))
 
     nconnections = 10
     n_comps = [22928-5, 12525-5] #[300, 301]
