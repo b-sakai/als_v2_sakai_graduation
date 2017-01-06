@@ -24,6 +24,7 @@ NRNOPT=\
 " -c STOPTIME=50"\
 " -c IS_SUPERCOMPUTER=0"\
 " -c START_TIME=${Time}"\
+" -c SAVE_ALL=1"\
 " -c WEIGHT_200=0.05"\
 " -c WEIGHT_300=0.004"\
 " -c WEIGHT_301=0.008"\

@@ -56,6 +56,7 @@ NRNOPT=\
 " -c STOPTIME=500"\
 " -c IS_SUPERCOMPUTER=1"\
 " -c INTERVAL=5000"\
+" -c SAVE_ALL=1"\
 " -c NCELL=40"\
 " -c WEIGHT_200=0.05"\
 " -c WEIGHT_300=0.05"\

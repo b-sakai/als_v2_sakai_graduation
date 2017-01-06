@@ -1027,6 +1027,7 @@ public setSpikeRecord_debug, fprintSpikeRecord_debug, setSpikeRecordList_debug
 
 objref tvecL, cmptL, ncL
 
+/*
 proc setSpikeRecordList_debug(){
     tvecL = new List()
     cmptL = new Vector()
@@ -1068,6 +1069,7 @@ proc fprintSpikeRecord_debug(){local i localobj fileSR
     fileSR.close()
     }
 }
+*/
 
 objref fileSR
 proc fprintSpikeRecord(){local i, interval, tstop, delay
@@ -1127,7 +1129,6 @@ proc fprintMultiSpikeRecord(){local i, interval, tstop, delay localobj mt
 
 proc saveData() { local i localobj outfile strdef filename
      filename = $s1
-
 //     printf("filename: %s\n", filename)
 
      outfile = new File()
@@ -1139,6 +1140,5 @@ proc saveData() { local i localobj outfile strdef filename
      outfile.printf("\n")
      outfile.close()
 }
-
 
 endtemplate CellSwc

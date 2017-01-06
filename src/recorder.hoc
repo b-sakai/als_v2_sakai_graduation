@@ -17,21 +17,21 @@
 //
 //************************************************
 
-strdef FPRINT_DIR
-strdef SPIKEOUT_DIR
-if(IS_SUPERCOMPUTER == 1){
-    FPRINT_DIR = "./result/record/"
-    SPIKEOUT_DIR = "./result/spike/"
-}else if(START_TIME == 0){
-    FPRINT_DIR = "../result/record/"
-    SPIKEOUT_DIR = "../result/spike/"
-}else{
-    sprint(FPRINT_DIR,"../result/%010d/record/",START_TIME)
-    sprint(SPIKEOUT_DIR,"../result/%010d/spike/",START_TIME)
-}
-if(pc.id == 0){
-    printf("OUTPUT DIR : %s\n",FPRINT_DIR)
-}
+//strdef FPRINT_DIR
+//strdef SPIKEOUT_DIR
+//if(IS_SUPERCOMPUTER == 1){
+//    FPRINT_DIR = "./result/record/"
+//    SPIKEOUT_DIR = "./result/spike/"
+//}else if(START_TIME == 0){
+//    FPRINT_DIR = "../result/record/"
+//    SPIKEOUT_DIR = "../result/spike/"
+//}else{
+//    sprint(FPRINT_DIR,"../result/%010d/record/",START_TIME)
+//    sprint(SPIKEOUT_DIR,"../result/%010d/spike/",START_TIME)
+//}
+//if(pc.id == 0){
+//    printf("OUTPUT DIR : %s\n",FPRINT_DIR)
+//}
 
 proc spikerecord(){local i localobj nc, nil
     if(pns.count()!=0){
@@ -198,6 +198,9 @@ proc setVoltageRecord(){local i,j, SynapsePrintOn localobj volt_vec
 objref vecs_, tvec_, vecs_cmpt_
 vecs_ = new List()
 vecs_cmpt_ = new Vector()
+
+
+/*
 proc setVoltageRecord_debug(){local i,j,cmpt localobj vec_, cell
     tvec_ = new Vector()
     tvec_.record(&t)
@@ -224,6 +227,7 @@ proc fprintVoltageRecord_debug(){local i localobj file,mt
     file.close()
     }
 }
+*/
 
 objref gaba_vecs,gaba_vec
 objref gaba_tvec
@@ -392,6 +396,25 @@ proc fprintDummyRecord(){localobj mt, file
     mt.fprint(file,"%5.5f\t")
     file.close()
 }
+
+
+proc compressData() { local i strdef cmd
+    if(pc.id == 0){
+        print "COMPRESS DATA"
+        printf("OUTPUT DIR : %s\n",FPRINT_DIR)
+    }
+    for(i = 0; i<pns.count();i+=1){
+        sprint(cmd, "tar cf %s%d.tar %s%d*.dat && rm %s%d*.dat", FPRINT_DIR, pns.o(i).nid, FPRINT_DIR, pns.o(i).nid, FPRINT_DIR, pns.o(i).nid)
+        print cmd
+        system(cmd)
+    }
+    for(i = 0; i<lns.count();i+=1){
+        sprint(cmd, "tar cf %s%d.tar %s%d*.dat && rm %s%d*.dat", FPRINT_DIR, lns.o(i).nid, FPRINT_DIR, lns.o(i).nid, FPRINT_DIR, lns.o(i).nid)
+        print cmd
+        system(cmd)
+    }
+}
+
 /*
 proc fprintPreGABArecord(){local j localobj mt, file
     strdef filename
