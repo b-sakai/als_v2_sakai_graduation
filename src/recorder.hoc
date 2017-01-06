@@ -17,21 +17,6 @@
 //
 //************************************************
 
-//strdef FPRINT_DIR
-//strdef SPIKEOUT_DIR
-//if(IS_SUPERCOMPUTER == 1){
-//    FPRINT_DIR = "./result/record/"
-//    SPIKEOUT_DIR = "./result/spike/"
-//}else if(START_TIME == 0){
-//    FPRINT_DIR = "../result/record/"
-//    SPIKEOUT_DIR = "../result/spike/"
-//}else{
-//    sprint(FPRINT_DIR,"../result/%010d/record/",START_TIME)
-//    sprint(SPIKEOUT_DIR,"../result/%010d/spike/",START_TIME)
-//}
-//if(pc.id == 0){
-//    printf("OUTPUT DIR : %s\n",FPRINT_DIR)
-//}
 
 proc spikerecord(){local i localobj nc, nil
     if(pns.count()!=0){
@@ -199,36 +184,6 @@ objref vecs_, tvec_, vecs_cmpt_
 vecs_ = new List()
 vecs_cmpt_ = new Vector()
 
-
-/*
-proc setVoltageRecord_debug(){local i,j,cmpt localobj vec_, cell
-    tvec_ = new Vector()
-    tvec_.record(&t)
-    cell = $o1
-    cmpt = $2
-    vec_ = new Vector()
-    vec_.record(&cell.Dend[cmpt].v(0.5))
-    vecs_.append(vec_)
-    vecs_cmpt_.append(cmpt)
-}
-
-proc fprintVoltageRecord_debug(){local i localobj file,mt
-    strdef filename
-    for(i=0; i<vecs_.count();i+=1){
-    mt = new Matrix()
-    file = new File()
-    sprint(filename,"%s%05dVolt.txt",FPRINT_DIR,vecs_cmpt_.x[i])
-    print filename
-    file.wopen(filename)
-    mt.resize(tvec_.size(),2)
-    mt.setcol(0,tvec_)
-    mt.setcol(1,vecs_.o(i))
-    mt.fprint(file,"%5.5f\t")
-    file.close()
-    }
-}
-*/
-
 objref gaba_vecs,gaba_vec
 objref gaba_tvec
 proc setGABArecord(){local i, j
@@ -260,31 +215,7 @@ proc setDummyRecord(){local i, j
     }
     //    pc.barrier()
 }
-/*
-objref PreGABA_vecs[5000]
-objref PreGABA_tvec
-PreGABA_cnt = 0
-proc setPreGABArecord(){local i,j,k localobj pre,post
-    for i=0, 50-1{
-    PreGABA_vecs[i] = new Vector()
-    }
-    PreGABA_tvec = new Vector()
-    PreGABA_tvec.record(&t)
-    //printf("PreGABA RECORD(pc.id:%d)\n",pc.id)
-    for i = 0, NPN+NLN-1{
-    if(pc.gid_exists(i)){
-        printf("PreGABA (pc.id:%d, gid:%d)\n",pc.id,i)
-        pre = pc.gid2obj(i)
-        for j=0, pre_comps_list[i].count()-1{
-        for k=0, pre_comps_list[i].o(j).size()-1{   
-            PreGABA_vecs[PreGABA_cnt].record(&pre.Dend[pre_comps_list[i].o(j).x[k]].v(0.5))
-            PreGABA_cnt += 1
-        }
-        }
-    }
-    }
-}
-*/
+
 proc fprintVoltageRecord(){local SynapsePrintOn localobj mt, file,mt2, file2
     strdef filename
     SynapsePrintOn = $1
@@ -414,38 +345,3 @@ proc compressData() { local i strdef cmd
         system(cmd)
     }
 }
-
-/*
-proc fprintPreGABArecord(){local j localobj mt, file
-    strdef filename
-    if(PreGABA_cnt != 0){
-    mt = new Matrix()
-    file = new File()
-    mt.resize(PreGABA_tvec.size(),PreGABA_cnt+1)
-    mt.setcol(0,PreGABA_tvec)
-    for(j = 0; j<PreGABA_cnt;j+=1){
-        mt.setcol(j+1,PreGABA_vecs[j])
-    }
-    sprint(filename,"%s%d_PreGABA%d.txt",FPRINT_DIR,pc.id,PreGABA_cnt)
-    file.wopen(filename)
-    mt.fprint(file,"%5.5f\t")
-    file.close()
-    }
-}
-*/
-
-/*
-print fprintSynapseList(){local i, j,pre_cnt, post_cnt localobj mt, file
-    strdef filename
-    mt = new Matrix()
-    pre_cnt  = 0
-    post_cnt = 0
-    for(i = 0; i<NPN+NLN;i+=1){
-    file = new File()
-    for(j=0;j<pre_comps_list[i].count();j+=1){
-        pre_cnt = pre_comps_list[i].
-    }
-    mt.resize(pre_comps_list[i]
-    }
-}
-*/
