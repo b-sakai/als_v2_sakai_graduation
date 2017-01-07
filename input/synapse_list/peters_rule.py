@@ -22,12 +22,10 @@ def extract_comp(s):
 
 
 input_filename = sys.argv[1] # "300_301_dist.csv"
-# input_filename = "200_300_dist.csv" 
 cell0, cell1, _ = input_filename.split("_")
 output_filename = "synapses_between_{0}_{1}.dat".format(cell0, cell1)
 
 max_distance = float(sys.argv[2])
-# max_distance = 50
 
 with open(input_filename, "r") as f:
     lines = f.readlines()
@@ -43,4 +41,4 @@ with open(output_filename, "w") as f:
     f.write("# {0}_syn {1}_syn\n".format(cell0, cell1))
     f.write("# num of data: %d\n" % len(candidates[0]))
     for (s0, s1) in zip(map(int, candidates[1]), map(int, candidates[2])):
-        f.write("%d %d\n" % (s0, s1))
+        f.write("%d %d\n" % (s0+2, s1+2)) # 朴さんの距離計算プログラムにバグがあり，コンパートメント番号が2つずれているためその修正 
