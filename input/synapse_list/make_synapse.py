@@ -22,12 +22,9 @@ def read_data(filename):
     with open(filename, "r") as f:
         f.readline()
         num = int(f.readline().split()[-1])
-        # var = np.ndarray([2,num])
         var = [[None for i in xrange(num)], [None for i in xrange(num)]]
         lines = f.readlines()
-        # print lines
         for i, line in enumerate(lines):
-            # print line
             var[0][i], var[1][i] = map(int, line.split())
     return var
 
@@ -48,7 +45,6 @@ def make_synapse_Arase(n):
                 print "something wrong with %s" % file
         elif post_cell[0] == "3":
             if pre_cell[2] == "0":
-                # synlist = syn_300_301
                 synlist = [syn_300_301[1], syn_300_301[0]]
             elif pre_cell[2] == "1":
                 synlist = syn_300_301
@@ -57,16 +53,16 @@ def make_synapse_Arase(n):
         else:
             print "something wrong with %s" % file
 
-        print synlist[0][:10]
-        print synlist[1][:10]
-
         with open(file, "w") as f:
             f.write("$ PRE_CELL %s\n" % pre_cell)
             f.write("$ POST_CELL %s\n" % post_cell)
             f.write("$ NCONNECTIONS %d\n" % n)
 
-            index = random.sample(xrange(len(synlist[0])), n)
             gid_index = int(post_cell[0])-2
+            k = 4 if gid_index == 0 else 1
+
+            index = random.sample(xrange(len(synlist[0])), k*n)
+            
 
             for i in index:
                 gid[gid_index] += 1
