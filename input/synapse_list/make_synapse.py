@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
 """
+synapses_between_*.dat からシナプス結合のリストを取得し，指定されたディレクトリ以下のシナプス結合ファイルをランダムに生成する
+京上でも動く
+
 USAGE
 $ python make_synapse.py [target_directory]
 """
@@ -15,89 +18,70 @@ comps_to_ln[300_301 or 301_300][pre or post] by Park
 comps_to_pn[300_200 or 301_200][pre or post] by Park
 """
 
-comps_to_ln = \
-[[[21015,14644, 8240,15191, 8804,21375, 8239,15706,15171,21088],\
-[11079,10877,11534,11093,11257,10351,11580,11879,11949,11038]],\
-[[10351,10877,11083,10380,11422,11681,10351,11083,11219,11093],\
-[21374,15191, 8242,21309, 8239, 9486,21436, 8804,21088,15070]]]
-
-comps_to_pn = \
-[[[2739, 2730, 2366, 2363, 2055, 2050, 1809, 1801, 1590, 1579],\
-[110,  107,  104,  101,  98,   97,   94,   114,  109,  102]],\
-[[3572, 4958, 5487, 1846, 6691, 7140, 3610, 3524, 2733, 4517],\
-[101,  102,  94,   98,   125,  119,  114,  108,  103,  93]]]
-
-
-def make_synapse_Park():
-    gid_to_ln = 3000000
-    gid_to_pn = 2000000
-
-    n = 10
-
-    for file in files:
-        pre_cell, post_cell, _ = file.split("_")
-        if post_cell[0] == "3":
-            with open(file, "w") as f:
-                f.write("$ PRE_CELL %s\n" % pre_cell)
-                f.write("$ POST_CELL %s\n" % post_cell)
-                f.write("$ NCONNECTIONS %d\n" % n)
-                index = int(pre_cell[2])
-                for i in xrange(n):
-                    f.write("%d %d %d\n" % (comps_to_ln[index][0][i], comps_to_ln[index][1][i], gid_to_ln+i))
-                gid_to_ln += n
-        elif post_cell[0] == "2":
-            with open(file, "w") as f:
-                f.write("$ PRE_CELL %s\n" % pre_cell)
-                f.write("$ POST_CELL %s\n" % post_cell)
-                f.write("$ NCONNECTIONS %d\n" % n)
-                index = int(pre_cell[2])
-                for i in xrange(10):
-                    f.write("%d %d %d\n" % (comps_to_pn[index][0][i], comps_to_pn[index][1][i], gid_to_pn+i))
-                gid_to_pn += n
+def read_data(filename):
+    with open(filename, "r") as f:
+        f.readline()
+        num = int(f.readline().split()[-1])
+        # var = np.ndarray([2,num])
+        var = [[None for i in xrange(num)], [None for i in xrange(num)]]
+        lines = f.readlines()
+        # print lines
+        for i, line in enumerate(lines):
+            # print line
+            var[0][i], var[1][i] = map(int, line.split())
+    return var
 
 
 def make_synapse_Arase(n):
-    gid_to_ln = 3000000
-    gid_to_pn = 2000000
+    gid = [2000000, 3000000]
 
     for file in files:
         print file
         pre_cell, post_cell, _ = file.split("/")[-1].split("_")
-        if post_cell[0] == "3":
-            with open(file, "w") as f:
-                f.write("$ PRE_CELL %s\n" % pre_cell)
-                f.write("$ POST_CELL %s\n" % post_cell)
-                f.write("$ NCONNECTIONS %d\n" % nconnections)
-                pre_index = int(pre_cell[2])
-                post_index = int(post_cell[2])
-                for i in xrange(n):
-                    if i < len(comps_to_ln[pre_index][0]):
-                        f.write("%d %d %d\n" % (comps_to_ln[pre_index][0][i], comps_to_ln[pre_index][1][i], gid_to_ln+i))
-                    else:
-                        while True:
-                            pre_comp = random.randint(1, n_comps[pre_index])
-                            post_comp = random.randint(1, n_comps[post_index])
-                            if not (pre_comp in comps_to_ln[pre_index][0] and post_comp in comps_to_ln[pre_index][1]):
-                                break
-                        f.write("%d %d %d\n" % (pre_comp, post_comp, gid_to_ln+i))
-                gid_to_ln += n
-        elif post_cell[0] == "2":
-            with open(file, "w") as f:
-                f.write("$ PRE_CELL %s\n" % pre_cell)
-                f.write("$ POST_CELL %s\n" % post_cell)
-                f.write("$ NCONNECTIONS %d\n" % n)
-                index = int(pre_cell[2])
-                for i in xrange(10):
-                    f.write("%d %d %d\n" % (comps_to_pn[index][0][i], comps_to_pn[index][1][i], gid_to_pn+i))
-                gid_to_pn += n
+
+        if post_cell[0] == "2":
+            if pre_cell[2] == "0":
+                synlist = syn_200_300
+            elif pre_cell[2] == "1":
+                synlist = syn_200_301
+            else:
+                print "something wrong with %s" % file
+        elif post_cell[0] == "3":
+            if pre_cell[2] == "0":
+                # synlist = syn_300_301
+                synlist = [syn_300_301[1], syn_300_301[0]]
+            elif pre_cell[2] == "1":
+                synlist = syn_300_301
+            else:
+                print "something wrong with %s" % file
+        else:
+            print "something wrong with %s" % file
+
+        print synlist[0][:10]
+        print synlist[1][:10]
+
+        with open(file, "w") as f:
+            f.write("$ PRE_CELL %s\n" % pre_cell)
+            f.write("$ POST_CELL %s\n" % post_cell)
+            f.write("$ NCONNECTIONS %d\n" % n)
+
+            index = random.sample(xrange(len(synlist[0])), n)
+            gid_index = int(post_cell[0])-2
+
+            for i in index:
+                gid[gid_index] += 1
+                f.write("%d %d %d\n" % (synlist[1][i], synlist[0][i], gid[gid_index]))
 
 
 if __name__ == "__main__":
     target = os.path.abspath(sys.argv[1]) + "/"
+    # target = "30temp/"
     files = glob.glob("{0}*.txt".format(target))
 
-    nconnections = 10
-    n_comps = [22928-5, 12525-5] #[300, 301]
+    syn_200_300 = read_data("synapses_between_200_300.dat")
+    syn_200_301 = read_data("synapses_between_200_301.dat")
+    syn_300_301 = read_data("synapses_between_300_301.dat")
 
-    # make_synapse_Park()
+    nconnections = 10
+
     make_synapse_Arase(nconnections)
