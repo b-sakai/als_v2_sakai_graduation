@@ -63,8 +63,8 @@ def draw_PSTH_rn_pn():
     for var in data:
         PSTH[index(var)] += 1
         # print index(var)
-    print PSTH[-10:]
-    print data[-10:]
+    # print PSTH[-10:]
+    # print data[-10:]
     plt.plot(time, PSTH, "-", label=str(dose))
     plt.title("{2}: {0} ng, {1} ms".format(dose, duration*1000, cell_gid))
     plt.xlabel("time")
@@ -85,7 +85,9 @@ def draw_PSTH_ln():
     time = np.arange(math.ceil(tstop/bin))*bin
     for i in xrange(4):
         for var in data[i]:
-            PSTH[i, index(var)] += 1
+            # print var, index(var)
+            if var != 0:
+                PSTH[i, index(var)] += 1
         # print index(var)
     # print PSTH[-10:]
     # print data[-10:]
