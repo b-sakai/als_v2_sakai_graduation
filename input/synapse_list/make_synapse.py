@@ -54,12 +54,12 @@ def make_synapse_Arase(n):
             print "something wrong with %s" % file
 
         with open(file, "w") as f:
-            f.write("$ PRE_CELL %s\n" % pre_cell)
-            f.write("$ POST_CELL %s\n" % post_cell)
-            f.write("$ NCONNECTIONS %d\n" % n)
-
             gid_index = int(post_cell[0])-2
             k = 4 if gid_index == 0 else 1
+
+            f.write("$ PRE_CELL %s\n" % pre_cell)
+            f.write("$ POST_CELL %s\n" % post_cell)
+            f.write("$ NCONNECTIONS %d\n" % (k*n))
 
             index = random.sample(xrange(len(synlist[0])), k*n)
             
