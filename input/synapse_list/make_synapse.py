@@ -13,10 +13,6 @@ import sys
 import glob
 import random
 
-"""
-comps_to_ln[300_301 or 301_300][pre or post] by Park
-comps_to_pn[300_200 or 301_200][pre or post] by Park
-"""
 
 def read_data(filename):
     with open(filename, "r") as f:
@@ -55,7 +51,8 @@ def make_synapse_Arase(n):
 
         with open(file, "w") as f:
             gid_index = int(post_cell[0])-2
-            k = 4 if gid_index == 0 else 1
+            #k = 4 if gid_index == 0 else 1
+            k = 1
 
             f.write("$ PRE_CELL %s\n" % pre_cell)
             f.write("$ POST_CELL %s\n" % post_cell)
