@@ -326,12 +326,16 @@ if (SAVE_ALL == 1) {
         for j=0,int(savestep/dt)-1{ fadvance() }
 
         for(i = 0; i<pns.count();i+=1){
-            sprint(output_filename, "%s%dt%f.dat", FPRINT_DIR, pns.o(i).nid, t)
-            pns.o(i).saveData(output_filename)
+            if((pns.o(i).nid % 10) == 0){
+                sprint(output_filename, "%s%dt%f.dat", FPRINT_DIR, pns.o(i).nid, t)
+                pns.o(i).saveData(output_filename)
+            }
         }
         for(i = 0; i<lns.count();i+=1){
-            sprint(output_filename, "%s%dt%f.dat", FPRINT_DIR, lns.o(i).nid, t)
-            lns.o(i).saveData(output_filename)
+            if((lns.o(i).nid % 10) == 0){
+                sprint(output_filename, "%s%dt%f.dat", FPRINT_DIR, lns.o(i).nid, t)
+                lns.o(i).saveData(output_filename)
+            }
         }
     }
     pc.barrier()
