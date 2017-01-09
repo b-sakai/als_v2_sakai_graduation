@@ -172,6 +172,13 @@ proc connectVecStimFromMRN(){ local i, j, dose, nstim localobj rnd, target, post
             vs    = setVecStim(spvec)
             nc = target.connectVecStim(vs, post_syn)
 
+            if(target.swcid == 0){
+                //print "nc.weight for 300 ",WEIGHT_300
+                nc.weight = WEIGHT_300
+            }else if(target.swcid == 1){
+                nc.weight = WEIGHT_301
+            }
+
             spvecs.append(spvec)
             vses.append(vs)
             ncs.append(nc)
@@ -492,10 +499,10 @@ proc connectNtoN_NET_GABA2(){\
 //    cmd = "tar xvf ../input/synapse_list/30temp/synlist.tar -C ../input/synapse_list/30temp/"
     if(pc.id==0) {
         print "Begin decompressing synlist"
-        sprint(cmd, "tar xvf %ssynlist.tar -C %s", synlist_dir, synlist_dir)
+        sprint(cmd, "tar xf %ssynlist.tar -C %s", synlist_dir, synlist_dir)
         print cmd
         system(cmd)
-        print "Begin decompressing synlist"
+        print "End decompressing synlist"
     }
     pc.barrier()
 

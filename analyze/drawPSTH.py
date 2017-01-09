@@ -69,7 +69,7 @@ def draw_PSTH_rn_pn():
     plt.title("{2}: {0} ng, {1} ms".format(dose, duration*1000, cell_gid))
     plt.xlabel("time")
     plt.ylabel("PSTH")
-    plt.xlim(0,5)
+    plt.xlim(0, round(time[-1]))
     plt.ylim(0,30)
     plt.legend()
 
@@ -101,7 +101,8 @@ def draw_PSTH_ln():
     plt.xlabel("time")
     plt.ylabel("PSTH")
     plt.legend()
-    plt.xlim(0,2)
+    # plt.xlim(0,2)
+    plt.xlim(0, round(time[-1]))
     plt.ylim(0,50)
     plt.rcParams["font.size"] = 15
 
