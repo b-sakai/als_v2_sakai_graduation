@@ -335,13 +335,15 @@ proc compressData() { local i strdef cmd
         printf("OUTPUT DIR : %s\n",FPRINT_DIR)
     }
     for(i = 0; i<pns.count();i+=1){
-        sprint(cmd, "tar cf %s%d.tar %s%d*.dat && rm %s%d*.dat", FPRINT_DIR, pns.o(i).nid, FPRINT_DIR, pns.o(i).nid, FPRINT_DIR, pns.o(i).nid)
+        sprint(cmd, "tar cf %s%d.tar %s%d*.dat", FPRINT_DIR, pns.o(i).nid, FPRINT_DIR, pns.o(i).nid)
         print cmd
         system(cmd)
     }
     for(i = 0; i<lns.count();i+=1){
-        sprint(cmd, "tar cf %s%d.tar %s%d*.dat && rm %s%d*.dat", FPRINT_DIR, lns.o(i).nid, FPRINT_DIR, lns.o(i).nid, FPRINT_DIR, lns.o(i).nid)
-        print cmd
-        system(cmd)
+        if((lns.o(i).nid % 10) == 0){
+            sprint(cmd, "tar cf %s%d.tar %s%d*.dat", FPRINT_DIR, lns.o(i).nid, FPRINT_DIR, lns.o(i).nid)
+            print cmd
+            system(cmd)
+        }
     }
 }

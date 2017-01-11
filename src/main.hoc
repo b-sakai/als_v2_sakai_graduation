@@ -326,10 +326,10 @@ if (SAVE_ALL == 1) {
         for j=0,int(savestep/dt)-1{ fadvance() }
 
         for(i = 0; i<pns.count();i+=1){
-            if((pns.o(i).nid % 10) == 0){
-                sprint(output_filename, "%s%dt%f.dat", FPRINT_DIR, pns.o(i).nid, t)
-                pns.o(i).saveData(output_filename)
-            }
+//            if((pns.o(i).nid % 10) == 0){
+            sprint(output_filename, "%s%dt%f.dat", FPRINT_DIR, pns.o(i).nid, t)
+            pns.o(i).saveData(output_filename)
+//            }
         }
         for(i = 0; i<lns.count();i+=1){
             if((lns.o(i).nid % 10) == 0){
@@ -339,8 +339,16 @@ if (SAVE_ALL == 1) {
         }
     }
     pc.barrier()
-    if(pc.id==0) print "FINISHED "
     compressData()
+    pc.barrier()
+
+    if(pc.id==0){
+        strdef cmd
+        sprint(cmd, "rm %s*.dat", FPRINT_DIR)
+        system(cmd)
+        print "FINISHED"
+    }
+
 } else {
     if(pc.id==0) {
         print "SET RECORDER"
