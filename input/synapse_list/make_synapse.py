@@ -21,11 +21,11 @@ def read_data(filename):
         var = [[None for i in xrange(num)], [None for i in xrange(num)]]
         lines = f.readlines()
         for i, line in enumerate(lines):
-            var[0][i], var[1][i] = map(int, line.split())
+            var[0][i], var[1][i] = map(int, line.split()[:2])
     return var
 
 
-def make_synapse_Arase(n):
+def make_synapse_Arase():
     gid = [2000000, 3000000]
 
     for file in files:
@@ -52,14 +52,20 @@ def make_synapse_Arase(n):
         with open(file, "w") as f:
             gid_index = int(post_cell[0])-2
             #k = 4 if gid_index == 0 else 1
-            k = 1
+            if gid_index == 0: # LN to PN
+                k = 1 # 4
+                n = 10
+            else: # LN to LN
+                k = 1
+                n = 300
+
 
             f.write("$ PRE_CELL %s\n" % pre_cell)
             f.write("$ POST_CELL %s\n" % post_cell)
             f.write("$ NCONNECTIONS %d\n" % (k*n))
 
             index = random.sample(xrange(len(synlist[0])), k*n)
-            
+
 
             for i in index:
                 gid[gid_index] += 1
@@ -73,8 +79,8 @@ if __name__ == "__main__":
 
     syn_200_300 = read_data("synapses_between_200_300.dat")
     syn_200_301 = read_data("synapses_between_200_301.dat")
-    syn_300_301 = read_data("synapses_between_300_301.dat")
+    syn_300_301 = read_data("synapses_between_LN.dat")
 
-    nconnections = 10
+    # nconnections = 10
 
-    make_synapse_Arase(nconnections)
+    make_synapse_Arase()
