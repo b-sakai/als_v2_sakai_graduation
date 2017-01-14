@@ -173,10 +173,9 @@ proc connectVecStimFromMRN(){ local i, j, dose, nstim localobj rnd, target, post
             nc = target.connectVecStim(vs, post_syn)
 
             if(target.swcid == 0){
-                //print "nc.weight for 300 ",WEIGHT_300
-                nc.weight = WEIGHT_300
+                nc.weight = WEIGHT_M
             }else if(target.swcid == 1){
-                nc.weight = WEIGHT_301
+                nc.weight = WEIGHT_M
             }
 
             spvecs.append(spvec)

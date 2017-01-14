@@ -1,6 +1,6 @@
 #!/bin/bash -x
 #PJM --rsc-list "node=60"
-#PJM --rsc-list "elapse=10:00:00"
+#PJM --rsc-list "elapse=7:00:00"
 #PJM --rsc-list "rscgrp=small"
 #PJM --mpi "proc=480"
 #PJM -s
@@ -53,14 +53,15 @@ NRNIV="./special -mpi"
 HOC_NAME="./main.hoc"
 #NRNOPT=""
 NRNOPT=\
-" -c STOPTIME=30"\
+" -c STOPTIME=2000"\
 " -c IS_SUPERCOMPUTER=1"\
 " -c INTERVAL=5000"\
-" -c SAVE_ALL=1"\
+" -c SAVE_ALL=0"\
 " -c NCELL=400"\
 " -c WEIGHT_200=0.05"\
 " -c WEIGHT_300=0.05"\
 " -c WEIGHT_301=0.05"\
+" -c WEIGHT_M=0.05"\
 " -c COMP_0=65"\
 " -c COMP_1=4525"\
 " -c COMP_2=5025"\

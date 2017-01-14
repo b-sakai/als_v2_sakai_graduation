@@ -56,6 +56,7 @@ if(name_declared("WEIGHT_200")!=5){ execute("WEIGHT_200=0.05")}
 if(name_declared("WEIGHT_300")!=5){ execute("WEIGHT_300=0.05")}
 //if(name_declared("WEIGHT_301")!=5){ execute("WEIGHT_301=0.9")}
 if(name_declared("WEIGHT_301")!=5){ execute("WEIGHT_301=0.008")}
+if(name_declared("WEIGHT_M")!=5){ execute("WEIGHT_M=0.05")}
 if(name_declared("GABAA_GMAX_LTOL")!=5){ execute("GABAA_GMAX_LTOL=5.0")}
 //if(name_declared("GABAB_GMAX_LTOL")!=5){ execute("GABAB_GMAX_LTOL=5.0")}
 //if(name_declared("GABAA_GMAX_LTOP")!=5){ execute("GABAA_GMAX_LTOP=0.1")}

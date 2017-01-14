@@ -1,6 +1,6 @@
 #!/bin/bash -x
 #PJM --rsc-list "node=6"
-#PJM --rsc-list "elapse=1:00:00"
+#PJM --rsc-list "elapse=6:00:00"
 #PJM --rsc-list "rscgrp=small"
 #PJM --mpi "proc=48"
 #PJM -s
@@ -19,7 +19,7 @@
 #PJM --stgin "rank=* ./input/network_info/* %r:../input/network_info/"
 #PJM --stgin "rank=* ./input/spiketiming_arase/* %r:../input/spiketiming_arase/"
 #PJM --stgin "rank=* ./input/spiketiming_arase/ORN/* %r:../input/spiketiming_arase/ORN/"
-#PJM --stgin "rank=* ./input/spiketiming_arase/ORN/3000ng_1stim/* %r:../input/spiketiming_arase/ORN/3000ng_1stim/"
+#PJM --stgin "rank=* ./input/spiketiming_arase/ORN/0ng_1stim/* %r:../input/spiketiming_arase/ORN/0ng_1stim/"
 #PJM --stgin "rank=* ./input/spiketiming_arase/MRN/* %r:../input/spiketiming_arase/MRN/"
 #PJM --stgin "rank=* ./input/spiketiming_arase/MRN/30Hz_1stim/* %r:../input/spiketiming_arase/MRN/30Hz_1stim/"
 
@@ -53,27 +53,28 @@ NRNIV="./special -mpi"
 HOC_NAME="./main.hoc"
 #NRNOPT=""
 NRNOPT=\
-" -c STOPTIME=500"\
+" -c STOPTIME=2000"\
 " -c IS_SUPERCOMPUTER=1"\
 " -c INTERVAL=5000"\
-" -c SAVE_ALL=1"\
+" -c SAVE_ALL=0"\
 " -c NCELL=40"\
-" -c WEIGHT_200=0.05"\
-" -c WEIGHT_300=0.05"\
-" -c WEIGHT_301=0.05"\
+" -c WEIGHT_200=0.5"\
+" -c WEIGHT_300=0.25"\
+" -c WEIGHT_301=0.025"\
+" -c WEIGHT_M=0.05"\
 " -c COMP_0=65"\
-" -c COMP_1=4525"\
+" -c COMP_1=5737"\
 " -c COMP_2=5025"\
 " -c COMP_3=9743"\
 " -c GABAA_ON=1"\
 " -c GABAB_ON=1"\
-" -c DOSE=3000"\
+" -c DOSE=0"\
 " -c NSTIM=1"\
 " -c MECHANO_SPONTANEOUS=30"\
 " -c MECHANO_ON=1"\
-" -c GABAA_GMAX_LTOP=5.0"\
-" -c GABAA_GMAX_LTOL=5.0"\
-" -c GABAB_GMAX_LTOP=0.6"\
+" -c GABAA_GMAX_LTOP=0.25"\
+" -c GABAA_GMAX_LTOL=0.25/500"\
+" -c GABAB_GMAX_LTOP=0.03"\
 " -c GABAB_GMAX_LTOL=0.0"
 
 
