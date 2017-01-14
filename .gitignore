@@ -31,7 +31,8 @@
 *#
 
 # variable input files
-#input/synapse_list/*_arase/escape.d/*.txt
+#input/synapse_list/*_arase/escape.d/
+#input/synapse_list/*_arase/synlist.tar
 
 # recorded files
 record/
