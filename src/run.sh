@@ -24,7 +24,7 @@ NRNOPT=\
 " -c STOPTIME=50"\
 " -c IS_SUPERCOMPUTER=0"\
 " -c START_TIME=${Time}"\
-" -c SAVE_ALL=0"\
+" -c SAVE_ALL=1"\
 " -c WEIGHT_200=0.05"\
 " -c WEIGHT_300=0.004"\
 " -c WEIGHT_301=0.008"\
@@ -32,13 +32,13 @@ NRNOPT=\
 " -c GABAB_GMAX_LTOL=5.0"\
 " -c GABAA_GMAX_LTOP=0.2"\
 " -c GABAB_GMAX_LTOP=0.0065"\
-" -c GABAB_ON=1"\
-" -c GABAA_ON=1"\
+" -c GABAB_ON=0"\
+" -c GABAA_ON=0"\
 " -c DOSE=3000"\
 " -c MECHANO_SPONTANEOUS=60"\
 " -c NSTIM=1"\
-" -c MECHANO_ON=1"
-
+" -c MECHANO_ON=1"\
+" -c GBAR_TIMES=3"
 
 #MPIEXEC="mpiexec  -n 2"
 MPIEXEC="mpiexec -n 4"

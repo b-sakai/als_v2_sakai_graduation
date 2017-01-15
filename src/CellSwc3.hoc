@@ -465,9 +465,9 @@ proc insertHH_RN(){
 proc insertLNlla(){
     forall{
     insert hh
-    gnabar_hh = 0.190
-    gkbar_hh = 0.060
-    gl_hh = 0.0001
+    gnabar_hh = 0.190 * GBAR_TIMES
+    gkbar_hh = 0.060 * GBAR_TIMES
+    gl_hh = 0.0001 * GBAR_TIMES
     el_hh = -67
     ena = 50
     ek = -100
