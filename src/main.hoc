@@ -21,7 +21,13 @@
 // setRecorder()
 // setPrinter()
 //************************************************
+{load_file("nrngui.hoc")}
+{load_file("stdlib.hoc")}
 
+{load_file("CellSwc3.hoc")}
+{load_file("loadinfo.hoc")}
+{load_file("areaList.hoc")}
+{load_file("exSectionList.hoc")}
 //{load_file("declare_parameters.hoc")}
 //************************************************
 // For Goto's PN model parameter
@@ -51,7 +57,7 @@ if(name_declared("WEIGHT_300")!=5){ execute("WEIGHT_300=0.05")}
 //if(name_declared("WEIGHT_301")!=5){ execute("WEIGHT_301=0.9")}
 if(name_declared("WEIGHT_301")!=5){ execute("WEIGHT_301=0.008")}
 if(name_declared("WEIGHT_M")!=5){ execute("WEIGHT_M=0.05")}
-if(name_declared("GBAR_TIMES")!=5){ execute("GBAR_TIMES=0.05")}
+if(name_declared("GBAR_TIMES")!=5){ execute("GBAR_TIMES=1.0")}
 if(name_declared("GABAA_GMAX_LTOL")!=5){ execute("GABAA_GMAX_LTOL=5.0")}
 //if(name_declared("GABAB_GMAX_LTOL")!=5){ execute("GABAB_GMAX_LTOL=5.0")}
 //if(name_declared("GABAA_GMAX_LTOP")!=5){ execute("GABAA_GMAX_LTOP=0.1")}
@@ -114,13 +120,8 @@ if(IS_SUPERCOMPUTER == 1){
 }
 
 
-{load_file("nrngui.hoc")}
-{load_file("stdlib.hoc")}
 
-{load_file("CellSwc3.hoc")}
-{load_file("loadinfo.hoc")}
-{load_file("areaList.hoc")}
-{load_file("exSectionList.hoc")}
+
 
 objref pc
 pc = new ParallelContext()
@@ -200,7 +201,7 @@ proc mkCells(){localobj pn,ln,rn, nc, nil
             ln = new CellSwc(ln_path[j].swcpath,ln_matrix.x[j][0],ln_matrix.x[j][1],ln_matrix.x[j][2],ln_matrix.x[j][3])
             ln.setPath(ln_path[j].ppath, ln_path[j].synpath)
             ln.setNid()
-            ln.insertLNlla()
+            ln.insertLNlla(GBAR_TIMES)
             lns.append(ln)
             //if(j==0) ln.mkSynapses("./synlist/fromRN/040823_5_sn_SynapseList.dat")
             //if(j==1) ln.mkSynapses("./synlist/fromRN/050205_7_sn_SynapseList.dat")
