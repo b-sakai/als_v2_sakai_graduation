@@ -44,7 +44,7 @@ def readdata_ln(file):
         lines = f.readlines()
 
         data = np.ndarray([column, row])
-        print file
+        # print file
         for i in xrange(row):
             # print map(float, lines[i].split())
             data[:, i] = map(float, lines[i].split())
@@ -112,19 +112,27 @@ def draw_PSTH_ln():
     plt.savefig(input_dir+target_file)
     plt.close()
 
-
+def fild_all_files(directory):
+    for root, dirs, files in os.walk(directory):
+        yield root
+        for file in files:
+            yield os.path.join(root, file)
 
 
 if __name__ == "__main__":
-    input_dir = sys.argv[1]
-    files = glob.glob("{0}*Spike.dat".format(input_dir))
-    print "{0} files was imported.".format(len(files))
+    # files = glob.glob("{0}*Spike.dat".format(input_dir))
+    # print "{0} files was imported.".format(len(files))
 
     duration = 1. #temporary
     bin = 0.1
     dose = 3000
 
-    for file in files:
+    # for file in files:
+    for file in fild_all_files(sys.argv[1]):
+        if os.path.isdir(file):
+            input_dir = file + "/"
+            continue
+        print file
         cell_gid = file.split("/")[-1][:6]
         if cell_gid[0] == "3":
             tstop, comps, data = readdata_ln(file)
