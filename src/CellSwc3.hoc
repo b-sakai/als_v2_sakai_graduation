@@ -484,18 +484,26 @@ proc insertLNlla(){local r
 
     }
 }
-proc insertFukuda_tunned(){
+proc insertFukuda_tunned(){local r
     mechanism_flg = 3
+    r = $1
     forall{
         insert GPeA
         ena_GPeA = 55
         ek_GPeA = -70
-    eca_GPeA = 124
+        eca_GPeA = 124
         el_GPeA = -50
         //a_m_GPeA = 0.065
         a_m_GPeA = 0.048
         //a_W_GPeA = 0.055
         a_W_GPeA = 0.060
+
+        gnabar   = 120e-3 * r
+        gkdrbar  = 5e-3 * r
+        gl  = 0.3e-3 * r
+        gcatbar   = 0.1e-3 * r
+        gkcabar   = 2e-3 * r
+        gA =  220e-3 * r
     }
 }
 

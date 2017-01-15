@@ -57,7 +57,8 @@ if(name_declared("WEIGHT_300")!=5){ execute("WEIGHT_300=0.05")}
 //if(name_declared("WEIGHT_301")!=5){ execute("WEIGHT_301=0.9")}
 if(name_declared("WEIGHT_301")!=5){ execute("WEIGHT_301=0.008")}
 if(name_declared("WEIGHT_M")!=5){ execute("WEIGHT_M=0.05")}
-if(name_declared("GBAR_TIMES")!=5){ execute("GBAR_TIMES=1.0")}
+if(name_declared("GBAR_TIMES_LN")!=5){ execute("GBAR_TIMES_LN=1.0")}
+if(name_declared("GBAR_TIMES_PN")!=5){ execute("GBAR_TIMES_PN=1.0")}
 if(name_declared("GABAA_GMAX_LTOL")!=5){ execute("GABAA_GMAX_LTOL=5.0")}
 //if(name_declared("GABAB_GMAX_LTOL")!=5){ execute("GABAB_GMAX_LTOL=5.0")}
 //if(name_declared("GABAA_GMAX_LTOP")!=5){ execute("GABAA_GMAX_LTOP=0.1")}
@@ -185,7 +186,7 @@ proc mkCells(){localobj pn,ln,rn, nc, nil
             //pn.spikegenlist.printnames()
 
             //initModel_PN(pn)
-            pn.insertFukuda_tunned()
+            pn.insertFukuda_tunned(GBAR_TIMES_PN)
 
             pns.append(pn)
             //print "pn ", i, j
@@ -201,7 +202,7 @@ proc mkCells(){localobj pn,ln,rn, nc, nil
             ln = new CellSwc(ln_path[j].swcpath,ln_matrix.x[j][0],ln_matrix.x[j][1],ln_matrix.x[j][2],ln_matrix.x[j][3])
             ln.setPath(ln_path[j].ppath, ln_path[j].synpath)
             ln.setNid()
-            ln.insertLNlla(GBAR_TIMES)
+            ln.insertLNlla(GBAR_TIMES_LN)
             lns.append(ln)
             //if(j==0) ln.mkSynapses("./synlist/fromRN/040823_5_sn_SynapseList.dat")
             //if(j==1) ln.mkSynapses("./synlist/fromRN/050205_7_sn_SynapseList.dat")
