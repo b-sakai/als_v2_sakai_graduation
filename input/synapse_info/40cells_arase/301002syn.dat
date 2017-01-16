@@ -3,6 +3,8 @@ $ fromRN
 ../input/synapse_list/fromRN/050205_7_sn_SynapseList.dat
 $ fromMRN
 ../input/synapse_list/fromMRN/301002.dat
+$ general_odor
+../input/synapse_list/general_odor/301002.dat
 $ CtoC
 23
 301002 200000 ../input/synapse_list/40cells_arase/301002_200000_manual.txt
