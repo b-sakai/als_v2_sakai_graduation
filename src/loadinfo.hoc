@@ -147,6 +147,13 @@ func loadSynapseInfo(){local i,pregid,postgid,pre_nid,post_nid,ndata,mode localo
             //print cell.SectionNum
             //cell.mkSynapses(path)
             cell.fromMRNsyn = path
+        }else if ((strcmp("general_odor",class)==0)&&(mode==1)){
+            syn_fp.gets(buf)
+            sscanf(buf, "%s\n", path)
+            //print path
+            //print cell.SectionNum
+            //cell.mkSynapses(path)
+            cell.general_odor_syn = path
         }else if((strcmp("CtoC",class)==0)&&(mode==2)){
         syn_fp.gets(buf)
         sscanf(buf, "%d\n",&ndata)

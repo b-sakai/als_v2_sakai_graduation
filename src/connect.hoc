@@ -134,12 +134,11 @@ obfunc setVecStim(){localobj vs, spvec
     return vs
 }
 
-objref spvecs, vses, ncs, synlyst
+objref spvecs, vses, ncs, synlist_vecstim
 
-
-proc connectVecStimFromMRN(){ local i, j, dose, nstim localobj rnd, target, post_syn, spvec, vs, nc
+proc connect_vec_stim(){ local i, j, dose, nstim localobj rnd, target, post_syn, spvec, vs, nc
     if(pc.id == 0){
-        printf("connectVecStimFromMRN()\n")
+        printf("connect_vec_stim()\n")
     }
 
     strdef _SPT_DIR_
@@ -148,7 +147,7 @@ proc connectVecStimFromMRN(){ local i, j, dose, nstim localobj rnd, target, post
     spvecs = new List()
     vses = new List()
     ncs = new List()
-    synlyst = new List()
+    synlist_vecstim = new List()
 
     _SPT_DIR_ = $s1
     dose = $2
@@ -162,26 +161,51 @@ proc connectVecStimFromMRN(){ local i, j, dose, nstim localobj rnd, target, post
         target = lns.object(i)
         loadSynapseInfo(target, target.synpath, 1)
         target.mkSynapses(target.fromMRNsyn, 1)
+        target.mkSynapses(target.general_odor_syn, 2)
         printf("target.synlist_fromMRN.count() : %d [%d]\n",target.synlist_fromMRN.count(),pc.id)
+        printf("target.synlist_general_odor.count() : %d [%d]\n",target.synlist_general_odor.count(),pc.id)
 
-        for j=0, target.synlist_fromMRN.count()-1{
-            post_syn = target.synlist_fromMRN.o(j)
-            sprint(_SPT_NAME_, "%sspt%03d.dat", _SPT_DIR_, int(rnd.repick()))
-            spvec = readSpikeTiming(_SPT_NAME_)
+        if(MECHANO_ON == 1){
+            for j=0, target.synlist_fromMRN.count()-1{ // mechano input
+                post_syn = target.synlist_fromMRN.o(j)
+                sprint(_SPT_NAME_, "%sspt%03d.dat", _SPT_DIR_, int(rnd.repick()))
+                spvec = readSpikeTiming(_SPT_NAME_)
 
-            vs    = setVecStim(spvec)
-            nc = target.connectVecStim(vs, post_syn)
+                vs    = setVecStim(spvec)
+                nc = target.connectVecStim(vs, post_syn)
 
-            if(target.swcid == 0){
-                nc.weight = WEIGHT_M
-            }else if(target.swcid == 1){
-                nc.weight = WEIGHT_M
+                if(target.swcid == 0){
+                    nc.weight = WEIGHT_M
+                }else if(target.swcid == 1){
+                    nc.weight = WEIGHT_M
+                }
+
+                spvecs.append(spvec)
+                vses.append(vs)
+                ncs.append(nc)
+                synlist_vecstim.append(post_syn)
             }
+        }
+        if(GENERAL_ODOR_ON == 1){
+            for j=0, target.synlist_general_odor.count()-1{ // general odor input
+                post_syn = target.synlist_general_odor.o(j)
+                sprint(_SPT_NAME_, "../input/spiketiming_arase/general_odor/spt%03d.dat", int(rnd.repick()))
+                spvec = readSpikeTiming(_SPT_NAME_)
 
-            spvecs.append(spvec)
-            vses.append(vs)
-            ncs.append(nc)
-            synlyst.append(post_syn)
+                vs    = setVecStim(spvec)
+                nc = target.connectVecStim(vs, post_syn)
+
+                if(target.swcid == 0){
+                    nc.weight = WEIGHT_M
+                }else if(target.swcid == 1){
+                    nc.weight = WEIGHT_M
+                }
+
+                spvecs.append(spvec)
+                vses.append(vs)
+                ncs.append(nc)
+                synlist_vecstim.append(post_syn)
+            }
         }
     }
 }

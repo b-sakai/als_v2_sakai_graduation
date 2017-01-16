@@ -16,8 +16,9 @@ for file in files:
             lines = f.readlines()
         with open(file, "w") as f:
             for line in lines:
-                f.write(line)
-                if "fromMRN/3" in line:
-                    f.write("$ general_odor\n")
-                    f.write("../input/synapse_list/general_odor/%s.dat\n"%prefix)
+                if "/general_odor/" in line:
+                    f.write("../input/synapse_list/general_odor/%s%02d.dat\n"%(prefix[:4],int(prefix[4:])%17))
+                else:
+                    f.write(line)
+
 

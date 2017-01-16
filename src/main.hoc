@@ -70,7 +70,8 @@ if(name_declared("GABAA_ON")!=5){ execute("GABAA_ON=0")}
 if(name_declared("DOSE")!=5){ execute("DOSE=1000")}
 if(name_declared("MECHANO_SPONTANEOUS")!=5){ execute("MECHANO_SPONTANEOUS=60")}
 if(name_declared("NSTIM")!=5){ execute("NSTIM=30")}
-if(name_declared("MECHANO_ON")!=5){ execute("MECHANO_ON=0")}
+if(name_declared("MECHANO_ON")!=5){ execute("MECHANO_ON=1")}
+if(name_declared("GENERAL_ODOR_ON")!=5){ execute("GENERAL_ODOR_ON=1")}
 
 
 strdef info_filename, info_filename_rn, synlist_dir
@@ -100,15 +101,11 @@ strdef olfactory_spt_file_dir, mechano_spt_file_dir
 if(NSTIM == 1){
         //sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_1stim_filtering/", DOSE)
         sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/ORN/%dng_1stim/", DOSE)
-    if(MECHANO_ON == 1) {
         sprint(mechano_spt_file_dir, "../input/spiketiming_arase/MRN/%dHz_1stim/", MECHANO_SPONTANEOUS)
-    }
 }else{
         //sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_30stims_filtering/", DOSE)
         sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/ORN/%dng_30stims/", DOSE)
-    if(MECHANO_ON == 1) {
         sprint(mechano_spt_file_dir, "../input/spiketiming_arase/MRN/%dHz_30stims/", MECHANO_SPONTANEOUS)
-    }
 }
 
 strdef FPRINT_DIR, SPIKEOUT_DIR
@@ -131,7 +128,7 @@ proc ShowInitialStatus(){
     if(pc.id==0){
     printf("==================================================================================\n")
     printf("PC.NHOST: %d\n",pc.nhost)
-    printf("STOPTIME: %d(ms), IS_SUPERCOMPUTER: %d, INTERVAL: %d, SAVE_ALL: %d\n",STOPTIME, IS_SUPERCOMPUTER, INTERVAL, SAVE_ALL)
+    printf("STOPTIME: %d(ms), IS_SUPERCOMPUTER: %d, INTERVAL: %d, SAVE_ALL: %d, GENERAL_ODOR_ON: %d\n",STOPTIME, IS_SUPERCOMPUTER, INTERVAL, SAVE_ALL, GENERAL_ODOR_ON)
     printf("NETWORK INFORMATION :\n")
     printf("CELL LIST : %s(PNs and LNs), %s(RNs)\n",info_filename, info_filename_rn)
     printf("WEIGHT_200\t%f\tWEIGHT_300\t%f\tWEIGHT_301\t%f\n",WEIGHT_200,WEIGHT_300,WEIGHT_301)
@@ -266,9 +263,8 @@ proc mkCells(){localobj pn,ln,rn, nc, nil
 {load_file("connect.hoc")}
 proc mkConnections(){
     connectRNtoOthers()
-    if(MECHANO_ON == 1) {
-        connectVecStimFromMRN(mechano_spt_file_dir, DOSE, NSTIM)
-    }
+    connect_vec_stim(mechano_spt_file_dir, DOSE, NSTIM)
+
     //connectNtoN()
     connectNtoN_NET_GABA2()
 }
