@@ -186,7 +186,8 @@ proc mkCells(){localobj pn,ln,rn, nc, nil
             //pn.spikegenlist.printnames()
 
             //initModel_PN(pn)
-            pn.insertFukuda_tunned(GBAR_TIMES_PN)
+            //pn.insertFukuda_tunned(GBAR_TIMES_PN)
+            pn.insertFukuda_tunned()
 
             pns.append(pn)
             //print "pn ", i, j
