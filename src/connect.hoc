@@ -165,27 +165,26 @@ proc connect_vec_stim(){ local i, j, dose, nstim localobj rnd, target, post_syn,
         printf("target.synlist_fromMRN.count() : %d [%d]\n",target.synlist_fromMRN.count(),pc.id)
         printf("target.synlist_general_odor.count() : %d [%d]\n",target.synlist_general_odor.count(),pc.id)
 
-        if(MECHANO_ON == 1){
-            for j=0, target.synlist_fromMRN.count()-1{ // mechano input
-                post_syn = target.synlist_fromMRN.o(j)
-                sprint(_SPT_NAME_, "%sspt%03d.dat", _SPT_DIR_, int(rnd.repick()))
-                spvec = readSpikeTiming(_SPT_NAME_)
+        for j=0, target.synlist_fromMRN.count()-1{ // mechano input
+            post_syn = target.synlist_fromMRN.o(j)
+            sprint(_SPT_NAME_, "%sspt%03d.dat", _SPT_DIR_, int(rnd.repick()))
+            spvec = readSpikeTiming(_SPT_NAME_)
 
-                vs    = setVecStim(spvec)
-                nc = target.connectVecStim(vs, post_syn)
+            vs    = setVecStim(spvec)
+            nc = target.connectVecStim(vs, post_syn)
 
-                if(target.swcid == 0){
-                    nc.weight = WEIGHT_M
-                }else if(target.swcid == 1){
-                    nc.weight = WEIGHT_M
-                }
-
-                spvecs.append(spvec)
-                vses.append(vs)
-                ncs.append(nc)
-                synlist_vecstim.append(post_syn)
+            if(target.swcid == 0){
+                nc.weight = 0.05//WEIGHT_M
+            }else if(target.swcid == 1){
+                nc.weight = 0.05//WEIGHT_M
             }
+
+            spvecs.append(spvec)
+            vses.append(vs)
+            ncs.append(nc)
+            synlist_vecstim.append(post_syn)
         }
+
         if(GENERAL_ODOR_ON == 1){
             for j=0, target.synlist_general_odor.count()-1{ // general odor input
                 post_syn = target.synlist_general_odor.o(j)
