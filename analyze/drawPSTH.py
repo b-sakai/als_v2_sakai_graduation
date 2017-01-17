@@ -138,6 +138,6 @@ if __name__ == "__main__":
             tstop, comps, data = readdata_ln(file)
             draw_PSTH_ln()
             # print "a"
-        else:
+        elif cell_gid[0] == "2":
             tstop, data = readdata_rn_pn(file)
             draw_PSTH_rn_pn()

@@ -2,7 +2,7 @@
 
 """
 synapses_between_*.dat からシナプス結合のリストを取得し，指定されたディレクトリ以下のシナプス結合ファイルをランダムに生成する
-京上でも動く
+numpy 使ってないから京上でも動く
 
 USAGE
 $ python make_synapse.py [target_directory]
