@@ -34,6 +34,9 @@
 #input/synapse_list/*_arase/escape.d/
 #input/synapse_list/*_arase/synlist.tar
 
+# jobfile dir
+job/jobfile/
+
 # recorded files
 record/
 record/**/*.txt
