@@ -24,14 +24,14 @@ h.load_file("CellSwc_Ver2.hoc")
 
 #calculate section axial resistance(internal resistance)
 def Calc_SRi(cell, num_sec):
-    sri = cell.Dend[num_sec].Ra /(np.pi*(cell.Dend[num_sec].diam/2)**2 * np.power(10,8))
+    sri = cell.Dend[num_sec].Ra /(np.pi*(cell.Dend[num_sec].diam/2)**2 * (10**8))
     #print cell.Dend[num_sec].Ra, cell.Dend[num_sec].diam
     return sri
 
 #calcuate section membrane resistance
 def Calc_SRm(cell, num_sec):
     #print num_sec
-    srm = 1/(cell.Dend[num_sec].gl_hh * cell.Dend[num_sec].L) * 10000
+    srm = 10**4/(cell.Dend[num_sec].gl_hh * cell.Dend[num_sec].L)
     return srm
 
 def Calc_LengthConstant(cell, num_sec):
@@ -68,34 +68,8 @@ def matching_RandomNumbers_and_NormalizedLengthSum(cell, dendlist, sum_list, sum
                     synapse_list.append(dendlist[j])
                     if(k!=i):
                         print "ERROR %d, %d"%((k-i),rnd[k])
-                    print dendlist[j], sum_list[j], rnd[i],i,k,j
+                    #print dendlist[j], sum_list[j], rnd[i],i,k,j
                     k+=1
-
-    return synapse_list
-
-
-#重複ものが生成されないように改良
-def matching_RandomNumbers_and_NormalizedLengthSum2(cell, dendlist, sum_list, sumofnl, numberofsynapse):
-    synapse_list = []
-    rnd = sumofnl * np.random.random(numberofsynapse)
-    print "len(rnd):%d"%(len(rnd))
-    print "len(sum_list):%d"%(len(sum_list))
-    #    print sum_list
-
-    while len(synapse_list)<numberofsynapse:
-        #for i in range(len(rnd)):
-        rand = sumofnl * np.random.random()
-        #print "i %d, rnd[%d] %d"%(i,i,rnd[i])
-        for j in range(len(sum_list)):
-            if j==0:
-                if(sum_list[j]>=rand):
-                    if(dendlist[j] in synapse_list)==0:
-                        synapse_list.append(dendlist[j])
-            if j>0:
-                if(sum_list[j-1]<rand)&(sum_list[j]>=rand):
-                    if(dendlist[j] in synapse_list)==0:
-                        synapse_list.append(dendlist[j])
-                        print dendlist[j], sum_list[j], rand
 
     return synapse_list
 
@@ -123,42 +97,44 @@ def findSynapseRegion(cell, dendlist):
             counter +=1
     print "SYNAPSE COMPARTMENT NUMBER : %d\n"%(counter)
 
-def main():
-    pnfilename = "050622_4_sn_bestrigid0106_mkRegion.swc"
-    ln1filename = "040823_5_sn_bestrigid0106_mkRegion.swc"
-    ln2filename = "050205_7_sn_bestrigid0106_mkRegion.swc"
-    ln1_redc_name = "./reduction/040823_5_sn_bestrigid0106_mkRegion-1-2.swc"
-    ln2_redc_name = "./reduction/050205_7_sn_bestrigid0106_mkRegion-1-2.swc"
-    #Filename = pnfilename
-    Filename = ln2_redc_name
-    CELL = h.CellSwc(Filename)
-    for sec in h.allsec():
-        sec.insert('hh')
-    swcData = swc.read(Filename)
+if __name__ == "__main__":
+    files = ["200000.swc", "300000.swc", "301000.swc"]
+    for file in files:
 
-    SynapseRegionList = []
-    #-----------------------------------
-    # Find Synapse Region
-    #-----------------------------------
-    findSynapseRegion(CELL, SynapseRegionList)
-    print SynapseRegionList
-    
-    #-----------------------------------
-    # Normalizing Length
-    #-----------------------------------
-    normalized_length_sum = []
-    sum_nl = Calc_SumOfNormalizedLength(CELL, SynapseRegionList, normalized_length_sum)
-    print "sum_nl:%d"%(sum_nl)
-    
-    #-----------------------------------
-    # make synapse
-    #-----------------------------------
-    NUMBEROFSYNAPSE = 100
-    #SYNLIST = matching_RandomNumbers_and_NormalizedLengthSum(CELL, SynapseRegionList, normalized_length_sum, sum_nl, NUMBEROFSYNAPSE)
-    SYNLIST = matching_RandomNumbers_and_NormalizedLengthSum2(CELL, SynapseRegionList, normalized_length_sum, sum_nl, NUMBEROFSYNAPSE)
-    #print SYNLIST
-    syn_filename = Filename[0:11]+'_SynapseList.dat' 
-    write_Synlist(syn_filename,SYNLIST)
-    #swc.write(new swc filename?? , swcData[1],swcData[0])
+        CELL = h.CellSwc(file)
+        for sec in h.allsec():
+            sec.insert('hh')
+        swcData = swc.read(file)
 
-main()
+        SynapseRegionList = []
+        #-----------------------------------
+        # Find Synapse Region
+        #-----------------------------------
+        findSynapseRegion(CELL, SynapseRegionList)
+        print SynapseRegionList
+        
+        #-----------------------------------
+        # Normalizing Length
+        #-----------------------------------
+        normalized_length_sum = []
+        sum_nl = Calc_SumOfNormalizedLength(CELL, SynapseRegionList, normalized_length_sum)
+        print "sum_nl:%d"%(sum_nl)
+        
+        #-----------------------------------
+        # make synapse
+        #-----------------------------------
+        if file[0] == "2":
+            N = 5
+            NUMBEROFSYNAPSE = 300
+        elif file[0] == "3":
+            N = 18
+            NUMBEROFSYNAPSE = 200
+        else: 
+            print "error %s\n" % file
+
+        for i in xrange(N):
+            SYNLIST = matching_RandomNumbers_and_NormalizedLengthSum(CELL, SynapseRegionList, normalized_length_sum, sum_nl, NUMBEROFSYNAPSE)
+
+            syn_filename = file.split(".")[0][:4] + ("%02d"%i) +'_synlist.dat' 
+            write_Synlist(syn_filename,SYNLIST)
+            print syn_filename
