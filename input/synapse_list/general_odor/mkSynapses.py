@@ -14,12 +14,12 @@ for file in files:
 
     if index == "5":
 #        num_synapses = 800
-        num_synapses = 400
+        num_synapses = 100
         target_prefix = "3000"
         ncells = 17
     elif index == "7":
 #        num_synapses = 600
-        num_synapses = 300
+        num_synapses = 100
         target_prefix = "3010"
         ncells = 16
     else:
