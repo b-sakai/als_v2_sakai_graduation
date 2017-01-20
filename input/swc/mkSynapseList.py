@@ -24,7 +24,7 @@ h.load_file("CellSwc_Ver2.hoc")
 
 #calculate section axial resistance(internal resistance)
 def Calc_SRi(cell, num_sec):
-    sri = cell.Dend[num_sec].Ra /((np.pi)*(cell.Dend[num_sec].diam/2)**2) * np.power(10,8)
+    sri = cell.Dend[num_sec].Ra /(np.pi*(cell.Dend[num_sec].diam/2)**2 * np.power(10,8))
     #print cell.Dend[num_sec].Ra, cell.Dend[num_sec].diam
     return sri
 
