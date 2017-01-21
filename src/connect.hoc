@@ -21,7 +21,8 @@
 {load_file("loadinfo.hoc")}
 {load_file("stim.hoc")}
 
-NUMSYNAPSE_PER_CELL = 400
+NUMSYNAPSE_PER_PN = 300
+NUMSYNAPSE_PER_LN = 200
 objref rnclist
 rnclist = new List()
 func mkPreSynapseOnRN(){local i, gid_base, gid_cnt, save_syn_gid localobj syn, nil, nc
@@ -66,7 +67,12 @@ func calcSrcgid(){local base, syn_id, target_id, modular, gid //Calculate Source
     syn_id = $2
     target_id = $3
     modular = $4 - base
-    gid = base + ((NUMSYNAPSE_PER_CELL * target_id + syn_id) % modular)
+    if(target_id > NPN) { // LN
+        gid = base + ((NUMSYNAPSE_PER_PN * NPN + (NUMSYNAPSE_PER_LN) * (target_id - NPN) + syn_id) % modular)
+    } else { // PN
+        gid = base + ((NUMSYNAPSE_PER_PN * target_id + syn_id) % modular)
+    }
+
     return gid
 }
 
