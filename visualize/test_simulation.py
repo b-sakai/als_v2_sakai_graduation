@@ -16,14 +16,18 @@ cellname_list = [
     '301000',
     ]
 
-stoptime = 1000.0
+job_id = "5571105"
+
+# stoptime = 1000.0
+stoptime = 10.0
 datastep = 0.25
 nstep = int(stoptime / datastep)
 
 for cellname in cellname_list:
-    vtkfile_base = os.path.join('/data/vtk_data/arase_simulation_5571105', 'vtk', cellname + '_%d.vtk')
+    # vtkfile_base = os.path.join('/data/vtk_data/arase_simulation_5571105', 'vtk', cellname + '_%d.vtk')
+    vtkfile_base = os.path.join('/Users/arasekosuke/lab/vtk_data', job_id, cellname + '_%d.vtk')
     swcfilename = os.path.join('swc', cellname + '.swc')
-    datafile_base = os.path.join('/data/vtk_data/arase_simulation_5571105', 'data', cellname, cellname + 't%.6f.dat')
+    datafile_base = os.path.join('/Users/arasekosuke/lab/result/0111save_all', job_id, cellname, cellname + 't%.6f.dat')
 
     vtkgen = swc2vtk.VtkGenerator()
     vtkgen.set_draw_mode(3)
