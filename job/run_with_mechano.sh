@@ -1,6 +1,6 @@
 #!/bin/bash -x
 #PJM --rsc-list "node=6"
-#PJM --rsc-list "elapse=6:00:00"
+#PJM --rsc-list "elapse=2:30:00"
 #PJM --rsc-list "rscgrp=small"
 #PJM --mpi "proc=48"
 #PJM -s
@@ -21,18 +21,20 @@
 #PJM --stgin "rank=* ./input/spiketiming_arase/ORN/* %r:../input/spiketiming_arase/ORN/"
 #PJM --stgin "rank=* ./input/spiketiming_arase/ORN/0ng_1stim/* %r:../input/spiketiming_arase/ORN/0ng_1stim/"
 #PJM --stgin "rank=* ./input/spiketiming_arase/MRN/* %r:../input/spiketiming_arase/MRN/"
-#PJM --stgin "rank=* ./input/spiketiming_arase/MRN/30Hz_1stim/* %r:../input/spiketiming_arase/MRN/30Hz_1stim/"
+#PJM --stgin "rank=* ./input/spiketiming_arase/MRN/10Hz_1stim/* %r:../input/spiketiming_arase/MRN/10Hz_1stim/"
+#PJM --stgin "rank=* ./input/spiketiming_arase/MRN/10Hz_constant/* %r:../input/spiketiming_arase/MRN/10Hz_constant/"
+#PJM --stgin "rank=* ./input/spiketiming_arase/general_odor/* %r:../input/spiketiming_arase/general_odor/"
 
 
 #PJM --stgin "rank=* ./input/swc/* %r:../input/swc/"
 #PJM --stgin "rank=* ./input/swc/rn0514/* %r:../input/swc/rn0514/"
 #PJM --stgin "rank=* ./input/synapse_info/* %r:../input/synapse_info/"
 #PJM --stgin "rank=* ./input/synapse_info/40cells_arase/* %r:../input/synapse_info/40cells_arase/"
-#PJM --stgin "rank=* ./input/synapse_info/syn/* %r:../input/synapse_info/syn/"
 #PJM --stgin "rank=* ./input/synapse_list/* %r:../input/synapse_list/"
 #PJM --stgin "rank=* ./input/synapse_list/40cells_arase/* %r:../input/synapse_list/40cells_arase/"
 #PJM --stgin "rank=* ./input/synapse_list/fromRN/* %r:../input/synapse_list/fromRN/"
 #PJM --stgin "rank=* ./input/synapse_list/fromMRN/* %r:../input/synapse_list/fromMRN/"
+#PJM --stgin "rank=* ./input/synapse_list/general_odor/* %r:../input/synapse_list/general_odor/"
 
 #PJM --stgin "rank=* ./src/* %r:./"
 #PJM --stgin "rank=* ../neuron_kplus/stgin/* %r:./"
@@ -53,15 +55,17 @@ NRNIV="./special -mpi"
 HOC_NAME="./main.hoc"
 #NRNOPT=""
 NRNOPT=\
-" -c STOPTIME=2000"\
+" -c STOPTIME=20"\
 " -c IS_SUPERCOMPUTER=1"\
 " -c INTERVAL=5000"\
 " -c SAVE_ALL=0"\
 " -c NCELL=40"\
-" -c WEIGHT_200=0.5"\
-" -c WEIGHT_300=0.25"\
-" -c WEIGHT_301=0.025"\
+" -c WEIGHT_200=0.25"\
+" -c WEIGHT_300=0.003"\
+" -c WEIGHT_301=0.008"\
 " -c WEIGHT_M=0.05"\
+" -c WEIGHT_GO_300=0.003"\
+" -c WEIGHT_GO_301=0.1"\
 " -c COMP_0=65"\
 " -c COMP_1=5737"\
 " -c COMP_2=5025"\
@@ -70,12 +74,15 @@ NRNOPT=\
 " -c GABAB_ON=1"\
 " -c DOSE=0"\
 " -c NSTIM=1"\
-" -c MECHANO_SPONTANEOUS=30"\
+" -c MECHANO_SPONTANEOUS=10"\
 " -c MECHANO_ON=1"\
-" -c GABAA_GMAX_LTOP=0.25"\
-" -c GABAA_GMAX_LTOL=0.25/500"\
-" -c GABAB_GMAX_LTOP=0.03"\
-" -c GABAB_GMAX_LTOL=0.0"
+" -c GENERAL_ODOR_ON=1"\
+" -c GABAA_GMAX_LTOP=0.1"\
+" -c GABAA_GMAX_LTOL=0.75"\
+" -c GABAB_GMAX_LTOP=0.02"\
+" -c GABAB_GMAX_LTOL=0.0"\
+" -c GBAR_TIMES_LN=3.0"\
+" -c GBAR_TIMES_PN=1.0"
 
 
 #LPG="lpgparm -t 4MB -s 4MB -d 4MB -h 4MB -p 4MB"
