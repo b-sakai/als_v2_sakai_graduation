@@ -23,6 +23,7 @@
 
 NUMSYNAPSE_PER_PN = 300
 NUMSYNAPSE_PER_LN = 200
+AXON_PER_RN = 5
 objref rnclist
 rnclist = new List()
 func mkPreSynapseOnRN(){local i, gid_base, gid_cnt, save_syn_gid localobj syn, nil, nc
@@ -58,7 +59,8 @@ func calcSyngid(){local base, axon_id, cell_id, cell_cnt, gid //Calculate Synaps
     for i=0, pc.id-1{
     cell_cnt += CELLM.x[i][2]
     }
-    gid = base + axon_id * NRN + cell_cnt + cell_id
+    gid = base + (cell_cnt + cell_id) * AXON_PER_RN + axon_id
+//    gid = base + axon_id * NRN + cell_cnt + cell_id
     return gid
 }
 
