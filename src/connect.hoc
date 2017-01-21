@@ -174,9 +174,9 @@ proc connect_vec_stim(){ local i, j, dose, nstim localobj rnd, target, post_syn,
             nc = target.connectVecStim(vs, post_syn)
 
             if(target.swcid == 0){
-                nc.weight = 0.05//WEIGHT_M
+                nc.weight = WEIGHT_M
             }else if(target.swcid == 1){
-                nc.weight = 0.05//WEIGHT_M
+                nc.weight = WEIGHT_M
             }
 
             spvecs.append(spvec)
@@ -195,9 +195,9 @@ proc connect_vec_stim(){ local i, j, dose, nstim localobj rnd, target, post_syn,
                 nc = target.connectVecStim(vs, post_syn)
 
                 if(target.swcid == 0){
-                    nc.weight = WEIGHT_M
+                    nc.weight = WEIGHT_GO_300
                 }else if(target.swcid == 1){
-                    nc.weight = WEIGHT_M
+                    nc.weight = WEIGHT_GO_301
                 }
 
                 spvecs.append(spvec)
