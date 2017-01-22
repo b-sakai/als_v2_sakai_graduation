@@ -46,7 +46,7 @@ NRNOPT=\
 " -c GBAR_TIMES_PN=1"
 
 #MPIEXEC="mpiexec  -n 2"
-MPIEXEC="mpiexec -n 4"
+MPIEXEC="mpiexec -n 8"
 #MPIEXEC="mpiexec -n 5"
 #MPIEXEC="mpiexec -n 1"
 #MPIEXEC=""

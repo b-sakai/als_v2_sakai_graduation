@@ -47,7 +47,8 @@ func mkPreSynapseOnRN(){local i, gid_base, gid_cnt, save_syn_gid localobj syn, n
         }
     }
     }
-    printf("Max synapse gid %d [%d]\n",syn_gid,pc.id)
+    //printf("Max synapse gid %d [%d]\n",syn_gid,pc.id)
+    printf("Max synapse gid %d [%d]\n",save_syn_gid,pc.id)
     return save_syn_gid
 }
 
