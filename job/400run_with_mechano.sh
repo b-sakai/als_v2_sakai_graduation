@@ -1,6 +1,6 @@
 #!/bin/bash -x
 #PJM --rsc-list "node=60"
-#PJM --rsc-list "elapse=6:00:00"
+#PJM --rsc-list "elapse=8:00:00"
 #PJM --rsc-list "rscgrp=small"
 #PJM --mpi "proc=480"
 #PJM -s
@@ -21,8 +21,8 @@
 #PJM --stgin "rank=* ./input/spiketiming_arase/ORN/* %r:../input/spiketiming_arase/ORN/"
 #PJM --stgin "rank=* ./input/spiketiming_arase/ORN/0ng_1stim/* %r:../input/spiketiming_arase/ORN/0ng_1stim/"
 #PJM --stgin "rank=* ./input/spiketiming_arase/MRN/* %r:../input/spiketiming_arase/MRN/"
-#PJM --stgin "rank=* ./input/spiketiming_arase/MRN/20Hz_1stim/* %r:../input/spiketiming_arase/MRN/20Hz_1stim/"
-#PJM --stgin "rank=* ./input/spiketiming_arase/MRN/20Hz_constant/* %r:../input/spiketiming_arase/MRN/20Hz_constant/"
+#PJM --stgin "rank=* ./input/spiketiming_arase/MRN/10Hz_1stim/* %r:../input/spiketiming_arase/MRN/10Hz_1stim/"
+#PJM --stgin "rank=* ./input/spiketiming_arase/MRN/10Hz_constant/* %r:../input/spiketiming_arase/MRN/10Hz_constant/"
 #PJM --stgin "rank=* ./input/spiketiming_arase/general_odor/* %r:../input/spiketiming_arase/general_odor/"
 
 
@@ -60,10 +60,12 @@ NRNOPT=\
 " -c INTERVAL=5000"\
 " -c SAVE_ALL=0"\
 " -c NCELL=400"\
-" -c WEIGHT_200=0.25"\
-" -c WEIGHT_300=0.05"\
-" -c WEIGHT_301=0.008"\
-" -c WEIGHT_M=0.05"\
+" -c WEIGHT_200=0.02"\
+" -c WEIGHT_300=0.006"\
+" -c WEIGHT_301=0.006"\
+" -c WEIGHT_M=0.03"\
+" -c WEIGHT_GO_300=0.01"\
+" -c WEIGHT_GO_301=0.1"\
 " -c COMP_0=65"\
 " -c COMP_1=5737"\
 " -c COMP_2=5025"\
@@ -72,14 +74,14 @@ NRNOPT=\
 " -c GABAB_ON=1"\
 " -c DOSE=0"\
 " -c NSTIM=1"\
-" -c MECHANO_SPONTANEOUS=20"\
+" -c MECHANO_SPONTANEOUS=10"\
 " -c MECHANO_ON=1"\
 " -c GENERAL_ODOR_ON=1"\
-" -c GABAA_GMAX_LTOP=0.05"\
-" -c GABAA_GMAX_LTOL=0.25"\
-" -c GABAB_GMAX_LTOP=0.03"\
+" -c GABAA_GMAX_LTOP=0.1*2"\
+" -c GABAA_GMAX_LTOL=0.75*2"\
+" -c GABAB_GMAX_LTOP=0.02*2"\
 " -c GABAB_GMAX_LTOL=0.0"\
-" -c GBAR_TIMES_LN=5.0"\
+" -c GBAR_TIMES_LN=3.0"\
 " -c GBAR_TIMES_PN=1.0"
 
 
