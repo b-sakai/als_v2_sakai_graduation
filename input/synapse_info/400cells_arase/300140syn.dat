@@ -1,10 +1,10 @@
 # This file shows the file path of synapse
 $ fromRN
-../input/synapse_list/fromRN/040823_5_sn_SynapseList.dat
+../input/synapse_list/fromRN/300014_synlist.dat
 $ fromMRN
 ../input/synapse_list/fromMRN/300014.dat
 $ general_odor
-../input/synapse_list/general_odor/300106.dat
+../input/synapse_list/general_odor/300004.dat
 $ CtoC
 225
 300140 200000 ../input/synapse_list/400cells_arase/300140_200000_manual.txt

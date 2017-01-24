@@ -1,6 +1,6 @@
 # This file shows the file path of synapse
 $ fromRN
-../input/synapse_list/fromRN/050205_7_sn_SynapseList.dat
+../input/synapse_list/fromRN/301003_synlist.dat
 $ fromMRN
 ../input/synapse_list/fromMRN/301008.dat
 $ general_odor

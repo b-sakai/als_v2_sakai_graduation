@@ -57,7 +57,7 @@ def make_synapse_Arase():
                 n_toroid = 0
             else: # LN to LN in og
                 n = 300
-                n_toroid = 20
+                n_toroid = 10
 
 
             f.write("$ PRE_CELL %s\n" % pre_cell)
