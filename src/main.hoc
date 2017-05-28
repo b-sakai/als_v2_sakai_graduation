@@ -79,13 +79,8 @@ if(name_declared("GENERAL_ODOR_ON")!=5){ execute("GENERAL_ODOR_ON=1")}
 strdef info_filename, info_filename_rn, synlist_dir
 
 if(IS_SUPERCOMPUTER == 0){
-    //info_filename = "../input/network_info/network_info_3cells.dat"
     info_filename = "../input/network_info/network_info_3_1PN2LNs.dat"
-    //info_filename = "../input/network_info/network_info_1PN.dat"
-    //info_filename = "../input/network_info/network_info_3reduced.dat"
-    //info_filename = "../input/network_info/network_info_4cells.dat"
     info_filename_rn = "../input/network_info/network_info_500rns.dat"
-    //info_filename_rn = "../input/network_info/network_info_1rns.dat"
     synlist_dir = "../input/synapse_list/3_1PN2LNs/"
 }else if(IS_SUPERCOMPUTER == 1){
     //sprint(info_filename, "../input/network_info/network_info_%dcells.dat", NCELL)
@@ -105,20 +100,20 @@ strdef olfactory_spt_file_dir, mechano_spt_file_dir
 
 if(NSTIM == 1){
         //sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_1stim_filtering/", DOSE)
-        sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/ORN/%dng_1stim/", DOSE)
+        sprint(olfactory_spt_file_dir, "../input/spiketiming/ORN/%dng_1stim/", DOSE)
         if(MECHANO_ON == 1){
-            sprint(mechano_spt_file_dir, "../input/spiketiming_arase/MRN/%dHz_1stim/", MECHANO_SPONTANEOUS)
+            sprint(mechano_spt_file_dir, "../input/spiketiming/MRN/%dHz_1stim/", MECHANO_SPONTANEOUS)
         } else{
-            sprint(mechano_spt_file_dir, "../input/spiketiming_arase/MRN/%dHz_constant/", MECHANO_SPONTANEOUS)
+            sprint(mechano_spt_file_dir, "../input/spiketiming/MRN/%dHz_constant/", MECHANO_SPONTANEOUS)
         }
 }else{
         //sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_30stims_filtering/", DOSE)
-        sprint(olfactory_spt_file_dir, "../input/spiketiming_arase/ORN/%dng_30stims/", DOSE)
+        sprint(olfactory_spt_file_dir, "../input/spiketiming/ORN/%dng_30stims/", DOSE)
         
         if(MECHANO_ON == 1){
-            sprint(mechano_spt_file_dir, "../input/spiketiming_arase/MRN/%dHz_30stims/", MECHANO_SPONTANEOUS)
+            sprint(mechano_spt_file_dir, "../input/spiketiming/MRN/%dHz_30stims/", MECHANO_SPONTANEOUS)
         } else{
-            sprint(mechano_spt_file_dir, "../input/spiketiming_arase/MRN/%dHz_constant/", MECHANO_SPONTANEOUS)
+            sprint(mechano_spt_file_dir, "../input/spiketiming/MRN/%dHz_constant/", MECHANO_SPONTANEOUS)
         }
 }
 
@@ -130,9 +125,6 @@ if(IS_SUPERCOMPUTER == 1){
     sprint(FPRINT_DIR,"../result/%010d/record/",START_TIME)
     sprint(SPIKEOUT_DIR,"../result/%010d/spike/",START_TIME)
 }
-
-
-
 
 
 objref pc
