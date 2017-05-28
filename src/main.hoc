@@ -92,7 +92,10 @@ if(IS_SUPERCOMPUTER == 0){
     sprint(info_filename, "../input/network_info/network_info_%dcells_arase.dat", NCELL)
     sprint(info_filename_rn, "../input/network_info/network_info_%drns.dat", NCELL*50)
     sprint(synlist_dir, "../input/synapse_list/%dcells_arase/", NCELL)
-        
+}else if(IS_SUPERCOMPUTER == 2){
+    sprint(info_filename, "../input/network_info/network_info_%dcells_arase.dat", NCELL)
+    sprint(info_filename_rn, "../input/network_info/network_info_%drns.dat", NCELL*50)
+    sprint(synlist_dir, "../input/synapse_list/%dcells_arase/", NCELL)
 }else{
     printf("IS_SUPERCOMPUTER = %d is invalid.\n", IS_SUPERCOMPUTER)
 }

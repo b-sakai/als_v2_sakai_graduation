@@ -528,12 +528,14 @@ proc connectNtoN_NET_GABA2(){\
     printf("SynPathList.count() %d [%d]\n",SynPathList.count(),pc.id)
 
 //    cmd = "tar xvf ../input/synapse_list/30temp/synlist.tar -C ../input/synapse_list/30temp/"
-    if(pc.id==0) {
-        print "Begin decompressing synlist"
-        sprint(cmd, "tar xf %ssynlist.tar -C %s", synlist_dir, synlist_dir)
-        print cmd
-        system(cmd)
-        print "End decompressing synlist"
+    if(IS_SUPERCOMPUTER==1){
+	if(pc.id==0) {
+            print "Begin decompressing synlist"
+            sprint(cmd, "tar xf %ssynlist.tar -C %s", synlist_dir, synlist_dir)
+            print cmd
+            system(cmd)
+            print "End decompressing synlist"
+	}
     }
     pc.barrier()
 
