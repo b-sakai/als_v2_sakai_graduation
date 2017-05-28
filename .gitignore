@@ -31,9 +31,9 @@
 *#
 
 # variable input files
-input/synapse_list/40cells_arase/*.txt
-#input/synapse_list/*_arase/escape.d/
-#input/synapse_list/*_arase/synlist.tar
+input/synapse_list/40cells/*.txt
+#input/synapse_list/*/escape.d/
+#input/synapse_list/*/synlist.tar
 
 # jobfile dir
 job/jobfile/
