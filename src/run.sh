@@ -14,6 +14,7 @@ mkdir -p ${SPIKE_DIR}
 
 #NRNIV="/Users/arasekosuke/lab/neuron_kplus/specials/x86_64/special -mpi"
 NRNIV='/home/arase/github/neuron_kplus/specials/x86_64/special -mpi'
+
 #HOC_NAME="./main_antenna.hoc"
 HOC_NAME="./main.hoc"
 #HOC_NAME="./ln_test.hoc"
