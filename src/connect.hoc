@@ -197,7 +197,7 @@ proc connect_vec_stim(){ local i, j, dose, nstim localobj rnd, target, post_syn,
         if(GENERAL_ODOR_ON == 1){
             for j=0, target.synlist_general_odor.count()-1{ // general odor input
                 post_syn = target.synlist_general_odor.o(j)
-                sprint(_SPT_NAME_, "../input/spiketiming_arase/general_odor/spt%03d.dat", int(rnd.repick()))
+                sprint(_SPT_NAME_, "../input/spiketiming/general_odor/spt%03d.dat", int(rnd.repick()))
                 spvec = readSpikeTiming(_SPT_NAME_)
 
                 vs    = setVecStim(spvec)
