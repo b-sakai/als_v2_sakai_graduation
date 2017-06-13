@@ -140,7 +140,6 @@ proc mkSerialStim(){local i localobj rnd
     dir = $s1
     for(i=0; i<rns.count();i=i+1){
         sprint(spiketiming,"%sspt%03d.dat",dir,int(rnd.uniform(0,999)))
-//        sprint(spiketiming,"/Users/arasekosuke/lab/data/ORN_spike/spiketiming/10000ng_1000ms.txt")
         rns.o(i).setIClamp(STOPTIME,dt,spiketiming)
     //rns.o(i).setIClamp_with_Latency(STOPTIME,dt,spiketiming,START_TIME+pc.nhost*i+pc.id)
     }
