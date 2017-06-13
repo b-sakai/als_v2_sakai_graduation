@@ -4,7 +4,7 @@
 #PJM --rsc-list "node=33"
 #PJM --mpi "shape=1"
 #PJM --mpi "proc=8"
-#PJM --rsc-list "elapse=12:00:00"
+#PJM --rsc-list "elapse=00:20:00"
 
 #PJM --stg-transfiles all
 #PJM --mpi "use-rankdir"
@@ -41,7 +41,8 @@ MU="-1" # -1 defaults (1/2 of GENE_NUM)
 MAXITER="200"
 MAXEVAL="-1"
 NUM_NRN_PROC="256"
-HOCFILE="./dose-response-estimator.hoc"
+#HOCFILE="./dose-response-estimator0125.hoc"
+HOCFILE="./dose-response-estimator0109commit.hoc"
 #NRNIV="./nrniv"
 NRNIV="./special"
 NRNOPT="{}"
