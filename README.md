@@ -1,7 +1,7 @@
 # Antennal Lobe Simulator (als_v2)
 
 ## はじめに
-本リポジトリは heewonpark/als_v2 からフォークされたものであり，KosukeArase の卒業研究に使用されたものである．
+本リポジトリは github.com:heewonpark/als_v2 からフォークされたものであり，KosukeArase の卒業研究に使用されたものである．
 以下，基本的な使用法等を記載する．
 
 ## 動作環境
@@ -15,3 +15,10 @@
     - Numpy
     - Matplotlib
 
+## 実行方法
+### ローカルマシン
+
+
+### クラスタ
+
+### スーパーコンピュータ
