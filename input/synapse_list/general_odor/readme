@@ -1,4 +1,3 @@
 一般臭の受容細胞から自発発火による刺激を受けるシナプス
-OG 全域 (x + y > 275 として抽出) からランダムに選択
-040823_5 では 400 個，050205_7 では 300 個
+OG (x + y > 275 として抽出, ./before_reduction/*_og.txt) から center core (./before_reduction/*_center_core.txt) を除いた領域 (./before_reduction/*_excluded.txt) からランダムに 100 個ずつ選択
 
