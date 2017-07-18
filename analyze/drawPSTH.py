@@ -11,6 +11,9 @@ import sys
 import math
 import glob
 import numpy as np
+
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pylab as plt
 
 
@@ -53,11 +56,11 @@ def readdata_ln(file):
 
 
 def index(x):
-    return math.floor(x/bin)
+    return int(math.floor(x/bin))
 
 
 def draw_PSTH_rn_pn():
-    PSTH = np.zeros([math.ceil(tstop/bin)])
+    PSTH = np.zeros([int(math.ceil(tstop/bin))])
 
     time = np.arange(math.ceil(tstop/bin))*bin
     for var in data:
@@ -80,28 +83,23 @@ def draw_PSTH_rn_pn():
 
 
 def draw_PSTH_ln():
-    PSTH = np.zeros([4, math.ceil(tstop/bin)])
+    PSTH = np.zeros([4, int(math.ceil(tstop/bin))])
+    time = np.arange(int(math.ceil(tstop/bin)))*bin
 
-    time = np.arange(math.ceil(tstop/bin))*bin
     for i in xrange(4):
         for var in data[i]:
-            # print var, index(var)
             if var != 0:
                 PSTH[i, index(var)] += 1
-        # print index(var)
-    # print PSTH[-10:]
-    # print data[-10:]
+
     plt.plot(time, PSTH[0], "-", color="green", label=comps[0])
     plt.plot(time, PSTH[1], "-", color="blue", label=comps[1])
     plt.plot(time, PSTH[2], "-", color="red", label=comps[2])
     plt.plot(time, PSTH[3], "-", color="brown", label=comps[3])
 
-    # plt.plot(time, PSTH[0], "-", label=str(dose))
     plt.title("{2}: {0} ng, {1} ms".format(dose, duration*1000, cell_gid))
     plt.xlabel("time")
     plt.ylabel("PSTH")
     plt.legend()
-    # plt.xlim(0,2)
     plt.xlim(0, round(time[-1]))
     plt.ylim(0,50)
     plt.rcParams["font.size"] = 15
@@ -132,12 +130,14 @@ if __name__ == "__main__":
         if os.path.isdir(file):
             input_dir = file + "/"
             continue
+        if not 'dat' in file:
+            continue
         print file
         cell_gid = file.split("/")[-1][:6]
         if cell_gid[0] == "3":
             tstop, comps, data = readdata_ln(file)
             draw_PSTH_ln()
-            # print "a"
         elif cell_gid[0] == "2":
             tstop, data = readdata_rn_pn(file)
             draw_PSTH_rn_pn()
+
