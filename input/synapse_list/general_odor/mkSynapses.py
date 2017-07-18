@@ -4,20 +4,18 @@ import random
 import numpy as np
 
 
-files = glob.glob("./before_reduction/*.dat")
+files = glob.glob("./before_reduction/*_excluded.txt")
 print files
 
 for file in files:
-    index = file.split("_")[2]
-    # src_prefix = file.split("/")[2].split("_")[:1]
-    # print src_prefix
-
-    if index == "5":
+    index = file.split("/")[2][2]
+    print(index)
+    if index == "0":
 #        num_synapses = 800
         num_synapses = 100
         target_prefix = "3000"
         ncells = 17
-    elif index == "7":
+    elif index == "1":
 #        num_synapses = 600
         num_synapses = 100
         target_prefix = "3010"
@@ -30,7 +28,7 @@ for file in files:
         lines = f.readlines()
         synlist = [None] * len(lines)
         for i, line in enumerate(lines):
-            synlist[i] = line.split("[")[2].split("]")[0]
+            synlist[i] = line.strip()
 
     for i in xrange(ncells+1):
         reduced_synlist = np.random.choice(synlist, num_synapses, replace=False)

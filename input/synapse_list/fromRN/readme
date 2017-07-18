@@ -1,1 +1,2 @@
 RNから刺激を受ける細胞のコンパートメント番号
+toroid 領域のうち，中心部分を除いたコンパート一覧（./before_reduction/*toroid.txt）からランダムに作成．
