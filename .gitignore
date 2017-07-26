@@ -32,7 +32,7 @@
 
 # variable input files
 input/synapse_list/40cells/*.txt
-#input/synapse_list/*/escape.d/
+input/synapse_list/*/escape.d/
 #input/synapse_list/*/synlist.tar
 
 # jobfile dir
@@ -58,3 +58,4 @@ job/.*
 tail
 al_env
 .DS_Store
+

@@ -122,8 +122,8 @@ if(IS_SUPERCOMPUTER == 1){
     FPRINT_DIR = "./result/record/"
     SPIKEOUT_DIR = "./result/spike/"
 }else{
-    sprint(FPRINT_DIR,"../result/%010d/record/",START_TIME)
-    sprint(SPIKEOUT_DIR,"../result/%010d/spike/",START_TIME)
+    sprint(FPRINT_DIR,"../result/%04d/record/",START_TIME)
+    sprint(SPIKEOUT_DIR,"../result/%04d/spike/",START_TIME)
 }
 
 
