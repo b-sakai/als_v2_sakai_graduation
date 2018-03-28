@@ -13,7 +13,8 @@ $python spike_analyze.py directory
 行と列逆の方がわかりやすいけど dat の向き（縦方向）に揃えてる
 """
 
-
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import math
