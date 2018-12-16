@@ -21,7 +21,7 @@
 {load_file("loadinfo.hoc")}
 {load_file("stim.hoc")}
 
-NUMSYNAPSE_PER_PN = 300
+NUMSYNAPSE_PER_PN = 100
 NUMSYNAPSE_PER_LN = 200
 AXON_PER_RN = 5
 objref rnclist
@@ -97,11 +97,12 @@ proc mkPostSynapseOfRN(){local i,j,gid_base,src_gid localobj target, syn, nc
         syn = target.synlist.o(j)
         src_gid = calcSrcgid(gid_base, j, i, syn_gid_max)
         //print "src_gid ", src_gid
+        //print "syn ", syn
         nc  = pc.gid_connect(src_gid, syn)
         nc.delay  = 1.0
         if(target.cellid == 2){
-            //print "nc.weight for 200 ",WEIGHT_200
-            nc.weight = WEIGHT_200
+            nc.weight = WEIGHT_200 * (5 - i) / 5.0
+	    print "nc.weight for 200 ",WEIGHT_200, i, nc.weight
         }else if(target.cellid == 3 && target.swcid == 0){
             //print "nc.weight for 300 ",WEIGHT_300
             nc.weight = WEIGHT_300

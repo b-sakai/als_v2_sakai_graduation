@@ -4,4 +4,3 @@ $ fromRN
 $ CtoC
 2
 302000 200000 ../input/synapse_list/3cells_newsynapse/302000_200000_manual.txt
-302000 303000 ../input/synapse_list/3cells_newsynapse/302000_303000_randomize.txt

@@ -46,35 +46,37 @@ if(name_declared("EL")!=5){ execute("EL=-60") } //
 if(name_declared("CAGAIN")!=5){ execute("CAGAIN=0.16")}
 
 //************************************************
-if(name_declared("STOPTIME")!=5){ execute("STOPTIME=50")}
-if(name_declared("IS_SUPERCOMPUTER")!=5){ execute("IS_SUPERCOMPUTER=0")}
-if(name_declared("INTERVAL")!=5){ execute("INTERVAL=1200")}
-if(name_declared("SAVE_ALL")!=5){ execute("SAVE_ALL=0")}
-if(name_declared("NCELL")!=5){ execute("NCELL=40")}
-if(name_declared("START_TIME")!=5){ execute("START_TIME=0")}
-if(name_declared("WEIGHT_200")!=5){ execute("WEIGHT_200=0.05")}
-if(name_declared("WEIGHT_300")!=5){ execute("WEIGHT_300=0.05")}
+
+//*****************************************************
+//if(name_declared("STOPTIME")!=5){ execute("STOPTIME=50")}
+//if(name_declared("IS_SUPERCOMPUTER")!=5){ execute("IS_SUPERCOMPUTER=0")}
+//if(name_declared("INTERVAL")!=5){ execute("INTERVAL=1200")}
+//if(name_declared("SAVE_ALL")!=5){ execute("SAVE_ALL=0")}
+//if(name_declared("NCELL")!=5){ execute("NCELL=40")}
+//if(name_declared("START_TIME")!=5){ execute("START_TIME=0")}
+//if(name_declared("WEIGHT_200")!=5){ execute("WEIGHT_200=0.05")}
+//if(name_declared("WEIGHT_300")!=5){ execute("WEIGHT_300=0.05")}
 //if(name_declared("WEIGHT_301")!=5){ execute("WEIGHT_301=0.9")}
-if(name_declared("WEIGHT_301")!=5){ execute("WEIGHT_301=0.008")}
-if(name_declared("WEIGHT_M")!=5){ execute("WEIGHT_M=0.05")}
-if(name_declared("WEIGHT_GO_300")!=5){ execute("WEIGHT_GO_300=0.05")}
-if(name_declared("WEIGHT_GO_301")!=5){ execute("WEIGHT_GO_301=0.05")}
-if(name_declared("GBAR_TIMES_LN")!=5){ execute("GBAR_TIMES_LN=1.0")}
-if(name_declared("GBAR_TIMES_PN")!=5){ execute("GBAR_TIMES_PN=1.0")}
-if(name_declared("GABAA_GMAX_LTOL")!=5){ execute("GABAA_GMAX_LTOL=5.0")}
+//if(name_declared("WEIGHT_301")!=5){ execute("WEIGHT_301=0.008")}
+//if(name_declared("WEIGHT_M")!=5){ execute("WEIGHT_M=0.05")}
+//if(name_declared("WEIGHT_GO_300")!=5){ execute("WEIGHT_GO_300=0.05")}
+//if(name_declared("WEIGHT_GO_301")!=5){ execute("WEIGHT_GO_301=0.05")}
+//if(name_declared("GBAR_TIMES_LN")!=5){ execute("GBAR_TIMES_LN=1.0")}
+//if(name_declared("GBAR_TIMES_PN")!=5){ execute("GBAR_TIMES_PN=1.0")}
+//if(name_declared("GABAA_GMAX_LTOL")!=5){ execute("GABAA_GMAX_LTOL=5.0")}
 //if(name_declared("GABAB_GMAX_LTOL")!=5){ execute("GABAB_GMAX_LTOL=5.0")}
 //if(name_declared("GABAA_GMAX_LTOP")!=5){ execute("GABAA_GMAX_LTOP=0.1")}
-if(name_declared("GABAB_GMAX_LTOL")!=5){ execute("GABAB_GMAX_LTOL=0.1")}
-if(name_declared("GABAA_GMAX_LTOP")!=5){ execute("GABAA_GMAX_LTOP=50.0")}
-if(name_declared("GABAB_GMAX_LTOP")!=5){ execute("GABAB_GMAX_LTOP=0.6")}
-if(name_declared("GABAB_ON")!=5){ execute("GABAB_ON=0")}
-if(name_declared("GABAA_ON")!=5){ execute("GABAA_ON=0")}
-if(name_declared("DOSE")!=5){ execute("DOSE=1000")}
-if(name_declared("MECHANO_SPONTANEOUS")!=5){ execute("MECHANO_SPONTANEOUS=60")}
-if(name_declared("NSTIM")!=5){ execute("NSTIM=30")}
-if(name_declared("MECHANO_ON")!=5){ execute("MECHANO_ON=1")}
-if(name_declared("GENERAL_ODOR_ON")!=5){ execute("GENERAL_ODOR_ON=1")}
-
+//if(name_declared("GABAB_GMAX_LTOL")!=5){ execute("GABAB_GMAX_LTOL=0.1")}
+//if(name_declared("GABAA_GMAX_LTOP")!=5){ execute("GABAA_GMAX_LTOP=50.0")}
+//if(name_declared("GABAB_GMAX_LTOP")!=5){ execute("GABAB_GMAX_LTOP=0.6")}
+//if(name_declared("GABAB_ON")!=5){ execute("GABAB_ON=0")}
+//if(name_declared("GABAA_ON")!=5){ execute("GABAA_ON=0")}
+//if(name_declared("DOSE")!=5){ execute("DOSE=1000")}
+//if(name_declared("MECHANO_SPONTANEOUS")!=5){ execute("MECHANO_SPONTANEOUS=60")}
+//if(name_declared("NSTIM")!=5){ execute("NSTIM=30")}
+//if(name_declared("MECHANO_ON")!=5){ execute("MECHANO_ON=1")}
+//if(name_declared("GENERAL_ODOR_ON")!=5){ execute("GENERAL_ODOR_ON=1")}
+//*****************************************************************
 
 strdef info_filename, info_filename_rn, synlist_dir
 
@@ -122,8 +124,8 @@ if(IS_SUPERCOMPUTER == 1){
     FPRINT_DIR = "./result/record/"
     SPIKEOUT_DIR = "./result/spike/"
 }else{
-    sprint(FPRINT_DIR,"../result/%04d/record/",START_TIME)
-    sprint(SPIKEOUT_DIR,"../result/%04d/spike/",START_TIME)
+    sprint(FPRINT_DIR,"../result/%010d/record/",START_TIME)
+    sprint(SPIKEOUT_DIR,"../result/%010d/spike/",START_TIME)
 }
 
 
@@ -156,7 +158,9 @@ proc mkNetwork(){
     if(pc.id == 0){
     printf( "pc.id\tpn\tln\trn\n")
     }
+
     printf("%d\t%d\t%d\t%d\n",pc.id, pns.count(), lns.count(), rns.count())
+
     mkConnections()
 }
 {load_file("divider.hoc")}
@@ -185,7 +189,13 @@ proc mkCells(){localobj pn,ln,rn, nc, nil
             //pn.cellbodylist.printnames()
             pn.dendlist = areaList(97,98,0)
                 pn.axonlist = areaList(99,100,0)
+	    SPIKEGEN_POS = 24
+	    SPIKEGEN_SIZE = 3
+	    if((i == 1) || (i == 2)){
+	    	SPIKEGEN_POS = 210
+	    }
             pn.setSpikegenlist(SPIKEGEN_POS, SPIKEGEN_SIZE)
+	    printf("SPIKEGEN_POS: %d\n",SPIKEGEN_POS)	
             //pn.spikegenlist.printnames()
 
             //initModel_PN(pn)
@@ -224,6 +234,7 @@ proc mkCells(){localobj pn,ln,rn, nc, nil
             //psection()
             print "SectionNum",ln.SectionNum
         }else if(i>=NPN+NLN){
+	    print i
             if(pc.nhost>NPN+NLN){
                 if((i-NLN-NPN)%(pc.nhost-NPN-NLN)==(pc.id-NPN-NLN)){
                     j = i-NPN-NLN

@@ -3,9 +3,14 @@
 #PBS -l nodes=2:ppn=28
 #PBS -q cluster
 
+
 module load torque compiler/gcc-4.8.2 openmpi/1.10.2/gcc-4.8.2.lp
 
-cd /home/arase/kanzaki_lab/als_v2/src/
+pwd
+cd $PWS_O_WORKDIR
+pwd
+cd /home/sakai/als_v2_arase/src/
+pwd
 
 # Make directory to save data file
 # Time=`date '+%m%d%H%M%S'`
@@ -21,7 +26,7 @@ mkdir -p ${RECORD_DIR}
 mkdir -p ${SPIKE_DIR}
 
 #NRNIV="/Users/arasekosuke/lab/neuron_kplus/specials/x86_64/special -mpi"
-NRNIV='/home/arase/github/neuron_kplus/specials/x86_64/special -mpi'
+NRNIV='/home/sakai/neuron_kplus/specials/x86_64/special -mpi'
 
 #HOC_NAME="./main_antenna.hoc"
 HOC_NAME="./main.hoc"
@@ -30,7 +35,7 @@ HOC_NAME="./main.hoc"
 #HOC_NAME="./loadbalance_test.hoc"
 
 NRNOPT=\
-" -c STOPTIME=2000"\
+" -c STOPTIME=10"\
 " -c IS_SUPERCOMPUTER=2"\
 " -c INTERVAL=5000"\
 " -c START_TIME=${Time}"\
@@ -74,10 +79,11 @@ EXEC="${MPIEXEC} ${NRNIV} ${NRNOPT} ${HOC_NAME}"
 #mpiexec -np 4 $NRNMPI/nrniv -mpi parallel_simulation1201.hoc
 #mpiexec -np 8 ./mod/x86_64/special -mpi main.hoc
 echo $EXEC
+
 time $EXEC |tee $OUT
 
 wait
 
 python ../analyze/drawPSTH.py $SPIKE_DIR
-#python drawGraph.py $RECORD_DIR
-#python drawISF.py $SPIKE_DIR
+python ../analyze/drawGraph.py $RECORD_DIR
+python ../analyze/drawISF.py $SPIKE_DIR

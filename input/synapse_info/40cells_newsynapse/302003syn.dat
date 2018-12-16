@@ -1,0 +1,27 @@
+# This file shows the file path of synapse
+$ fromRN
+../input/synapse_list/fromRN0804/040823_5_sn_reduction_SynapseList.dat
+$ CtoC
+22
+302003 200000 ../input/synapse_list/302_200_manual.txt
+302003 200001 ../input/synapse_list/302_200_manual.txt
+302003 200002 ../input/synapse_list/302_200_manual.txt
+302003 200003 ../input/synapse_list/302_200_manual.txt
+302003 200004 ../input/synapse_list/302_200_manual.txt
+302003 303000 ../input/synapse_list/302_303_randomize.txt
+302003 303001 ../input/synapse_list/302_303_randomize.txt
+302003 303002 ../input/synapse_list/302_303_randomize.txt
+302003 303003 ../input/synapse_list/302_303_randomize.txt
+302003 303004 ../input/synapse_list/302_303_randomize.txt
+302003 303005 ../input/synapse_list/302_303_randomize.txt
+302003 303006 ../input/synapse_list/302_303_randomize.txt
+302003 303007 ../input/synapse_list/302_303_randomize.txt
+302003 303008 ../input/synapse_list/302_303_randomize.txt
+302003 303009 ../input/synapse_list/302_303_randomize.txt
+302003 303010 ../input/synapse_list/302_303_randomize.txt
+302003 303011 ../input/synapse_list/302_303_randomize.txt
+302003 303012 ../input/synapse_list/302_303_randomize.txt
+302003 303013 ../input/synapse_list/302_303_randomize.txt
+302003 303014 ../input/synapse_list/302_303_randomize.txt
+302003 303015 ../input/synapse_list/302_303_randomize.txt
+302003 303016 ../input/synapse_list/302_303_randomize.txt

@@ -20,15 +20,15 @@ import os
 import csv
 
 from synapse_list_format import SYNLIST
-###########################################
+
 # DEFAULT SETTING
 NSWC  = 3
 NPN   = 5
 NLN   = 35
-###########################################
 
-NPN = 1
-NLN = 2
+
+#NPN = 1
+#NLN = 2
 
 NCELL = NPN + NLN
 
@@ -238,16 +238,16 @@ def write_line_syn2(f,precell, postcell, filetype, gidbase):
         synlist = s301_300
     elif(precell.nid == 302) & (postcell.nid == 303):
         synlist = SYNLIST()
-        synlist.read_synlist_format(302,303,"../synapse_list/302_303_template.csv")
+        synlist.read_synlist_format(302,303,"../synapse_list/302_303_dist.csv")
     elif(precell.nid == 303) & (postcell.nid == 302):
         synlist = SYNLIST()
-        synlist.read_synlist_format(303,302,"../synapse_list/303_302_template.csv")
+        synlist.read_synlist_format(303,302,"../synapse_list/303_302_dist.csv")
     elif(precell.nid == 302) & (postcell.nid == 200):
         synlist = SYNLIST()
-        synlist.read_synlist_format(302,200,"../synapse_list/302_200_manual.csv")
+        synlist.read_synlist_format(302,200,"../synapse_list/302_200_dist.csv")
     elif(precell.nid == 303) & (postcell.nid == 200):
         synlist = SYNLIST()
-        synlist.read_synlist_format(303,200,"../synapse_list/303_200_manual.csv")
+        synlist.read_synlist_format(303,200,"../synapse_list/303_200_dist.csv")
     
     synfile_path_m = SYNLIST_DIR_M + synfilename
     if not os.path.exists(SYNLIST_DIR_M):
@@ -269,6 +269,8 @@ def writeSynData(cell,gidbase):
     LNtoPN = [0 for i in range(NPN)]
     LtoP = 0
     LtoL = 0
+    print "cellid"
+    print cell.getCellid()
     if(cell.getCellid() == 3):
         F.write("$ CtoC\n")
         for i in range(NPN):
@@ -281,11 +283,11 @@ def writeSynData(cell,gidbase):
         F.write("%d\n"%(LtoP + LtoL))
         for i in range(NPN):
             if(LNtoPN[i]==1):
-                write_line_syn2(F,cell,PN[i],"manual",gidbase)
+                write_line_syn(F,cell,PN[i],"manual")
         gidbase += 10    
         for i in range(NLN):
             if(cell.swcid != LN[i].swcid):
-                write_line_syn2(F,cell,LN[i],"randomize",gidbase)
+                write_line_syn(F,cell,LN[i],"randomize")
         gidbase += 10
     F.close()
     return gidbase

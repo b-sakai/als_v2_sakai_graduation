@@ -98,7 +98,7 @@ def findSynapseRegion(cell, dendlist):
     print "SYNAPSE COMPARTMENT NUMBER : %d\n"%(counter)
 
 if __name__ == "__main__":
-    files = ["200000.swc", "300000.swc", "301000.swc"]
+    files = ["040823_5_sn_bestrigid0106_mkRegion_reduction.swc", "050205_7_sn_bestrigid0106_mkRegion_reduction.swc", "070224_SN-23-R.swc"]
     for file in files:
 
         CELL = h.CellSwc(file)
@@ -123,6 +123,8 @@ if __name__ == "__main__":
         #-----------------------------------
         # make synapse
         #-----------------------------------
+        N = 10
+        NUMBEROFSYNAPSE = 300
         if file[0] == "2":
             N = 5
             NUMBEROFSYNAPSE = 300

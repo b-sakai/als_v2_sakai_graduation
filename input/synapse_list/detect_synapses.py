@@ -16,10 +16,13 @@ import numpy as np
 
 
 def read_swc(path):
+    print "a"
     with open(path, "r") as f:
-        while len(f.readline())!= 1:
+        while len(f.readline()) >= 3 :
             continue
         lines = f.readlines()
+
+
 
     n = len(lines)
     comps = np.ndarray([n, 7]) #id, type, x, y, z, d, parent
@@ -43,20 +46,28 @@ def calc_distance():
 
 if __name__ == "__main__":
     max_distance = float(sys.argv[1])
+    print max_distance
 
-    swc_path_200 = "../swc/050622_4_sn_bestrigid0106_mkRegion.swc"
+    #swc_path_200 = "../swc/050622_4_sn_bestrigid0106_mkRegion.swc"
+    swc_path_200 = "../swc/7172_registrated_v3_ln.swc"
     swc_path_300 = "../swc/040823_5_sn_bestrigid0106_mkRegion.swc"
     swc_path_301 = "../swc/050205_7_sn_bestrigid0106_mkRegion.swc"
+    print "load completed"
 
-    # output_filename = "synapses_between_200_300.dat"
-    output_filename = "synapses_between_200_300.dat"
+    output_filename = "synapses_between_7172_300.dat"
+    #output_filename = "synapses_between_7172_301.dat"
     # output_filename = "synapses_between_300_301.dat"
+    print "start reading swc"
 
     comps1 = read_swc(swc_path_200)
+    print comps1
+    print "comps1 completed"
     comps2 = read_swc(swc_path_300)
+    print "comps2 completed"
 
     synlist = []
     calc_distance()
+    print "set completed"
 
     with open(output_filename, "w") as f:
         f.write("# %s_syn %s_syn\n" % (output_filename.split(".")[0].split("_")[2], output_filename.split(".")[0].split("_")[3]))
