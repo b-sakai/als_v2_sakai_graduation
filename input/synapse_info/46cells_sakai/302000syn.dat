@@ -1,0 +1,44 @@
+# This file shows the file path of synapse
+$ fromRN
+../input/synapse_list/fromRN/syn_glomerulars/302
+$ fromMRN
+../input/synapse_list/fromMRN/302000.dat
+$ CtoC
+37
+302000 200000 ../input/synapse_list/46cells/302000_200000_manual.txt
+302000 200001 ../input/synapse_list/46cells/302000_200001_manual.txt
+302000 200002 ../input/synapse_list/46cells/302000_200002_manual.txt
+302000 200003 ../input/synapse_list/46cells/302000_200003_manual.txt
+302000 200004 ../input/synapse_list/46cells/302000_200004_manual.txt
+302000 200005 ../input/synapse_list/46cells/302000_200005_manual.txt
+302000 200006 ../input/synapse_list/46cells/302000_200006_manual.txt
+302000 200007 ../input/synapse_list/46cells/302000_200007_manual.txt
+302000 200008 ../input/synapse_list/46cells/302000_200008_manual.txt
+302000 200009 ../input/synapse_list/46cells/302000_200009_manual.txt
+302000 200010 ../input/synapse_list/46cells/302000_200010_manual.txt
+302000 300000 ../input/synapse_list/46cells/302000_300000_randomize.txt
+302000 300001 ../input/synapse_list/46cells/302000_300001_randomize.txt
+302000 300002 ../input/synapse_list/46cells/302000_300002_randomize.txt
+302000 300003 ../input/synapse_list/46cells/302000_300003_randomize.txt
+302000 300004 ../input/synapse_list/46cells/302000_300004_randomize.txt
+302000 300005 ../input/synapse_list/46cells/302000_300005_randomize.txt
+302000 300006 ../input/synapse_list/46cells/302000_300006_randomize.txt
+302000 300007 ../input/synapse_list/46cells/302000_300007_randomize.txt
+302000 301000 ../input/synapse_list/46cells/302000_301000_randomize.txt
+302000 301001 ../input/synapse_list/46cells/302000_301001_randomize.txt
+302000 301002 ../input/synapse_list/46cells/302000_301002_randomize.txt
+302000 301003 ../input/synapse_list/46cells/302000_301003_randomize.txt
+302000 301004 ../input/synapse_list/46cells/302000_301004_randomize.txt
+302000 301005 ../input/synapse_list/46cells/302000_301005_randomize.txt
+302000 301006 ../input/synapse_list/46cells/302000_301006_randomize.txt
+302000 301007 ../input/synapse_list/46cells/302000_301007_randomize.txt
+302000 301008 ../input/synapse_list/46cells/302000_301008_randomize.txt
+302000 303000 ../input/synapse_list/46cells/302000_303000_randomize.txt
+302000 303001 ../input/synapse_list/46cells/302000_303001_randomize.txt
+302000 303002 ../input/synapse_list/46cells/302000_303002_randomize.txt
+302000 303003 ../input/synapse_list/46cells/302000_303003_randomize.txt
+302000 303004 ../input/synapse_list/46cells/302000_303004_randomize.txt
+302000 303005 ../input/synapse_list/46cells/302000_303005_randomize.txt
+302000 303006 ../input/synapse_list/46cells/302000_303006_randomize.txt
+302000 303007 ../input/synapse_list/46cells/302000_303007_randomize.txt
+302000 303008 ../input/synapse_list/46cells/302000_303008_randomize.txt

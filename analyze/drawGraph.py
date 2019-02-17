@@ -9,18 +9,21 @@
 #-------------------------------------------------
 
 
-import matplotlib.pyplot as plt
-from matplotlib import pylab
 import sys
 import os.path
 import numpy as np
 
-def drawGraph(filename, show):
+import matplotlib as mpl
+mpl.use('Agg')
+import matplotlib.pylab as plt
+
+def drawGraph(filename):
     datafile = open(filename,'r')
     data = datafile.readlines()
     nDatas, nColumns = data[0].split(' ')
     nDatas = int(nDatas)
     nColumns = int(nColumns)
+    print filename
     print nDatas, nColumns
     vec = [[0 for i in range(nDatas)] for j in range(nColumns)]
     svec = [0 for i in range(nDatas)]
@@ -42,39 +45,38 @@ def drawGraph(filename, show):
     tmp = filename.rsplit('.',1)
     imgFilename = "%s.png"%tmp[0]
 
-    flg = pylab.figure()
+    flg = plt.figure()
     if 'Synaptic' in filename:
         for i in range(nDatas):
             for j in range(1,nColumns):
                 svec[i] += vec[j][i]
-        pylab.plot(vec[0], svec)
-        pylab.ylabel("Current[nA]")        
+        plt.plot(vec[0], svec)
+        plt.ylabel("Current[nA]")        
         _SAVETXT_NAME_ = "%s_Sum.dat"%(tmp[0])
         np.savetxt(_SAVETXT_NAME_, svec, fmt="%.5f")
     elif 'GABA' in filename:
         for i in range(nDatas):
             for j in range(1,nColumns):
                 svec[i] += vec[j][i]
-        pylab.plot(vec[0], svec)
-        pylab.ylabel("Current[nA]")        
+        plt.plot(vec[0], svec)
+        plt.ylabel("Current[nA]")        
         _SAVETXT_NAME_ = "%s_Sum.dat"%(tmp[0])
         np.savetxt(_SAVETXT_NAME_, svec, fmt="%.5f")
     else:
-        pylab.ylabel("membrain potential[mV]")
+        plt.ylabel("membrain potential[mV]")
 
     for j in range(1,nColumns):
-        pylab.plot(vec[0], vec[j])
+        plt.plot(vec[0], vec[j])
     #pylab.ylim(-100, 80)
     #pylab.xlim(0,500)
-    pylab.xlabel("time[ms]")
+    plt.xlabel("time[ms]")
     #pylab.ylabel("current[nA]")
     
     #print imgFilename, tmp
-    pylab.title(imgFilename)
-    pylab.savefig(imgFilename)
-    if(show==True):
-        pylab.show()
-    pylab.close()
+    plt.title(imgFilename)
+    plt.savefig(imgFilename)
+
+    plt.close()
     """
     #### Graph for Thesis big
     fig = plt.figure(figsize=(8,3),dpi=400)
@@ -107,7 +109,7 @@ if len(sys.argv) is 1:
     print "NO FILENAME"
 elif len(sys.argv) is 2:
     if(os.path.isfile(sys.argv[1])):
-        drawGraph(sys.argv[1],1)
+        drawGraph(sys.argv[1])
     elif(os.path.isdir(sys.argv[1])):
         print "%s is directory"%sys.argv[1]
         target_dir = os.path.normpath(sys.argv[1])
@@ -117,7 +119,7 @@ elif len(sys.argv) is 2:
                 ext = os.path.splitext(full_dir)
                 if(ext[1] == '.txt'):
                     print full_dir                    
-                    drawGraph(full_dir,0)
+                    drawGraph(full_dir)
     else:
         print "Wrong directory or filename"
 else:

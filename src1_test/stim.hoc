@@ -1,0 +1,82 @@
+//************************************************
+// FILE NAME : stim.hoc
+// 2015.05.13
+// Heewon Park
+//************************************************
+
+//************************************************
+// MODIFICATION HISTORY
+//************************************************
+//
+//
+//
+
+//************************************************
+// FUNCTION LIST
+//************************************************
+//
+//
+//************************************************
+
+proc mkSerialStim(){local i localobj rnd
+    rnd = new Random(pc.id)
+    strdef zerong_spiketiming, halfng_spiketiming, spiketiming
+    strdef zerong_dir, halfng_dir, dir
+    zerong_dir = $s1
+    halfng_dir = $s2
+    dir = $s3
+    for(i=0; i<rns.count();i=i+1){
+    	sprint(zerong_spiketiming,"%sspt%03d.dat",zerong_dir,int(rnd.uniform(0,999)))
+    	sprint(halfng_spiketiming,"%sspt%03d.dat",halfng_dir,int(rnd.uniform(0,999)))
+    	sprint(spiketiming,"%sspt%03d.dat",dir,int(rnd.uniform(0,999)))
+
+    	if (rns.object(i).gloid == 18) {
+	   rns.o(i).setIClamp(STOPTIME,dt,spiketiming, zerong_spiketiming)
+        } else if (rns.object(i).gloid == 16) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,zerong_spiketiming, spiketiming)
+        } else if (rns.object(i).gloid == 19) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,halfng_spiketiming, zerong_spiketiming)
+        } else if (rns.object(i).gloid == 17) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,halfng_spiketiming, halfng_spiketiming)
+        } else if (rns.object(i).gloid == 15) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,zerong_spiketiming, halfng_spiketiming)
+        } else if (rns.object(i).gloid == 5) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,zerong_spiketiming, halfng_spiketiming)
+        } else if (rns.object(i).gloid == 6) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,halfng_spiketiming, halfng_spiketiming)
+        } else if (rns.object(i).gloid == 32) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,zerong_spiketiming, halfng_spiketiming)
+        } else if (rns.object(i).gloid == 33) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,halfng_spiketiming, halfng_spiketiming)
+        } else if (rns.object(i).gloid == 34) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,halfng_spiketiming, zerong_spiketiming)
+        } else if (rns.object(i).gloid == 35) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,halfng_spiketiming, zerong_spiketiming)
+        } else {
+	   rns.o(i).setIClamp(STOPTIME,dt,zerong_spiketiming, zerong_spiketiming)
+	}
+    }
+}
+
+obfunc readSpikeTiming(){local var localobj fobj, spvec
+    /*
+    spvec : spike timing vector
+    */
+    strdef _readfile_
+    _readfile_ = $s1
+    //print _readfile_
+
+    spvec = new Vector()
+
+    fobj = new File()
+    fobj.ropen(_readfile_)
+    while(!fobj.eof()){
+    var = fobj.scanvar()
+    spvec.append(var*1000.0)
+    }
+
+    spvec.remove(spvec.size()-1) //Last value of spike timing file is number of data
+    //spvec.printf()
+    fobj.close()
+    return spvec
+}

@@ -1,0 +1,3 @@
+cd ../python/
+python make_synapse.py 5
+5μm以下のコンパートメントの組を抽出(2019/01/13)

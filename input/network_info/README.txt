@@ -1,0 +1,1 @@
+現状netowork_infoは手書き

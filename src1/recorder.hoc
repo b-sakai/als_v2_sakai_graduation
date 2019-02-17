@@ -1,0 +1,323 @@
+//************************************************
+// FILE NAME : recorder.hoc
+// 2015.05.13
+// Heewon Park
+//************************************************
+
+//************************************************
+// MODIFICATION HISTORY
+//************************************************
+//
+//
+//
+
+//************************************************
+// FUNCTION LIST
+//************************************************
+//
+//************************************************
+
+
+proc spikerecord(){local i localobj nc, nil
+    if(pns.count()!=0){
+    printf("spikerecord(%d) for PN\n",pc.id)
+    //pns.o(0).setSpikeRecord(475)
+
+    pns.o(0).setSpikeRecord(43)
+    }else if(lns.count()!=0){
+    printf("spikerecord(%d) for LN\n",pc.id)
+    if(lns.o(0).swcid == 0){
+        //lns.o(0).setSpikeRecord(21706)
+        lns.o(0).setSpikeRecord(382-2)
+    }else if(lns.o(0).swcid == 1){
+        //lns.o(0).setSpikeRecord(11197)
+        lns.o(0).setSpikeRecord(1168-2)
+    }else if(lns.o(0).swcid == 2){
+        lns.o(0).setSpikeRecord(45-2)
+    }else if(lns.o(0).swcid == 3){
+        lns.o(0).setSpikeRecord(202-2)
+    }
+
+    }else if(rns.count()!=0){
+    printf("spikerecord(%d) for RN\n",pc.id)
+    rns.o(0).setSpikeRecord(60)
+    }    
+}
+
+proc multiSpikeRecord(){local i localobj nc, nil
+    if(pns.count()!=0){
+        printf("spikerecord(%d) for PN\n",pc.id)
+        //pns.o(0).setSpikeRecord(475)
+	pns.o(0).setSpikeRecord(43)
+    }else if(lns.count()!=0){
+        printf("multiSpikerecord(%d) for LN\n",pc.id)
+        lns.o(0).setMultiSpikeRecord($1, $2, $3, $4)
+//        lns.o(0).setMultiSpikeRecord(1168-2, 2)
+  //      lns.o(0).setMultiSpikeRecord(5000, 3)
+    //    lns.o(0).setMultiSpikeRecord(11197, 4)
+    }else if(rns.count()!=0){
+        printf("spikerecord(%d) for RN\n",pc.id)
+        rns.o(0).setSpikeRecord(60)
+    }    
+}
+
+proc spikeout(){
+    if(pns.count()!=0){
+    printf("spike out(%d) for PN\n",pc.id)
+    pns.o(0).fprintSpikeRecord(SPIKEOUT_DIR,INTERVAL,STOPTIME)
+    }
+
+    if(lns.count()!=0){
+    printf("spike out(%d) for LN\n",pc.id)
+    lns.o(0).fprintSpikeRecord(SPIKEOUT_DIR,INTERVAL,STOPTIME)
+    }
+    if(rns.count()!=0){
+    printf("spike out(%d) for RN\n",pc.id)
+    rns.o(0).fprintSpikeRecord(SPIKEOUT_DIR,INTERVAL,STOPTIME)
+    }
+}
+
+proc multiSpikeOut(){
+    //print SPIKEOUT_DIR
+    if(pns.count()!=0){
+        printf("spike out(%d) for PN\n",pc.id)
+        pns.o(0).fprintSpikeRecord(SPIKEOUT_DIR,INTERVAL,STOPTIME)
+    }
+    if(lns.count()!=0){
+        printf("multi spike out(%d) for LN\n",pc.id)
+        lns.o(0).fprintMultiSpikeRecord(SPIKEOUT_DIR,INTERVAL,STOPTIME)
+    }
+    if(rns.count()!=0){
+        printf("spike out(%d) for RN\n",pc.id)
+        rns.o(0).fprintSpikeRecord(SPIKEOUT_DIR,INTERVAL,STOPTIME)
+    }
+}
+
+objref PNvolt_vec
+objref LNvolt_vec
+objref PNvolt_list
+objref LNvolt_list
+objref RNvolt_list
+objref volt_tvec
+
+proc setVoltageRecord(){local i,j, SynapsePrintOn localobj volt_vec
+    volt_tvec = new Vector()
+    volt_tvec.record(&t)
+    printf("setVoltageRecord() (pc.id:%d)\n",pc.id)
+    printf("SIZE OF VECTOR : %d\n",volt_tvec.buffer_size())
+    if(pns.count()!=0){PNvolt_list = new List()}
+    if(lns.count()!=0){LNvolt_list = new List()}
+    if(rns.count()!=0){RNvolt_list = new List()}
+    SynapsePrintOn = $1
+    for(j = 0; j<pns.count();j+=1){
+    printf("PN record(id:%d)\n",(pc.id))
+    //printf("pns.count %d#\n",pns.count())
+    if(j == 0){
+        PNvolt_vec = new Vector()
+        //PNvolt_vec.record(&projection.Dend[1211].v(0.5))
+        //PNvolt_vec.record(&pns.o(j).Dend[475].v(0.5))
+	PNvolt_vec.record(&pns.o(j).Dend[200].v(0.5))
+        //printf("pns.o(%d).SynNumerList.size(): %d#\n",j,pns.o(j).SynNumberList.size())
+        if(SynapsePrintOn == 1){
+        for (i=0; i<pns.o(j).SynNumberList.size();i+=100){
+            //print pns.o(j).SynNumberList.x[i]
+            volt_vec = new Vector()
+            //PNvolt_vecs[i].record(&pns.o(j).Dend[pns.o(j).SynNumberList.x[i]].v(0.5))
+            volt_vec.record(&pns.o(j).Dend[pns.o(j).SynNumberList.x[i]].v(0.5))
+            PNvolt_list.append(volt_vec)
+        }
+        }
+    }
+    //printf("PN record(id:%d)END\n",(pc.id))
+    }
+
+    for(j = 0; j<lns.count();j+=1){
+    printf("LN record(id:%d)\n",(pc.id))
+    //printf("lns.count:%d#\n",lns.count())
+    if(j == 0){
+        LNvolt_vec = new Vector()               
+        if(lns.o(j).swcid == 0){
+        //LNvolt_vec.record(&lns.o(j).Dend[21706].v(0.5))
+        LNvolt_vec.record(&lns.o(j).Dend[382-2].v(0.5))
+        }else if(lns.o(j).swcid == 1){
+        //LNvolt_vec.record(&lns.o(j).Dend[11197].v(0.5))
+        LNvolt_vec.record(&lns.o(j).Dend[1168-2].v(0.5))
+        }else if(lns.o(j).swcid == 2){
+        LNvolt_vec.record(&lns.o(j).Dend[45-2].v(0.5))
+        }else if(lns.o(j).swcid == 3){
+        LNvolt_vec.record(&lns.o(j).Dend[202-2].v(0.5))
+        }
+        printf("lns.o(%d).SynNumerList.size(): %d#\n",j,lns.o(j).SynNumberList.size())
+        if(SynapsePrintOn == 1){
+        for (i=0; i<lns.o(j).SynNumberList.size();i+=100){
+            volt_vec = new Vector()
+            //for i=0, lns.o(j).SynNumberList.size()-1{
+            //LNvolt_vecs[i].record(&lns.o(j).Dend[lns.o(j).SynNumberList.x[i]].v(0.5))
+            volt_vec.record(&lns.o(j).Dend[lns.o(j).SynNumberList.x[i]].v(0.5))
+            LNvolt_list.append(volt_vec)
+        }
+        }
+    }
+    //printf("LN record(id:%d)END\n",(pc.id))
+    }
+    //printf("RN record(id:%d)\n",(pc.id))
+    for(j = 0; j<rns.count();j+=1){
+    //printf("RN record(id:%d)\n",(pc.id))
+    //printf("rns.count %d#\n",rns.count())
+    //print "ERROR CHECK SETVOLATAGERECORD",1
+    if(IS_SUPERCOMPUTER == 1){
+        if((j==0)&&(pc.id%8==0)){
+        volt_vec = new Vector()
+        volt_vec.record(&rns.o(j).Dend[120].v(0.5))
+        RNvolt_list.append(volt_vec)
+        }
+    }else{
+       if(j<5){
+        volt_vec = new Vector()
+        volt_vec.record(&rns.o(j).Dend[120].v(0.5))
+        RNvolt_list.append(volt_vec)
+        }
+    }
+    //print "ERROR CHECK SETVOLATAGERECORD",2
+    }
+    //pc.barrier()
+}
+
+
+objref vecs_, tvec_, vecs_cmpt_
+vecs_ = new List()
+vecs_cmpt_ = new Vector()
+
+objref gaba_vecs,gaba_vec
+objref gaba_tvec
+proc setGABArecord(){local i, j
+    if(gabalist.count()==0){return}
+    gaba_vecs = new List()
+    gaba_tvec = new Vector()
+    gaba_tvec.record(&t)
+    
+    for(j=0; j<gabalist.count();j+=1){
+    gaba_vec = new Vector()
+    gaba_vec.record(&gabalist.o(j).pre)
+    gaba_vecs.append(gaba_vec)
+    }
+    //    pc.barrier()
+}
+
+
+proc fprintVoltageRecord(){local SynapsePrintOn localobj mt, file,mt2, file2
+    strdef filename
+    SynapsePrintOn = $1
+    for(j = 0; j<pns.count();j+=1){
+    if(j == 0){
+        mt = new Matrix()
+        file = new File()
+        mt.resize(volt_tvec.size(),2)
+        mt.setcol(0,volt_tvec)
+        mt.setcol(1,PNvolt_vec)
+	//print FPRINT_DIR
+        sprint(filename,"%s%dVolt.txt",FPRINT_DIR,pns.o(j).nid)
+        file.wopen(filename)
+        mt.fprint(file,"%5.5f\t")
+        file.close()
+        if(SynapsePrintOn == 1){
+        file2 = new File()
+        mt2 = new Matrix()
+        //mt2.resize(volt_tvec.size(),pns.o(j).SynNumberList.size()/100+1)
+        mt2.resize(volt_tvec.size(),PNvolt_list.count()+1)
+        mt2.setcol(0,volt_tvec)
+        for(i=0; i<PNvolt_list.count();i+=1){
+            mt2.setcol(i+1,PNvolt_list.o(i))
+        }
+        sprint(filename,"%s%dVolt_FromRN.txt",FPRINT_DIR,pns.o(j).nid)
+        file2.wopen(filename)
+        mt2.fprint(file2,"%5.5f\t")
+        file2.close()
+        }
+    }
+    }
+    for(j = 0; j<lns.count();j+=1){
+    if(j == 0){
+        mt = new Matrix()
+        file = new File()
+        mt.resize(volt_tvec.size(),2)
+        mt.setcol(0,volt_tvec)
+        mt.setcol(1,LNvolt_vec)
+        sprint(filename,"%s%dVolt.txt",FPRINT_DIR,lns.o(j).nid)
+        file.wopen(filename)
+        mt.fprint(file,"%5.5f\t")
+        file.close()
+        if(SynapsePrintOn == 1){
+        file2 = new File()
+        mt2 = new Matrix()
+        //mt2.resize(volt_tvec.size(),lns.o(j).SynNumberList.size()/100+1)
+        mt2.resize(volt_tvec.size(),LNvolt_list.count()+1)
+
+        mt2.setcol(0,volt_tvec)
+        for(i=0; i<LNvolt_list.count();i+=1){
+            mt2.setcol(i+1,LNvolt_list.o(i))
+        }
+        sprint(filename,"%s%dVolt_FromRN.txt",FPRINT_DIR,lns.o(j).nid)
+
+        file2.wopen(filename)
+        mt2.fprint(file2,"%5.5f\t")
+        file2.close()
+        }
+    }
+    }
+    //for(j = 0; j<rns.count();j+=1){
+    printf("RN PRINT %d\n",pc.id)
+    if(rns.count()!=0){
+    if(RNvolt_list.count()>0){
+        //  printf("RN PRINT %d",pc.id)
+        mt = new Matrix()
+        file = new File()
+        //mt.resize(volt_tvec.size(),rns.count + 1)
+        mt.resize(volt_tvec.size(),RNvolt_list.count()+1)
+        mt.setcol(0,volt_tvec)
+        for(i=0; i<RNvolt_list.count();i+=1){
+        mt.setcol(i+1,RNvolt_list.o(i))
+        }
+        sprint(filename,"%s%dVolt.txt",FPRINT_DIR,pc.id)
+        file.wopen(filename)
+        mt.fprint(file,"%5.5f\t")
+        file.close()
+    }
+    }
+}
+
+proc fprintGABArecord(){localobj mt, file
+    if(gabalist.count()==0){return}
+    strdef filename
+    mt = new Matrix()
+    file = new File()
+    mt.resize(gaba_tvec.size(),gabalist.count()+1)
+    mt.setcol(0,gaba_tvec)
+    for(j = 0; j<gabalist.count();j+=1){
+    mt.setcol(j+1,gaba_vecs.o(j))
+    }
+    sprint(filename,"%s%d_GABA.txt",FPRINT_DIR,pc.id)
+    file.wopen(filename)
+    mt.fprint(file,"%5.5f\t")
+    file.close()
+}
+
+
+proc compressData() { local i strdef cmd
+    if(pc.id == 0){
+        print "COMPRESS DATA"
+        printf("OUTPUT DIR : %s\n",FPRINT_DIR)
+    }
+    for(i = 0; i<pns.count();i+=1){
+        sprint(cmd, "tar cf %s%d.tar %s%d*.dat", FPRINT_DIR, pns.o(i).nid, FPRINT_DIR, pns.o(i).nid)
+        print cmd
+        system(cmd)
+    }
+    for(i = 0; i<lns.count();i+=1){
+        if((lns.o(i).nid % 10) == 0){
+            sprint(cmd, "tar cf %s%d.tar %s%d*.dat", FPRINT_DIR, lns.o(i).nid, FPRINT_DIR, lns.o(i).nid)
+            print cmd
+            system(cmd)
+        }
+    }
+}

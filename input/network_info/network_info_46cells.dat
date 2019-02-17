@@ -1,0 +1,51 @@
+# gid, cellid, swcid, cloneid, gloid, SWC file path, position&rotation file, Synapse information file
+$ CELLS 46
+$ PN 11
+200000 2 0 0 6 ../input/swc/717_registrated_v3.swc none ../input/synapse_info/46cells_sakai/200000syn.dat
+200001 2 0 1 5 ../input/swc/717_registrated_v3.swc none ../input/synapse_info/46cells_sakai/200001syn.dat
+200002 2 0 2 19 ../input/swc/717_registrated_v3.swc none ../input/synapse_info/46cells_sakai/200002syn.dat
+200003 2 0 3 18 ../input/swc/717_registrated_v3.swc none ../input/synapse_info/46cells_sakai/200003syn.dat
+200004 2 0 4 17 ../input/swc/717_registrated_v3.swc none ../input/synapse_info/46cells_sakai/200004syn.dat
+200005 2 0 5 16 ../input/swc/717_registrated_v3.swc none ../input/synapse_info/46cells_sakai/200005syn.dat
+200006 2 0 6 15 ../input/swc/717_registrated_v3.swc none ../input/synapse_info/46cells_sakai/200006syn.dat
+200007 2 0 7 35 ../input/swc/717_registrated_v3.swc none ../input/synapse_info/46cells_sakai/200007syn.dat
+200008 2 0 8 34 ../input/swc/717_registrated_v3.swc none ../input/synapse_info/46cells_sakai/200008syn.dat
+200009 2 0 9 33 ../input/swc/717_registrated_v3.swc none ../input/synapse_info/46cells_sakai/200009syn.dat
+200010 2 0 10 32 ../input/swc/717_registrated_v3.swc none ../input/synapse_info/46cells_sakai/200010syn.dat
+$ LN 35
+300000 3 0 0 0 ../input/swc/040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/300000syn.dat
+300001 3 0 1 0 ../input/swc/040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/300001syn.dat
+300002 3 0 2 0 ../input/swc/040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/300002syn.dat
+300003 3 0 3 0 ../input/swc/040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/300003syn.dat
+300004 3 0 4 0 ../input/swc/040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/300004syn.dat
+300005 3 0 5 0 ../input/swc/040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/300005syn.dat
+300006 3 0 6 0 ../input/swc/040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/300006syn.dat
+300007 3 0 7 0 ../input/swc/040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/300007syn.dat
+301000 3 1 0 0 ../input/swc/050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/301000syn.dat
+301001 3 1 1 0 ../input/swc/050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/301001syn.dat
+301002 3 1 2 0 ../input/swc/050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/301002syn.dat
+301003 3 1 3 0 ../input/swc/050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/301003syn.dat
+301004 3 1 4 0 ../input/swc/050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/301004syn.dat
+301005 3 1 5 0 ../input/swc/050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/301005syn.dat
+301006 3 1 6 0 ../input/swc/050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/301006syn.dat
+301007 3 1 7 0 ../input/swc/050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/301007syn.dat
+301008 3 1 8 0 ../input/swc/050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/301008syn.dat
+302000 3 2 0 0 ../input/swc/mirror040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/302000syn.dat
+302001 3 2 1 0 ../input/swc/mirror040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/302001syn.dat
+302000 3 2 0 0 ../input/swc/mirror040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/302000syn.dat
+302002 3 2 2 0 ../input/swc/mirror040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/302002syn.dat
+302003 3 2 3 0 ../input/swc/mirror040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/302003syn.dat
+302004 3 2 4 0 ../input/swc/mirror040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/302004syn.dat
+302005 3 2 5 0 ../input/swc/mirror040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/302005syn.dat
+302006 3 2 6 0 ../input/swc/mirror040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/302006syn.dat
+302007 3 2 7 0 ../input/swc/mirror040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/302007syn.dat
+302008 3 2 8 0 ../input/swc/mirror040823_5_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/302008syn.dat
+303000 3 3 0 0 ../input/swc/mirror050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/303000syn.dat
+303001 3 3 1 0 ../input/swc/mirror050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/303001syn.dat
+303002 3 3 2 0 ../input/swc/mirror050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/303002syn.dat
+303003 3 3 3 0 ../input/swc/mirror050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/303003syn.dat
+303004 3 3 4 0 ../input/swc/mirror050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/303004syn.dat
+303005 3 3 5 0 ../input/swc/mirror050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/303005syn.dat
+303006 3 3 6 0 ../input/swc/mirror050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/303006syn.dat
+303007 3 3 7 0 ../input/swc/mirror050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/303007syn.dat
+303008 3 3 8 0 ../input/swc/mirror050205_7_sn_bestrigid0106_mkRegion.swc none ../input/synapse_info/46cells_sakai/303008syn.dat

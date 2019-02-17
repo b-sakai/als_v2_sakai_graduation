@@ -144,7 +144,7 @@ def mkMultipleStims(spiketimef,dose,nstims,dose2,nstims2,parameter):
     de_para[0]= Calculate_Alpha1(dose,parameter)
     de_para[3]= Calculate_Alpha2(dose,parameter)
     for j in range(nstims):
-        spike_t = [None for _ in range(500)]
+        spike_t = [None for _ in range(500)]p
         spike_t[0] = 6.0
         i=0
         while(i<150):
@@ -404,7 +404,7 @@ def mkStim(nfiles,nstims,dose,nstims2,dose2):
             mkMultipleStims_adaptation(File,dose,nstims,dose2,nstims2,parameter)
         File.close()
 
-mkStim(1000,1,100,-1,-1)
+mkStim(1000,1,1500,-1,-1)
 #write_numfile = open("save_filenumber.dat",'w')
 #write_numfile.write(str(file_num+1)+'\n')
 #write_numfile.close()

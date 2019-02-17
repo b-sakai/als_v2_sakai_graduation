@@ -1,0 +1,160 @@
+//************************************************
+// FILE NAME : main.hoc
+// 2015.04.30
+// Heewon Park
+//************************************************
+
+//************************************************
+// MODIFICATION HISTORY
+//************************************************
+// 2015/05/28 if number of cell is zero, nothing would be loaded
+//
+//
+
+
+//************************************************
+// FUNCTION LIST
+//************************************************
+// loadinfo() : read network_info_XXX.dat file
+//              and save informations with some matrix and array
+//
+// loadSynapseInfo() 
+// : read XXXsyn.dat file
+//   this file include synapse informations            
+//
+//************************************************
+
+{load_file("stdlib.hoc")}
+
+NPN = 0
+NLN = 0
+NRN = 0
+
+objref pn_matrix, ln_matrix, rn_matrix
+pn_matrix = new Matrix()
+ln_matrix = new Matrix()
+rn_matrix = new Matrix()
+
+{load_file("Path.hoc")}
+objref pn_path[100], ln_path[500], rn_path[20000]
+objref GID_VEC
+GID_VEC = new Vector()
+
+func loadinfo(){local num_pn, num_ln, num, c_gid, cellid, swcid, cloneid, gloid localobj info_fp
+    strdef buf
+    strdef info_filename
+    strdef celltype
+    //swc file path, position file path, synapse file path
+    strdef swcpath, ppath, synpath
+    
+    info_filename = $s1
+    info_fp = new File()
+    if(info_fp.ropen(info_filename) != 1){
+    printf("ERROR : File was not found. (%s)\n", info_filename)
+    return(-1) 
+    }
+    while(info_fp.scanstr(buf) != -1){
+    if(strcmp("#",buf)==0){
+        continue
+    }else if(strcmp("$",buf)==0){
+        info_fp.gets(buf)
+        sscanf(buf, "%s %d\n",celltype, &num)
+        if((strcmp("PN",celltype)==0)&&(num != 0)){
+        pn_matrix.resize(num, 5)
+        //print celltype," ", num
+        NPN = num
+        for(i=0;i<num;i=i+1){
+            info_fp.gets(buf)
+            sscanf(buf, "%d %d %d %d %d %s %s %s\n",&c_gid,&cellid, &swcid, &cloneid, &gloid, swcpath,ppath,synpath)
+            pn_matrix.x[i][0] = c_gid
+            pn_matrix.x[i][1] = cellid
+            pn_matrix.x[i][2] = swcid
+            pn_matrix.x[i][3] = cloneid
+	    pn_matrix.x[i][4] = gloid
+            pn_path[i] = new Path(swcpath, ppath, synpath)
+            
+            GID_VEC.append(c_gid)
+        }
+        }else if((strcmp("LN",celltype)==0)&&(num != 0)){
+        ln_matrix.resize(num, 5)
+        //print celltype," ", num
+        NLN = num
+        for(i=0;i<num;i=i+1){
+            info_fp.gets(buf)
+            sscanf(buf, "%d %d %d %d %d %s %s %s\n",&c_gid,&cellid, &swcid, &cloneid, &gloid, swcpath,ppath,synpath)
+            ln_matrix.x[i][0] = c_gid
+            ln_matrix.x[i][1] = cellid
+            ln_matrix.x[i][2] = swcid
+            ln_matrix.x[i][3] = cloneid
+	    ln_matrix.x[i][4] = gloid
+            ln_path[i] = new Path(swcpath, ppath, synpath)
+
+            GID_VEC.append(c_gid)
+        }
+        }else if((strcmp("RN",celltype)==0)&&(num != 0)){
+        rn_matrix.resize(num, 4)
+        //print celltype," ", num
+        NRN = num
+        for(i=0;i<num;i=i+1){
+            info_fp.gets(buf)
+            sscanf(buf, "%d %d %d %d %s %s %s\n",&cellid, &swcid, &cloneid, &gloid, swcpath,ppath,synpath)
+            rn_matrix.x[i][0] = cellid
+            rn_matrix.x[i][1] = swcid
+            rn_matrix.x[i][2] = cloneid
+	    rn_matrix.x[i][3] = gloid
+            rn_path[i] = new Path(swcpath, ppath, synpath)          
+        }
+        }
+    }
+    }
+    return 0
+}
+{load_file("SynPath.hoc")}
+objref SynPathList
+SynPathList = new List()
+func loadSynapseInfo(){local i,pregid,postgid,pre_nid,post_nid,ndata,mode localobj syn_fp, cell, synp
+    strdef buf
+    strdef syn_filename
+    strdef class, path
+
+    cell = $o1
+    syn_filename = $s2
+    mode = $3 //mode =100 read RN synapse, mode = 2 other synapse
+
+    syn_fp = new File()
+    if(syn_fp.ropen(syn_filename) != 1){
+    printf("ERROR : File was not found. (%s)\n", syn_filename)
+    return(-1) 
+    }
+    while(syn_fp.scanstr(buf) != -1){
+    if(strcmp("#",buf)==0){
+        continue
+    }else if(strcmp("$",buf)==0){
+        syn_fp.gets(buf)
+        sscanf(buf, "%s\n", class)
+        if((strcmp("fromRN",class)==0)&&(mode==100)){
+            syn_fp.gets(buf)
+            sscanf(buf, "%s\n", path)
+            cell.fromRNsyn = path
+        }else if ((strcmp("fromMRN",class)==0)&&(mode==100)){
+            syn_fp.gets(buf)
+            sscanf(buf, "%s\n", path)
+            cell.fromMRNsyn = path
+        }else if ((strcmp("general_odor",class)==0)&&(mode==100)){
+            syn_fp.gets(buf)
+            sscanf(buf, "%s\n", path)
+            cell.general_odor_syn = path
+        }else if((strcmp("CtoC",class)==0)&&(mode==200)){
+        syn_fp.gets(buf)
+        sscanf(buf, "%d\n",&ndata)
+        for(i=0;i<ndata;i=i+1){
+            syn_fp.gets(buf)
+            sscanf(buf,"%d %d %s\n",&pregid, &postgid, synpath)
+            synp = new SynPath(pregid, pre_nid,postgid, post_nid,synpath)
+            SynPathList.append(synp)
+        }
+        }
+    }
+    }
+    return 0
+}

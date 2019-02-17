@@ -74,6 +74,7 @@ def draw_PSTH_rn_pn():
     plt.ylabel("PSTH")
     plt.xlim(0, round(time[-1]))
     plt.ylim(0,30)
+    plt.rcParams['figure.figsize'] = (30.0, 15.0)
     #plt.legend()
 
     target_file = "{0}_PSTH.png".format(cell_gid)
@@ -102,6 +103,7 @@ def draw_PSTH_ln():
     #plt.legend()
     plt.xlim(0, round(time[-1]))
     plt.ylim(0,50)
+    plt.rcParams['figure.figsize'] = (30.0, 15.0)
     plt.rcParams["font.size"] = 15
 
 
