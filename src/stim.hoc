@@ -18,130 +18,43 @@
 //
 //************************************************
 
-//objref stlist
-proc mkIntermitStim(){local i localobj st
-    //stlist = new List()
-    for(i=0; i<rns.count();i=i+1){
-    print "mkIntermitStim"
-    rns.object(i).setIntermitStim_gaus(0,0,20000,300,10000,10,0.0)
-    //stlist.append(st)
-    }
-}
-
-objref iclist
-iclist = new List()
-proc mkIclamp(){local i localobj ic
-    iclist = new List()
-    for(i=0; i<rns.count();i=i+1){
-    ic = rns.o(i).mkIclamp(0)
-    iclist.append(ic)
-    ic = rns.o(i).mkIclamp(0,2,6,40)
-    iclist.append(ic)
-    if(i == 0){
-        psection()
-    }
-    }
-}
-
-proc mkIclamp_pn(){local i localobj ic
-    iclist = new List()
-    for(i=0; i<pns.count();i=i+1){
-    ic = pns.o(i).mkIclamp(0,10,10,5)
-    iclist.append(ic)
-    ic = pns.o(i).mkIclamp(100,2,6,40)
-    iclist.append(ic)
-    ic = pns.o(i).mkIclamp(200,10,10,80)
-    iclist.append(ic)
-    ic = pns.o(i).mkIclamp(300,10,10,120)
-    iclist.append(ic)
-    ic = pns.o(i).mkIclamp(400,10,10,160)
-    iclist.append(ic)
-    ic = pns.o(i).mkIclamp(600,10,10,200)
-    iclist.append(ic)
-    ic = pns.o(i).mkIclamp(700,10,10,250)
-    iclist.append(ic)
-    if(i == 0){
-        psection()
-    }
-    }
-}
-
-proc mkIclamp_ln(){local i localobj ic
-    iclist = new List()
-    for(i=0; i<lns.count();i=i+1){
-    ic = lns.o(i).mkIclamp(0,10,10,5)
-    iclist.append(ic)
-    ic = lns.o(i).mkIclamp(1000,2,6,40)
-    iclist.append(ic)
-    ic = lns.o(i).mkIclamp(2000,10,10,80)
-    iclist.append(ic)
-    ic = lns.o(i).mkIclamp(3000,10,10,120)
-    iclist.append(ic)
-    ic = lns.o(i).mkIclamp(4000,10,10,160)
-    iclist.append(ic)
-    ic = lns.o(i).mkIclamp(6000,10,10,200)
-    iclist.append(ic)
-    ic = lns.o(i).mkIclamp(7000,10,10,250)
-    iclist.append(ic)
-    ic = lns.o(i).mkIclamp(8000,10,10,300)
-    iclist.append(ic)
-    ic = lns.o(i).mkIclamp(9000,10,10,350)
-    iclist.append(ic)
-    if(i == 0){
-        psection()
-    }
-    }
-}
-
-proc mkIclamp_ln2(){local i localobj ic
-    iclist = new List()
-    
-    for(i=0; i<lns.count();i=i+1){
-    if(lns.o(i).swcid == 0){
-        ic = lns.o(i).mkIclamp(0,10,10,0)
-        iclist.append(ic)
-        ic = lns.o(i).mkIclamp(1000,10,10,10)
-        iclist.append(ic)
-        ic = lns.o(i).mkIclamp(2000,10,10,20)
-        iclist.append(ic)
-        ic = lns.o(i).mkIclamp(3000,10,10,30)
-        iclist.append(ic)
-        ic = lns.o(i).mkIclamp(4000,10,10,40)
-        iclist.append(ic)
-        ic = lns.o(i).mkIclamp(6000,10,10,50)
-        iclist.append(ic)
-        ic = lns.o(i).mkIclamp(7000,10,10,60)
-        iclist.append(ic)
-        ic = lns.o(i).mkIclamp(8000,10,10,70)
-        iclist.append(ic)
-        ic = lns.o(i).mkIclamp(9000,10,10,80)
-        iclist.append(ic)
-        if(i == 0){
-        psection()
-        }
-    }
-    }
-}
-
-proc mkIclamp_debug(){local cmpt, dur, amp, del localobj ic, cell
-    cell = $o1
-    cmpt = $2
-    dur  = $3
-    amp  = $4
-    del  = $5
-    ic = cell.mkIclamp(cmpt,dur,amp,del)
-    iclist.append(ic)
-}
-
 proc mkSerialStim(){local i localobj rnd
     rnd = new Random(pc.id)
-    strdef spiketiming
-    strdef dir
-    dir = $s1
+    strdef zerong_spiketiming, halfng_spiketiming, spiketiming
+    strdef zerong_dir, halfng_dir, dir
+    zerong_dir = $s1
+    halfng_dir = $s2
+    dir = $s3
     for(i=0; i<rns.count();i=i+1){
-        sprint(spiketiming,"%sspt%03d.dat",dir,int(rnd.uniform(0,999)))
-        rns.o(i).setIClamp(STOPTIME,dt,spiketiming)
-    //rns.o(i).setIClamp_with_Latency(STOPTIME,dt,spiketiming,START_TIME+pc.nhost*i+pc.id)
+    	sprint(zerong_spiketiming,"%sspt%03d.dat",zerong_dir,int(rnd.uniform(0,999)))
+    	sprint(halfng_spiketiming,"%sspt%03d.dat",halfng_dir,int(rnd.uniform(0,999)))
+    	sprint(spiketiming,"%sspt%03d.dat",dir,int(rnd.uniform(0,999)))
+
+    	if (rns.object(i).gloid == 18) {
+	   rns.o(i).setIClamp(STOPTIME,dt,spiketiming, zerong_spiketiming)
+        } else if (rns.object(i).gloid == 16) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,zerong_spiketiming, spiketiming)
+        } else if (rns.object(i).gloid == 19) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,halfng_spiketiming, zerong_spiketiming)
+        } else if (rns.object(i).gloid == 17) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,halfng_spiketiming, halfng_spiketiming)
+        } else if (rns.object(i).gloid == 15) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,zerong_spiketiming, halfng_spiketiming)
+        } else if (rns.object(i).gloid == 5) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,zerong_spiketiming, halfng_spiketiming)
+        } else if (rns.object(i).gloid == 6) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,halfng_spiketiming, halfng_spiketiming)
+        } else if (rns.object(i).gloid == 32) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,zerong_spiketiming, halfng_spiketiming)
+        } else if (rns.object(i).gloid == 33) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,halfng_spiketiming, halfng_spiketiming)
+        } else if (rns.object(i).gloid == 34) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,halfng_spiketiming, zerong_spiketiming)
+        } else if (rns.object(i).gloid == 35) {   
+	   rns.o(i).setIClamp(STOPTIME,dt,halfng_spiketiming, zerong_spiketiming)
+        } else {
+	   rns.o(i).setIClamp(STOPTIME,dt,zerong_spiketiming, zerong_spiketiming)
+	}
     }
 }
 

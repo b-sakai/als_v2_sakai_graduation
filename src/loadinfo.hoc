@@ -40,7 +40,7 @@ objref pn_path[100], ln_path[500], rn_path[20000]
 objref GID_VEC
 GID_VEC = new Vector()
 
-func loadinfo(){local num_pn, num_ln, num, c_gid, cellid, swcid, cloneid localobj info_fp
+func loadinfo(){local num_pn, num_ln, num, c_gid, cellid, swcid, cloneid, gloid localobj info_fp
     strdef buf
     strdef info_filename
     strdef celltype
@@ -60,48 +60,48 @@ func loadinfo(){local num_pn, num_ln, num, c_gid, cellid, swcid, cloneid localob
         info_fp.gets(buf)
         sscanf(buf, "%s %d\n",celltype, &num)
         if((strcmp("PN",celltype)==0)&&(num != 0)){
-        pn_matrix.resize(num, 4)
+        pn_matrix.resize(num, 5)
         //print celltype," ", num
         NPN = num
         for(i=0;i<num;i=i+1){
             info_fp.gets(buf)
-            sscanf(buf, "%d %d %d %d %s %s %s\n",&c_gid,&cellid, &swcid, &cloneid, swcpath,ppath,synpath)
-            //printf("%d %d %d %s %s %s\n",cellid, swcid, cloneid, swcpath, ppath,synpath)
+            sscanf(buf, "%d %d %d %d %d %s %s %s\n",&c_gid,&cellid, &swcid, &cloneid, &gloid, swcpath,ppath,synpath)
             pn_matrix.x[i][0] = c_gid
             pn_matrix.x[i][1] = cellid
             pn_matrix.x[i][2] = swcid
             pn_matrix.x[i][3] = cloneid
+	    pn_matrix.x[i][4] = gloid
             pn_path[i] = new Path(swcpath, ppath, synpath)
             
             GID_VEC.append(c_gid)
         }
         }else if((strcmp("LN",celltype)==0)&&(num != 0)){
-        ln_matrix.resize(num, 4)
+        ln_matrix.resize(num, 5)
         //print celltype," ", num
         NLN = num
         for(i=0;i<num;i=i+1){
             info_fp.gets(buf)
-            sscanf(buf, "%d %d %d %d %s %s %s\n",&c_gid,&cellid, &swcid, &cloneid,swcpath,ppath,synpath)
-            //printf("%d %d %d %s %s %s\n",cellid, swcid, cloneid, swcpath, ppath,synpath)
+            sscanf(buf, "%d %d %d %d %d %s %s %s\n",&c_gid,&cellid, &swcid, &cloneid, &gloid, swcpath,ppath,synpath)
             ln_matrix.x[i][0] = c_gid
             ln_matrix.x[i][1] = cellid
             ln_matrix.x[i][2] = swcid
             ln_matrix.x[i][3] = cloneid
+	    ln_matrix.x[i][4] = gloid
             ln_path[i] = new Path(swcpath, ppath, synpath)
 
             GID_VEC.append(c_gid)
         }
         }else if((strcmp("RN",celltype)==0)&&(num != 0)){
-        rn_matrix.resize(num, 3)
+        rn_matrix.resize(num, 4)
         //print celltype," ", num
         NRN = num
         for(i=0;i<num;i=i+1){
             info_fp.gets(buf)
-            sscanf(buf, "%d %d %d %s %s %s\n",&cellid, &swcid, &cloneid, swcpath,ppath,synpath)
-            //printf("%d %d %d %s %s %s\n",cellid, swcid, cloneid, swcpath, ppath,synpath)
+            sscanf(buf, "%d %d %d %d %s %s %s\n",&cellid, &swcid, &cloneid, &gloid, swcpath,ppath,synpath)
             rn_matrix.x[i][0] = cellid
             rn_matrix.x[i][1] = swcid
             rn_matrix.x[i][2] = cloneid
+	    rn_matrix.x[i][3] = gloid
             rn_path[i] = new Path(swcpath, ppath, synpath)          
         }
         }
@@ -119,10 +119,8 @@ func loadSynapseInfo(){local i,pregid,postgid,pre_nid,post_nid,ndata,mode localo
 
     cell = $o1
     syn_filename = $s2
-    mode = $3 //mode =1 read RN synapse, mode = 2 other synapse
-    
-    //print cell
-    //print cell.synpath
+    mode = $3 //mode =100 read RN synapse, mode = 2 other synapse
+
     syn_fp = new File()
     if(syn_fp.ropen(syn_filename) != 1){
     printf("ERROR : File was not found. (%s)\n", syn_filename)
@@ -134,37 +132,25 @@ func loadSynapseInfo(){local i,pregid,postgid,pre_nid,post_nid,ndata,mode localo
     }else if(strcmp("$",buf)==0){
         syn_fp.gets(buf)
         sscanf(buf, "%s\n", class)
-        if((strcmp("fromRN",class)==0)&&(mode==1)){
+        if((strcmp("fromRN",class)==0)&&(mode==100)){
             syn_fp.gets(buf)
             sscanf(buf, "%s\n", path)
-            //print cell.SectionNum
-            //cell.mkSynapses(path)
             cell.fromRNsyn = path
-        }else if ((strcmp("fromMRN",class)==0)&&(mode==1)){
+        }else if ((strcmp("fromMRN",class)==0)&&(mode==100)){
             syn_fp.gets(buf)
             sscanf(buf, "%s\n", path)
-            //print path
-            //print cell.SectionNum
-            //cell.mkSynapses(path)
             cell.fromMRNsyn = path
-        }else if ((strcmp("general_odor",class)==0)&&(mode==1)){
+        }else if ((strcmp("general_odor",class)==0)&&(mode==100)){
             syn_fp.gets(buf)
             sscanf(buf, "%s\n", path)
-            //print path
-            //print cell.SectionNum
-            //cell.mkSynapses(path)
             cell.general_odor_syn = path
-        }else if((strcmp("CtoC",class)==0)&&(mode==2)){
+        }else if((strcmp("CtoC",class)==0)&&(mode==200)){
         syn_fp.gets(buf)
         sscanf(buf, "%d\n",&ndata)
-        //printf("%d\n",ndata)
         for(i=0;i<ndata;i=i+1){
             syn_fp.gets(buf)
             sscanf(buf,"%d %d %s\n",&pregid, &postgid, synpath)
-            //printf("%d %d %s\n",pregid,postgid, synpath)
-            
             synp = new SynPath(pregid, pre_nid,postgid, post_nid,synpath)
-            //cell.SynPathList.append(synp)
             SynPathList.append(synp)
         }
         }
@@ -172,8 +158,3 @@ func loadSynapseInfo(){local i,pregid,postgid,pre_nid,post_nid,ndata,mode localo
     }
     return 0
 }
-//objref c
-//print "loadsynapseinfo---------------"
-//loadSynapseInfo(c)
-//for test
-//loadinfo("./cell_info/network_info_simple.dat")

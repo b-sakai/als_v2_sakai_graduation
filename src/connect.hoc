@@ -21,9 +21,13 @@
 {load_file("loadinfo.hoc")}
 {load_file("stim.hoc")}
 
+NUM_GLO = 60
 NUMSYNAPSE_PER_PN = 100
-NUMSYNAPSE_PER_LN = 200
+NUMSYNAPSE_PER_LN = 1800
 AXON_PER_RN = 5
+NUMSYNAPSE_PER_GLO_RNs = 100 // NRN * AXON_PER_RN / NUM_GLO   // 100 (= 1200 * 5 / 60)
+NUMSYNAPSE_PER_GLO_LN = 40 // NUMSYNAPSE_PER_LN / NUM_GLO    // 3 (= 180 / 60)
+
 objref rnclist
 rnclist = new List()
 func mkPreSynapseOnRN(){local i, gid_base, gid_cnt, save_syn_gid localobj syn, nil, nc
@@ -31,7 +35,6 @@ func mkPreSynapseOnRN(){local i, gid_base, gid_cnt, save_syn_gid localobj syn, n
     save_syn_gid =0
     //if(pc.id==0) print "(syn_gid, pc.id)"
     for i=0, rns.count()-1{
-    //print i
     gid_cnt  = 0
     forsec rns.object(i).axonlist{
         nc = new NetCon(&v(0.5),nil) 
@@ -40,7 +43,6 @@ func mkPreSynapseOnRN(){local i, gid_base, gid_cnt, save_syn_gid localobj syn, n
         pc.set_gid2node(syn_gid,pc.id)
         pc.cell(syn_gid, nc)
         rnclist.append(nc)
-        //printf("(%d, %d)\t",syn_gid, pc.id)
         gid_cnt += 1
         if(syn_gid>save_syn_gid){
         save_syn_gid = syn_gid
@@ -61,7 +63,6 @@ func calcSyngid(){local base, axon_id, cell_id, cell_cnt, gid //Calculate Synaps
     cell_cnt += CELLM.x[i][2]
     }
     gid = base + (cell_cnt + cell_id) * AXON_PER_RN + axon_id
-//    gid = base + axon_id * NRN + cell_cnt + cell_id
     return gid
 }
 
@@ -79,57 +80,114 @@ func calcSrcgid(){local base, syn_id, target_id, modular, gid //Calculate Source
     return gid
 }
 
+func calcSrcgidForPN(){local base, syn_id, gloid, modular, gid //Calculate Source GID: calculate which presynapse to connect
+    base = $1
+    syn_id = $2
+    gloid = $3
+    modular = $4 - base
+    gid = base + (NUMSYNAPSE_PER_GLO_RNs * gloid) + (syn_id % NUMSYNAPSE_PER_GLO_RNs)
+
+
+    return gid
+}
+
+func calcSrcgidForLN(){local base, syn_id, target_id, gloid, modular, gid //Calculate Source GID: calculate which presynapse to connect
+    base = $1
+    syn_id = $2
+    gloid = $3
+    target_id = $4
+    modular = $5 - base
+    gid = base + (NUMSYNAPSE_PER_GLO_RNs * gloid) + (NUMSYNAPSE_PER_GLO_LN * target_id + syn_id) % NUMSYNAPSE_PER_GLO_RNs
+
+
+    return gid
+}
+
 objref nclist_RN
 nclist_RN = new List()
-proc mkPostSynapseOfRN(){local i,j,gid_base,src_gid localobj target, syn, nc
+proc mkPostSynapseOfRN(){local i,j,gid_base,src_gid,gloid, maxnum localobj target, syn, nc
+    strdef path
     gid_base = $1
     syn_gid_max = $2
-    //print gid_base
-    for i=0, NPN+NLN-1{
-    //for i=NPN, NPN+NLN-1{
+
+    // make postsynapse of RN to PN
+    for i=0, NPN-1{
     if(pc.gid_exists(GID_VEC.x[i])){
         target = pc.gid2obj(GID_VEC.x[i])
-        loadSynapseInfo(target, target.synpath, 1)
+        loadSynapseInfo(target, target.synpath, 100)
         target.mkSynapses(target.fromRNsyn, 0)
-        //printf("loadsynapseinfo()(pc.id : %d)\n",pc.id)
-        printf("target.synlist.count() : %d [%d]\n",target.synlist.count(),pc.id)
+
+	gloid = pns.object(0).gloid
+        printf("target.synlist.count() : %d [%d] gloid = %d\n",target.synlist.count(),pc.id, gloid)
+
         for j=0, target.synlist.count()-1{
         syn = target.synlist.o(j)
-        src_gid = calcSrcgid(gid_base, j, i, syn_gid_max)
-        //print "src_gid ", src_gid
-        //print "syn ", syn
+        src_gid = calcSrcgidForPN(gid_base, j, gloid, syn_gid_max)
         nc  = pc.gid_connect(src_gid, syn)
         nc.delay  = 1.0
-        if(target.cellid == 2){
-            nc.weight = WEIGHT_200 * (5 - i) / 5.0
-	    print "nc.weight for 200 ",WEIGHT_200, i, nc.weight
-        }else if(target.cellid == 3 && target.swcid == 0){
+
+        nc.weight = WEIGHT_200 // * (5 - i) / 5.0
+        nclist_RN.append(nc)
+        }
+        printf("pn_src_gid : %d i: %d j: %d [%d]\n",src_gid,i,j,pc.id)
+    }
+    }
+
+    // make postsynapse of RN to LN
+    for i=NPN, NPN+NLN-1{
+    if(pc.gid_exists(GID_VEC.x[i])){
+
+     	for gloid=0, NUM_GLO-1{ 
+	target = pc.gid2obj(GID_VEC.x[i])
+        loadSynapseInfo(target, target.synpath, 100)
+        sprint(path, "%s/30%d_%02d_glomerulars.dat", target.fromRNsyn, lns.object(0).swcid, gloid)
+	printf("lnpath check %s\n", path)
+        target.mkSynapses(path, 0)
+        printf("target.synlist.count() : %d [%d]\n",target.synlist.count(),pc.id)
+
+	if(target.synlist.count() < NUMSYNAPSE_PER_GLO_LN){
+	    maxnum = target.synlist.count()
+	} else {
+	    maxnum = NUMSYNAPSE_PER_GLO_LN
+	}
+
+        for j=0, maxnum-1{
+        syn = target.synlist.o(j)
+        src_gid = calcSrcgidForLN(gid_base, j, gloid, i, syn_gid_max)
+        nc  = pc.gid_connect(src_gid, syn)
+        nc.delay  = 1.0
+        
+        if(target.cellid == 3 && target.swcid == 0){
             //print "nc.weight for 300 ",WEIGHT_300
             nc.weight = WEIGHT_300
         }else if(target.cellid == 3 && target.swcid == 1){
             //print "nc.weight for 301 ",WEIGHT_301
             nc.weight = WEIGHT_301
         }else if(target.cellid == 3 && target.swcid == 2){
-            print "nc.weight for 302 ",WEIGHT_300
+            //print "nc.weight for 302 ",WEIGHT_300
             nc.weight = WEIGHT_300
         }else if(target.cellid == 3 && target.swcid == 3){
-            print "nc.weight for 303 ",WEIGHT_301
+            //print "nc.weight for 303 ",WEIGHT_301
             nc.weight = WEIGHT_301
         }else{
             print "nc.weight ** ERROR **"
         }
+
         nclist_RN.append(nc)
         }
         printf("src_gid : %d i: %d j: %d [%d]\n",src_gid,i,j,pc.id)
     }
     }
+    }
 }
+
 proc connectRNtoOthers(){\
     local gid_base, syn_gid,syn_gid_max
     printf("connectRNtoOthers[%d]\n",pc.id)
     gid_base = 1000000
     syn_gid  = mkPreSynapseOnRN(gid_base)
-    //printf("Before allreduce gid_max:%d pc.id:%d\n",syn_gid,pc.id)
+    printf("Before allreduce gid_max:%d pc.id:%d\n",syn_gid,pc.id)
+
     syn_gid_max = pc.allreduce(syn_gid,2)
     //printf("After allreduce  gid_max:%d pc.id:%d\n",syn_gid_max,pc.id)
     pc.barrier()
@@ -169,11 +227,9 @@ proc connect_vec_stim(){ local i, j, dose, nstim localobj rnd, target, post_syn,
 
     for i=0, lns.count()-1{
         target = lns.object(i)
-        loadSynapseInfo(target, target.synpath, 1)
+        loadSynapseInfo(target, target.synpath, 100)
         target.mkSynapses(target.fromMRNsyn, 1)
-        target.mkSynapses(target.general_odor_syn, 2)
         printf("target.synlist_fromMRN.count() : %d [%d]\n",target.synlist_fromMRN.count(),pc.id)
-        printf("target.synlist_general_odor.count() : %d [%d]\n",target.synlist_general_odor.count(),pc.id)
 
         for j=0, target.synlist_fromMRN.count()-1{ // mechano input
             post_syn = target.synlist_fromMRN.o(j)
@@ -184,7 +240,7 @@ proc connect_vec_stim(){ local i, j, dose, nstim localobj rnd, target, post_syn,
             nc = target.connectVecStim(vs, post_syn)
 
             if(target.swcid == 0){
-                nc.weight = 0.05//WEIGHT_M
+                nc.weight = WEIGHT_M
             }else if(target.swcid == 1){
                 nc.weight = WEIGHT_M
             }
@@ -194,29 +250,7 @@ proc connect_vec_stim(){ local i, j, dose, nstim localobj rnd, target, post_syn,
             ncs.append(nc)
             synlist_vecstim.append(post_syn)
         }
-
-        if(GENERAL_ODOR_ON == 1){
-            for j=0, target.synlist_general_odor.count()-1{ // general odor input
-                post_syn = target.synlist_general_odor.o(j)
-                sprint(_SPT_NAME_, "../input/spiketiming/general_odor/spt%03d.dat", int(rnd.repick()))
-                spvec = readSpikeTiming(_SPT_NAME_)
-
-                vs    = setVecStim(spvec)
-                nc = target.connectVecStim(vs, post_syn)
-
-                if(target.swcid == 0){
-                    nc.weight = WEIGHT_GO_300
-                }else if(target.swcid == 1){
-                    nc.weight = WEIGHT_GO_301
-                }
-
-                spvecs.append(spvec)
-                vses.append(vs)
-                ncs.append(nc)
-                synlist_vecstim.append(post_syn)
-            }
-        }
-    }
+     }
 }
 
 
@@ -407,10 +441,14 @@ proc readSynapseList2(){\
 objref nclist_NtoN
 nclist_NtoN = new List()
 
+objref nclist_LtoLstdp
+nclist_LtoLstdp = new List()
+objref nclist_LtoPstdp
+nclist_LtoPstdp = new List()
 
-objref gabalist, dummylist
+objref gabalist
 gabalist  = new List()
-dummylist = new List()
+
 
 //Post Synapse Voltage
 objref psv_tvec
@@ -447,7 +485,65 @@ proc fprintPostSynapseVoltageRecord(){localobj mt, file
 }
 
 
-proc makeNET_GABAsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weight, point localobj gaba, pre, post, nc, nil
+proc makeNET_LtoPsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weight, point localobj gaba, stdp, pre, post, nc, nil
+    pre_cell=$1
+    post_cell=$2
+    delay=$3
+    weight=$4
+    gmax_a=$5
+    gmax_b=$6
+
+    if(pc.gid_exists(pre_cell)){
+    pre = pc.gid2obj(pre_cell)
+    for i=0, pre_comps.size()-1{
+        if(!pc.gid_exists(gidVec.x[i])){
+        point = (pc.id)/(NLN+NPN)
+        pre.Dend[pre_comps.x[i]] nc = new NetCon(&v(point),nil)
+        nc.threshold = 1
+        pc.set_gid2node(gidVec.x[i],pc.id)
+        pc.cell(gidVec.x[i],nc)
+        nclist_NtoN.append(nc)
+        }
+    }
+    }
+
+    if(pc.gid_exists(post_cell)){
+        post = pc.gid2obj(post_cell)
+        for i=0, post_comps.size()-1{
+        //printf("POST: %d, GID : %d, i : %d, [%d]\n",post_cell,gidVec.x[i],i,pc.id)
+	if(i%2 == 0){
+	    stdp = post.mkNET_STDP(post_comps.x[i])
+            gabalist.append(gaba)
+            nc = pc.gid_connect(gidVec.x[i], stdp)
+            nc.delay = delay
+            nc.weight = 5.0
+            nclist_NtoN.append(nc)
+	    nclist_LtoPstdp.append(nc)
+	}else{
+            if(GABAA_ON == 1){
+                gaba = post.mkNET_GABAa(post_comps.x[i],gmax_a)
+                gabalist.append(gaba)
+                nc = pc.gid_connect(gidVec.x[i], gaba)
+                nc.delay = delay
+                nc.weight = weight
+                nclist_NtoN.append(nc)
+            }
+	    if(GABAB_ON == 1){
+                gaba = post.mkNET_GABAb(post_comps.x[i],gmax_b)
+                gabalist.append(gaba)
+                nc = pc.gid_connect(gidVec.x[i], gaba)
+                nc.delay = delay
+                nc.weight = weight
+                nclist_NtoN.append(nc)
+            }
+	}
+        //setPostSynapseVoltageRecord(post, post_comps.x[i])
+        }
+    }
+
+}
+
+proc makeNET_LtoLsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weight, point localobj gaba, stdp, pre, post, nc, nil
     pre_cell=$1
     post_cell=$2
     delay=$3
@@ -480,6 +576,15 @@ proc makeNET_GABAsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weig
         post = pc.gid2obj(post_cell)
         for i=0, post_comps.size()-1{
         //printf("POST: %d, GID : %d, i : %d, [%d]\n",post_cell,gidVec.x[i],i,pc.id)
+	if(i%2 == 0){
+	    stdp = post.mkNET_STDP(post_comps.x[i])
+            gabalist.append(gaba)
+            nc = pc.gid_connect(gidVec.x[i], stdp)
+            nc.delay = delay
+            nc.weight = 5.0
+            nclist_NtoN.append(nc)
+	    nclist_LtoLstdp.append(nc)
+	}else{
             if(GABAA_ON == 1){
                 gaba = post.mkNET_GABAa(post_comps.x[i],gmax_a)
                 gabalist.append(gaba)
@@ -488,7 +593,7 @@ proc makeNET_GABAsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weig
                 nc.weight = weight
                 nclist_NtoN.append(nc)
             }
-        if(GABAB_ON == 1){
+	    if(GABAB_ON == 1){
                 gaba = post.mkNET_GABAb(post_comps.x[i],gmax_b)
                 gabalist.append(gaba)
                 nc = pc.gid_connect(gidVec.x[i], gaba)
@@ -496,6 +601,7 @@ proc makeNET_GABAsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weig
                 nc.weight = weight
                 nclist_NtoN.append(nc)
             }
+	}
         //setPostSynapseVoltageRecord(post, post_comps.x[i])
         }
     }
@@ -518,17 +624,14 @@ proc connectNtoN_NET_GABA2(){\
     printf("NPN : %d NLN : %d\n",NPN,NLN)
     for(i=0;i<NPN;i=i+1){
         if(pc.id == 0){printf("loadSynapseInfo PN\n")}
-        //print "error pn"
-        loadSynapseInfo(nil,pn_path[i].synpath,2)
+        loadSynapseInfo(nil,pn_path[i].synpath,200)
     }
     for(i=0;i<NLN;i=i+1){
         if(pc.id == 0){printf("loadSynapseInfo LN\n")}
-        //print "error ln"
-        loadSynapseInfo(nil,ln_path[i].synpath,2)
+        loadSynapseInfo(nil,ln_path[i].synpath,200)
     }
     printf("SynPathList.count() %d [%d]\n",SynPathList.count(),pc.id)
 
-//    cmd = "tar xvf ../input/synapse_list/30temp/synlist.tar -C ../input/synapse_list/30temp/"
     if(IS_SUPERCOMPUTER==1){
 	if(pc.id==0) {
             print "Begin decompressing synlist"
@@ -541,32 +644,23 @@ proc connectNtoN_NET_GABA2(){\
     pc.barrier()
 
     for(j=0;j<SynPathList.count();j+=1){
-    //print "SynPathList ",j,SynPathList.o(j).synpath, SynPathList.o(j).pregid, SynPathList.o(j).postgid
         readSynapseList2(SynPathList.o(j))
         if(int(SynPathList.o(j).postgid/100000)==2){//If post-synaptic neuron is PN
-            //printf("POST SYNAPSE IS PN(pc.id:%d)\n",pc.id)
-            //makePostSynapse_NET_GABA(SynPathList.o(j).postgid,1,10,GMAX_LTOP/NLN)
-            //makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,10.0,GMAX_LTOP/NLN)
-            //makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid)
-            //makePostSynapse_NET_GABA(SynPathList.o(j).postgid,1,10,5.0)
             if(GABAA_ON == 1){
                 gmax_a = GABAA_GMAX_LTOP/NLN //The larger the network is, the more synapses are connected to one compartment.
             }
             if(GABAB_ON == 1){
                 gmax_b = GABAB_GMAX_LTOP/NLN
             }
+	    makeNET_LtoPsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,weight,gmax_a,gmax_b)
         }else{
-            //printf("POST SYNAPSE IS LN(pc.id:%d)\n",pc.id)
-            //makePostSynapse_NET_GABA(SynPathList.o(j).postgid,1,10,GMAX_LTOL/NLN)
-            //makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,10.0,GMAX_LTOL/NLN)
-            //makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid)
             if(GABAA_ON == 1){
                 gmax_a = GABAA_GMAX_LTOL/NLN
             }else if(GABAB_ON == 1){
                 gmax_b = GABAB_GMAX_LTOL/NLN
             }
+	    makeNET_LtoLsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,weight,gmax_a,gmax_b)
         }
-        makeNET_GABAsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,weight,gmax_a,gmax_b)
         if(pre_comps.size() != post_comps.size()){
             print "ERROR IN CONNECTNTON"
             return (-1)
@@ -576,24 +670,3 @@ proc connectNtoN_NET_GABA2(){\
 }
 
 
-proc connectNtoN_DUMMY(){\
-    local i, j, gid_base,pre_gid, post_gid\
-    localobj pre_dummy, post_dummy
-    //printf("connectNtoN_DUMMY[%d]\n",pc.id)
-    gid_base = $1
-    if(pc.id==0){printf("pc.id\tpre_t\tpre_s\tpost_t\tpost_s\n")}
-    if(pns.count()==0 && lns.count()==0){
-    pre_dummy = rns.o(0).mkDUMMY(0)
-    dummylist.append(pre_dummy)
-    pre_gid = gid_base + (pc.id-NPN-NLN)%(pc.nhost-NPN-NLN)*2
-    pc.target_var(&pre_dummy.dummy,pre_gid)
-    pc.source_var(&rns.o(0).Dend[0].v(0.5),pre_gid+1)
-
-    post_dummy = rns.o(0).mkDUMMY(1)
-    dummylist.append(post_dummy)
-    post_gid = gid_base + (pc.id+1-NPN-NLN)%(pc.nhost-NPN-NLN)*2
-    pc.source_var(&rns.o(0).Dend[1].v(0.5),post_gid)
-    pc.target_var(&post_dummy.dummy,post_gid+1)
-    printf("%d\t%d\t%d\t%d\t%d\n",pc.id,pre_gid,pre_gid+1,post_gid+1,post_gid)
-    }
-}

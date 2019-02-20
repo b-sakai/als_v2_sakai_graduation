@@ -73,7 +73,7 @@ proc spikeout(){
     }
     if(rns.count()!=0){
     printf("spike out(%d) for RN\n",pc.id)
-    rns.o(0).fprintSpikeRecord(SPIKEOUT_DIR,INTERVAL,STOPTIME)
+    rns.o(0).RNfprintSpikeRecord(SPIKEOUT_DIR,INTERVAL,STOPTIME)
     }
 }
 
@@ -89,7 +89,7 @@ proc multiSpikeOut(){
     }
     if(rns.count()!=0){
         printf("spike out(%d) for RN\n",pc.id)
-        rns.o(0).fprintSpikeRecord(SPIKEOUT_DIR,INTERVAL,STOPTIME)
+        rns.o(0).RNfprintSpikeRecord(SPIKEOUT_DIR,INTERVAL,STOPTIME)
     }
 }
 
@@ -204,21 +204,6 @@ proc setGABArecord(){local i, j
     //    pc.barrier()
 }
 
-objref PNdummy_vecs[5000]
-objref dummy_tvec
-proc setDummyRecord(){local i, j
-    if(dummylist.count()==0){return}
-    for i= 0, 5000-1{
-    PNdummy_vecs[i] = new Vector()
-    }
-    dummy_tvec = new Vector()
-    dummy_tvec.record(&t)
-    
-    for(j=0; j<dummylist.count();j+=1){
-    PNdummy_vecs[j].record(&dummylist.o(j).pre)
-    }
-    //    pc.barrier()
-}
 
 proc fprintVoltageRecord(){local SynapsePrintOn localobj mt, file,mt2, file2
     strdef filename
@@ -317,38 +302,21 @@ proc fprintGABArecord(){localobj mt, file
     file.close()
 }
 
-proc fprintDummyRecord(){localobj mt, file
-    if(dummylist.count()==0){return}
-    strdef filename
-    mt = new Matrix()
-    file = new File()
-    mt.resize(dummy_tvec.size(),dummylist.count()+1)
-    mt.setcol(0,dummy_tvec)
-    for(j = 0; j<dummylist.count();j+=1){
-    mt.setcol(j+1,PNdummy_vecs[j])
-    }
-    sprint(filename,"%s%d_Dummy.txt",FPRINT_DIR,pc.id)
-    file.wopen(filename)
-    mt.fprint(file,"%5.5f\t")
-    file.close()
-}
-
 
 proc compressData() { local i strdef cmd
     if(pc.id == 0){
         print "COMPRESS DATA"
         printf("OUTPUT DIR : %s\n",FPRINT_DIR)
     }
-    for(i = 0; i<pns.count();i+=1){
+/*    for(i = 0; i<pns.count();i+=1){
         sprint(cmd, "tar cf %s%d.tar %s%d*.dat", FPRINT_DIR, pns.o(i).nid, FPRINT_DIR, pns.o(i).nid)
         print cmd
         system(cmd)
     }
-    for(i = 0; i<lns.count();i+=1){
-        if((lns.o(i).nid % 10) == 0){
-            sprint(cmd, "tar cf %s%d.tar %s%d*.dat", FPRINT_DIR, lns.o(i).nid, FPRINT_DIR, lns.o(i).nid)
-            print cmd
-            system(cmd)
-        }
+*/
+    if(pc.id == NPN+8){
+        sprint(cmd, "tar cf %s%d.tar %s%d*.dat", FPRINT_DIR, lns.o(0).nid, FPRINT_DIR, lns.o(0).nid)
+        print cmd
+        system(cmd)
     }
 }
