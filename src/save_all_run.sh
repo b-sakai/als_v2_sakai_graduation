@@ -1,4 +1,3 @@
-
 #! /bin/bash
 
 # Make directory to save data file
@@ -19,14 +18,9 @@ echo "DATA DIRECTORY : ${RECORD_DIR}"
 mkdir -p ${RECORD_DIR}
 mkdir -p ${SPIKE_DIR}
 
-#NRNIV="/Users/arasekosuke/lab/neuron_kplus/specials/x86_64/special -mpi"
 NRNIV='/home/sakai/neuron_kplus_old/specials/x86_64/special -mpi'
 
-#HOC_NAME="./main_antenna.hoc"
 HOC_NAME="./wmain.hoc"
-#HOC_NAME="./ln_test.hoc"
-#HOC_NAME="./main_test.hoc"
-#HOC_NAME="./loadbalance_test.hoc"
 
 NRNOPT=\
 " -c STOPTIME=100000"\
@@ -59,32 +53,8 @@ NRNOPT=\
 " -c GBAR_TIMES_LN=1.0"\
 " -c GBAR_TIMES_PN=1.0"
 
-#" -c WEIGHT_200=0.02"\
-#" -c WEIGHT_300=0.006"\
-#" -c WEIGHT_301=0.006"\
-#" -c GABAA_GMAX_LTOP=0.1"\
-#" -c GABAA_GMAX_LTOL=0.75"\
-#" -c GABAA_GMAX_LTOP=0.1"\
-
-
-#MPIEXEC="mpiexec  -n 2"
 MPIEXEC="mpiexec -n 56"
-#MPIEXEC="mpiexec -n 68"
-#MPIEXEC="mpiexec -n 24"
-#MPIEXEC="mpiexec -n 5"
-#MPIEXEC="mpiexec -n 1"
-#MPIEXEC=""
-
 EXEC="${MPIEXEC} ${NRNIV} ${NRNOPT} ${HOC_NAME}"
 
-#mpiexec -np 4 $NRNMPI/nrniv -mpi parallel_simulation1201.hoc
-#mpiexec -np 8 ./mod/x86_64/special -mpi main.hoc
 echo $EXEC
 time $EXEC |tee $OUT
-
-#python drawGraph.py $RECORD_DIR
-#python drawISF.py $SPIKE_DIR
-wait
-
-
-python ../message_slack.py $NRNOPT
