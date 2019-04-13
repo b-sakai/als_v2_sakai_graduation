@@ -2,7 +2,7 @@
 
 """
 LN,PN間のシナプスを求めるプログラム
-./fromRN/glomerulars/300のコンパートメントとPN軸索初節部のコンパートメント./pn_axon/717.datとのシナプスをsynapses_between_300_201.dat などとして保存するプログラム
+./fromRN/glomerulars/300のコンパートメントとPN軸索初節部のコンパートメント../comp_pnAxon/717.datとのシナプスをsynapses_between_300_201.dat などとして保存するプログラム
 swc ファイルの指定と出力ファイルの指定は随時書き換えてください．
 
 Usage:
@@ -69,7 +69,7 @@ if __name__ == "__main__":
                     ["10","32"]]
     for j in range(len(pn_glomerular)):
         for i in range(4):
-            pn_path = "../syn_pnAxon/717axon.dat"
+            pn_path = "../comp_pnAxon/717axon.dat"
             ln_path = "../fromRN/syn_glomerulars/30" + str(i) + "/30" + str(i) + "_" +  str(pn_glomerular[j][1].zfill(2)) + "_glomerulars.dat"
             output_filename = "synapses_between_2" + str(pn_glomerular[j][0].zfill(2)) + "_30" + str(i) + ".dat"
             print output_filename

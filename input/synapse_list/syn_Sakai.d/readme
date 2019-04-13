@@ -1,3 +1,2 @@
-cd ../python/
-python make_synapse.py 5
-5μm以下のコンパートメントの組を抽出(2019/01/13)
+ltol: directory for LtoL synapse list files per types of neuron
+ltop: directory for LtoP synapse list files per types of neuron
