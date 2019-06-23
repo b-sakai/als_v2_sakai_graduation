@@ -1,3 +1,4 @@
+
 #! /bin/bash
 
 # Make directory to save data file
@@ -15,8 +16,8 @@ NRNIV='/home/sakai/neuron_kplus_old/specials/x86_64/special -mpi'
 HOC_NAME="./wmain.hoc"
 
 NRNOPT=\
-" -c STOPTIME=10"\
-" -c IS_SUPERCOMPUTER=2"\ 
+" -c STOPTIME=3000"\
+" -c IS_SUPERCOMPUTER=2"\
 " -c INTERVAL=1000"\
 " -c START_TIME=${Time}"\
 " -c SAVE_ALL=0"\
