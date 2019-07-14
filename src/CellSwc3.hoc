@@ -32,7 +32,7 @@ public Dend, SectionNum
 public connect2target
 public mkSyn,mkExp2Syn
 public mkSynapses, synapses
-public mkPRL_GABA, mkDUMMY, mkNET_GABAa, mkNET_GABAb, mkNET_STDP
+public mkPRL_GABA, mkDUMMY, mkNET_GABAa, mkNET_GABAb, mkNET_STDP, mkNET_GABA_STDP
 public setPath, setNid, setGid, setSpikegenlist
 public setIntermitStim_gaus,setIClamp, mkIclamp, setIClamp_with_Latency
 public insertHH, insertHH_RN, insertLNlla, insertFukuda_tunned, insertHH_K
@@ -553,16 +553,17 @@ proc mkSynapses(){local i
     //$s1 = Synapse list data file name
     str1 = $s1
     type = $2 // type = 0: synapse from ORN, type = 1: synapse from MRN, type = 2: synapse from general odor receptor
+    learning = $3
     ReadSynlist(str1)
 
     for i=0, SynNumberList.size()-1{
 
     if(type == 0){
-        synapses(SynNumberList.x[i])
+        synapses(SynNumberList.x[i], learning)
     } else if (type == 1){
-        synapses_fromMRN(SynNumberList.x[i])
+        synapses_fromMRN(SynNumberList.x[i], learning)
     } else if (type == 2){
-        synapses_general_odor(SynNumberList.x[i])
+        synapses_general_odor(SynNumberList.x[i], learning)
     }
 
     }
@@ -581,7 +582,7 @@ proc synapses(){local targetno, tau, tau1, tau2, dtau, d, rev_e, learnig
     } else {
         d = 1
     }
-    learning = 1
+    learning = $2
 
     this.Dend[targetno] syn__ = new ExpSynSTDP(0.2) synlist.append(syn__)
     syn__.tau = tau
@@ -741,15 +742,28 @@ obfunc mkPRL_GABA(){local gmax,comp
 objref stdp
 // This STDP synapse uses NetCon to connect
 obfunc mkNET_STDP(){local comp
-    learning = 1
     comp = $1
+    learning = $2
     this.Dend[comp] stdp = new ExpSynSTDP(0.5)
     stdp.e = 0
     stdp.tau = 100.0
-    stdp.LR = 5.0
     stdp.maxWeight = 10
     stdp.learning = learning 
     return stdp
+}
+
+objref gaba_stdp
+// This GABA_STDP synapse uses NetCon to connect
+obfunc mkNET_GABA_STDP(){local comp
+    comp = $1
+    gmax = $2
+    learning = $3
+    this.Dend[comp] gaba_stdp = new NET_GABAa_STDP(0.5)
+    gaba_stdp.gmax = gmax
+    gaba_stdp.Erev = 0
+    gaba_stdp.maxWeight = 1.0
+    gaba_stdp.learning = learning 
+    return gaba_stdp
 }
 
 // This GABA_A synapse uses NetCon to connect

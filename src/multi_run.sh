@@ -1,6 +1,9 @@
 
 #! /bin/bash
 
+# argument
+Arg1=$1
+
 # Make directory to save data file
 Time=`date '+%m%d%H%M%S'`
 echo "TIME : ${Time}"
@@ -12,11 +15,11 @@ echo "DATA DIRECTORY : ${RECORD_DIR}"
 mkdir -p ${RECORD_DIR}
 mkdir -p ${SPIKE_DIR}
 
-NRNIV='/home/sakai/neuron_kplus_old/specials/x86_64/special -mpi'
+NRNIV='/home/sakai/neuron_kplus_temp/specials/x86_64/special -mpi'
 HOC_NAME="./wmain.hoc"
 
 NRNOPT=\
-" -c STOPTIME=30"\
+" -c STOPTIME=10"\
 " -c IS_SUPERCOMPUTER=2"\
 " -c INTERVAL=1000"\
 " -c START_TIME=${Time}"\
@@ -45,7 +48,7 @@ NRNOPT=\
 " -c GABAB_GMAX_LTOL=0.0"\
 " -c GBAR_TIMES_LN=1.0"\
 " -c GBAR_TIMES_PN=1.0"\
-" -c LEARNING=0"
+" -c LEARNING=${Arg1}"
 
 MPIEXEC="mpiexec -n 56"
 EXEC="${MPIEXEC} ${NRNIV} ${NRNOPT} ${HOC_NAME}"
@@ -58,3 +61,4 @@ wait
 python ../analyze/drawPSTH.py $SPIKE_DIR
 python ../analyze/drawGraph.py $RECORD_DIR
 python ../analyze/drawISF.py $SPIKE_DIR
+python ../analyze/calculate_synaptic_change_ltop.py $RECORD_DIR

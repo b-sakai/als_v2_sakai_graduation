@@ -86,13 +86,13 @@ if(IS_SUPERCOMPUTER == 0){
     synlist_dir = "../input/synapse_list/3_1PN2LNs/"
 }else if(IS_SUPERCOMPUTER == 1){
     //sprint(info_filename, "../input/network_info/network_info_%dcells.dat", NCELL)
-    sprint(info_filename, "../input/network_info/network_info_%dcells.dat", NCELL)
-    sprint(info_filename_rn, "../input/network_info/network_info_%drns.dat", NCELL*50)
+    sprint(info_filename, "../input/network_info/network_info_%dcells.dat", 46)
+    sprint(info_filename_rn, "../input/network_info/network_info_%drns.dat", 1200)
     sprint(synlist_dir, "../input/synapse_list/%dcells/", NCELL)
 }else if(IS_SUPERCOMPUTER == 2){
-    sprint(info_filename, "../input/network_info/network_info_%dcells.dat", NCELL)
+    sprint(info_filename, "../input/network_info/network_info_%dcells.dat", 46)
     sprint(info_filename_rn, "../input/network_info/network_info_%drns.dat",1200)
-    sprint(synlist_dir, "../input/synapse_list/%dcells/", NCELL)
+    sprint(synlist_dir, "../input/synapse_list/%dcells/", 46)
 }else{
     printf("IS_SUPERCOMPUTER = %d is invalid.\n", IS_SUPERCOMPUTER)
 }
@@ -100,8 +100,7 @@ if(IS_SUPERCOMPUTER == 0){
 
 strdef zerong_olfactory_spt_file_dir, halfng_olfactory_spt_file_dir, olfactory_spt_file_dir, mechano_spt_file_dir
 
-if(NSTIM == 1){
-        //sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_1stim_filtering/", DOSE)
+
 	sprint(zerong_olfactory_spt_file_dir, "../input/spiketiming/ORN/%dng_1stim/", 0)
 	sprint(halfng_olfactory_spt_file_dir, "../input/spiketiming/ORN/%dng_1stim/", 1000)
         sprint(olfactory_spt_file_dir, "../input/spiketiming/ORN/%dng_1stim/", DOSE)
@@ -110,16 +109,7 @@ if(NSTIM == 1){
         } else{
             sprint(mechano_spt_file_dir, "../input/spiketiming/MRN/%dHz_constant/", MECHANO_SPONTANEOUS)
         }
-}else{
-        //sprint(olfactory_spt_file_dir, "../input/spiketiming/%ddose_30stims_filtering/", DOSE)
-        sprint(olfactory_spt_file_dir, "../input/spiketiming/ORN/%dng_30stims/", DOSE)
-        
-        if(MECHANO_ON == 1){
-            sprint(mechano_spt_file_dir, "../input/spiketiming/MRN/%dHz_30stims/", MECHANO_SPONTANEOUS)
-        } else{
-            sprint(mechano_spt_file_dir, "../input/spiketiming/MRN/%dHz_constant/", MECHANO_SPONTANEOUS)
-        }
-}
+
 
 strdef FPRINT_DIR, SPIKEOUT_DIR
 if(IS_SUPERCOMPUTER == 1){
@@ -279,11 +269,11 @@ proc mkCells(){localobj pn,ln,rn, nc, nil
 
 {load_file("connect.hoc")}
 proc mkConnections(){
-    connectRNtoOthers()
+    connectRNtoOthers(LEARNING)
     connect_vec_stim(mechano_spt_file_dir, DOSE, NSTIM)
 
     //connectNtoN()
-    connectNtoN_NET_GABA2()
+    connectNtoN_NET_GABA2(LEARNING)
 }
 
 if(pc.id==0)print "MAKE NETWORK"
@@ -426,7 +416,7 @@ if (SAVE_ALL == 1) {
     wmt.resize(vweight.size(), 2)
     wmt.setcol(0, volt_tvec)
     wmt.setcol(1, lvweight.object(i))
-    sprint(wfilename, "%sL%02dweightL.txt", FPRINT_DIR, i)
+    sprint(wfilename, "%sL%03dweightL.dat", FPRINT_DIR, i)
     wfile.wopen(wfilename)
     wmt.fprint(wfile,"%5.5f\t")
     wfile.close()
@@ -441,7 +431,7 @@ if (SAVE_ALL == 1) {
     rwmt.resize(rvweight.size(), 2)
     rwmt.setcol(0, volt_tvec)
     rwmt.setcol(1, rvweight)
-    sprint(rwfilename, "%s%02dweightR.txt", FPRINT_DIR, pc.id)
+    sprint(rwfilename, "%s%02dweightR.dat", FPRINT_DIR, pc.id)
     rwfile.wopen(rwfilename)
     rwmt.fprint(rwfile,"%5.5f\t")
     rwfile.close()

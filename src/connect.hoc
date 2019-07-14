@@ -109,13 +109,14 @@ proc mkPostSynapseOfRN(){local i,j,gid_base,src_gid,gloid, maxnum localobj targe
     strdef path
     gid_base = $1
     syn_gid_max = $2
+    learning = $3
 
     // make postsynapse of RN to PN
     for i=0, NPN-1{
     if(pc.gid_exists(GID_VEC.x[i])){
         target = pc.gid2obj(GID_VEC.x[i])
         loadSynapseInfo(target, target.synpath, 100)
-        target.mkSynapses(target.fromRNsyn, 0)
+        target.mkSynapses(target.fromRNsyn, 0, learning)
 
 	gloid = pns.object(0).gloid
         printf("target.synlist.count() : %d [%d] gloid = %d\n",target.synlist.count(),pc.id, gloid)
@@ -142,7 +143,7 @@ proc mkPostSynapseOfRN(){local i,j,gid_base,src_gid,gloid, maxnum localobj targe
         loadSynapseInfo(target, target.synpath, 100)
         sprint(path, "%s/30%d_%02d_glomerulars.dat", target.fromRNsyn, lns.object(0).swcid, gloid)
 	printf("lnpath check %s\n", path)
-        target.mkSynapses(path, 0)
+        target.mkSynapses(path, 0, learning)
         printf("target.synlist.count() : %d [%d]\n",target.synlist.count(),pc.id)
 
 	if(target.synlist.count() < NUMSYNAPSE_PER_GLO_LN){
@@ -183,6 +184,7 @@ proc mkPostSynapseOfRN(){local i,j,gid_base,src_gid,gloid, maxnum localobj targe
 
 proc connectRNtoOthers(){\
     local gid_base, syn_gid,syn_gid_max
+    learning = $1
     printf("connectRNtoOthers[%d]\n",pc.id)
     gid_base = 1000000
     syn_gid  = mkPreSynapseOnRN(gid_base)
@@ -191,7 +193,7 @@ proc connectRNtoOthers(){\
     syn_gid_max = pc.allreduce(syn_gid,2)
     //printf("After allreduce  gid_max:%d pc.id:%d\n",syn_gid_max,pc.id)
     pc.barrier()
-    mkPostSynapseOfRN(gid_base, syn_gid_max)
+    mkPostSynapseOfRN(gid_base, syn_gid_max, learning)
     pc.barrier()
 }
 
@@ -228,7 +230,7 @@ proc connect_vec_stim(){ local i, j, dose, nstim localobj rnd, target, post_syn,
     for i=0, lns.count()-1{
         target = lns.object(i)
         loadSynapseInfo(target, target.synpath, 100)
-        target.mkSynapses(target.fromMRNsyn, 1)
+        target.mkSynapses(target.fromMRNsyn, 1, learning)
         printf("target.synlist_fromMRN.count() : %d [%d]\n",target.synlist_fromMRN.count(),pc.id)
 
         for j=0, target.synlist_fromMRN.count()-1{ // mechano input
@@ -492,6 +494,7 @@ proc makeNET_LtoPsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weig
     weight=$4
     gmax_a=$5
     gmax_b=$6
+    learning=$7
 
     if(pc.gid_exists(pre_cell)){
     pre = pc.gid2obj(pre_cell)
@@ -512,11 +515,11 @@ proc makeNET_LtoPsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weig
         for i=0, post_comps.size()-1{
         //printf("POST: %d, GID : %d, i : %d, [%d]\n",post_cell,gidVec.x[i],i,pc.id)
 	if(i%2 == 0){
-	    stdp = post.mkNET_STDP(post_comps.x[i])
-            gabalist.append(gaba)
+	    stdp = post.mkNET_GABA_STDP(post_comps.x[i], gmax_a, learning)
+            gabalist.append(stdp)
             nc = pc.gid_connect(gidVec.x[i], stdp)
             nc.delay = delay
-            nc.weight = 5.0
+            nc.weight = weight
             nclist_NtoN.append(nc)
 	    nclist_LtoPstdp.append(nc)
 	}else{
@@ -550,6 +553,7 @@ proc makeNET_LtoLsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weig
     weight=$4
     gmax_a=$5
     gmax_b=$6
+    learning=$7
 
     if(pc.gid_exists(pre_cell)){
     pre = pc.gid2obj(pre_cell)
@@ -577,11 +581,11 @@ proc makeNET_LtoLsynapse(){local pre_cell, post_cell, gmax_a,gmax_b, delay, weig
         for i=0, post_comps.size()-1{
         //printf("POST: %d, GID : %d, i : %d, [%d]\n",post_cell,gidVec.x[i],i,pc.id)
 	if(i%2 == 0){
-	    stdp = post.mkNET_STDP(post_comps.x[i])
-            gabalist.append(gaba)
+	    stdp = post.mkNET_GABA_STDP(post_comps.x[i], gmax_a, learning)
+            gabalist.append(stdp)
             nc = pc.gid_connect(gidVec.x[i], stdp)
             nc.delay = delay
-            nc.weight = 5.0
+            nc.weight = weight
             nclist_NtoN.append(nc)
 	    nclist_LtoLstdp.append(nc)
 	}else{
@@ -619,6 +623,7 @@ proc connectNtoN_NET_GABA2(){\
     strdef _syn_path, cmd
     gid_base = 2000000
     weight =1.0
+    learning = $1
 
     printf("connectNtoN_NET_GABA[%d]\n",pc.id)
     printf("NPN : %d NLN : %d\n",NPN,NLN)
@@ -652,14 +657,14 @@ proc connectNtoN_NET_GABA2(){\
             if(GABAB_ON == 1){
                 gmax_b = GABAB_GMAX_LTOP/NLN
             }
-	    makeNET_LtoPsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,weight,gmax_a,gmax_b)
+	    makeNET_LtoPsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,weight,gmax_a,gmax_b, learning)
         }else{
             if(GABAA_ON == 1){
                 gmax_a = GABAA_GMAX_LTOL/NLN
             }else if(GABAB_ON == 1){
                 gmax_b = GABAB_GMAX_LTOL/NLN
             }
-	    makeNET_LtoLsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,weight,gmax_a,gmax_b)
+	    makeNET_LtoLsynapse(SynPathList.o(j).pregid,SynPathList.o(j).postgid,1.0,weight,gmax_a,gmax_b, learning)
         }
         if(pre_comps.size() != post_comps.size()){
             print "ERROR IN CONNECTNTON"
